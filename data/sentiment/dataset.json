@@ -1,0 +1,3101 @@
+{
+  "datasetId": "sentiment-eval-v0.1",
+  "version": "0.1.0",
+  "datasetVersion": "2026.11.03",
+  "description": "舆情评测集：120 条评论，按「主题×日期」聚为 16 簇（P0 3 簇、P1 6 簇、P2 4 簇、none 3 簇），覆盖单条分级、聚合升级、噪声与五类来源，用于告警聚类与级别回放评测。",
+  "generatedAt": "2026-11-03T10:00:00+08:00",
+  "items": [
+    {
+      "id": "cm-0001",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1000",
+      "text": "新版本界面颜色有点刺眼，看久了不舒服。",
+      "publishedAt": "2026-10-20T08:12:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0002",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1001",
+      "text": "版本更新后背景音乐换了，还是旧版好听。",
+      "publishedAt": "2026-10-20T14:52:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0003",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1002",
+      "text": "版本更新的新地图很好看，喜欢。",
+      "publishedAt": "2026-10-20T21:43:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0004",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1003",
+      "text": "这次版本内容挺丰富的，玩得开心。",
+      "publishedAt": "2026-10-20T11:46:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": 0.9
+      }
+    },
+    {
+      "id": "cm-0005",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1004",
+      "text": "想问下版本号在哪里查看？",
+      "publishedAt": "2026-10-20T19:11:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": 0.2
+      }
+    },
+    {
+      "id": "cm-0006",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1005",
+      "text": "版本更新公告一般发在哪里？",
+      "publishedAt": "2026-10-20T09:37:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": -0.2
+      }
+    },
+    {
+      "id": "cm-0007",
+      "source": "taptap",
+      "brand": "机甲前线",
+      "author": "tap_1006",
+      "text": "代练上分，价格优惠，需要的私聊。",
+      "publishedAt": "2026-10-20T11:46:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.86,
+        "needsReview": false,
+        "sentimentScore": -0.1
+      }
+    },
+    {
+      "id": "cm-0008",
+      "source": "googleplay",
+      "brand": "机甲前线",
+      "author": "gp_1007",
+      "text": "高战账号出租，日结，有意者联系。",
+      "publishedAt": "2026-10-20T19:11:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.91,
+        "needsReview": false,
+        "sentimentScore": 0
+      }
+    },
+    {
+      "id": "cm-0009",
+      "source": "community",
+      "brand": "机甲前线",
+      "author": "社区_1008",
+      "text": "打卡，占楼，混个脸熟。",
+      "publishedAt": "2026-10-20T09:37:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.96,
+        "needsReview": false,
+        "sentimentScore": 0.1
+      }
+    },
+    {
+      "id": "cm-0010",
+      "source": "ticket",
+      "brand": "机甲前线",
+      "author": "用户_1009",
+      "text": "前排围观，这帖子有点意思。",
+      "publishedAt": "2026-10-20T16:07:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.87,
+        "needsReview": false,
+        "sentimentScore": 0.2
+      }
+    },
+    {
+      "id": "cm-0011",
+      "source": "steam",
+      "brand": "机甲前线",
+      "author": "steam_1010",
+      "text": "666666，顶一个。",
+      "publishedAt": "2026-10-20T22:56:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.92,
+        "needsReview": false,
+        "sentimentScore": -0.2
+      }
+    },
+    {
+      "id": "cm-0012",
+      "source": "taptap",
+      "brand": "机甲前线",
+      "author": "tap_1011",
+      "text": "出售游戏币，量大从优，非诚勿扰。",
+      "publishedAt": "2026-10-20T13:18:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.97,
+        "needsReview": false,
+        "sentimentScore": -0.1
+      }
+    },
+    {
+      "id": "cm-0013",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1012",
+      "text": "这次活动奖励很丰厚，满意。",
+      "publishedAt": "2026-10-21T16:07:00+08:00",
+      "topicHints": [
+        "活动",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.88,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0014",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1013",
+      "text": "活动玩法挺有意思，玩得很开心。",
+      "publishedAt": "2026-10-21T22:56:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.93,
+        "needsReview": false,
+        "sentimentScore": 0.7
+      }
+    },
+    {
+      "id": "cm-0015",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1014",
+      "text": "活动福利给力，点赞。",
+      "publishedAt": "2026-10-21T13:18:00+08:00",
+      "topicHints": [
+        "活动",
+        "福利"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0016",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1015",
+      "text": "活动什么时候开始？",
+      "publishedAt": "2026-10-21T20:28:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": -0.2
+      }
+    },
+    {
+      "id": "cm-0017",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1016",
+      "text": "想问下活动奖励有哪些？",
+      "publishedAt": "2026-10-21T10:24:00+08:00",
+      "topicHints": [
+        "活动",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": -0.1
+      }
+    },
+    {
+      "id": "cm-0018",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1017",
+      "text": "活动页面在哪里进入？",
+      "publishedAt": "2026-10-21T17:35:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": 0
+      }
+    },
+    {
+      "id": "cm-0019",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1018",
+      "text": "新版本 2.4 更新后一直闪退，根本没法正常玩。",
+      "publishedAt": "2026-10-22T20:28:00+08:00",
+      "topicHints": [
+        "版本",
+        "Bug",
+        "闪退"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本",
+          "Bug"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「版本」+ 明确影响「闪退、没法正常」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0020",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1019",
+      "text": "更新完进不去副本，一加载就黑屏，太影响体验了。",
+      "publishedAt": "2026-10-22T10:24:00+08:00",
+      "topicHints": [
+        "版本",
+        "Bug",
+        "进不去"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本",
+          "Bug"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「版本」+ 明确影响「进不去、黑屏」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0021",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1020",
+      "text": "新版本的画面风格不太喜欢，还是喜欢以前的。",
+      "publishedAt": "2026-10-22T17:35:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.86,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0022",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1021",
+      "text": "版本更新后按键布局变了，需要重新适应。",
+      "publishedAt": "2026-10-22T08:12:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.91,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0023",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1022",
+      "text": "这次版本更新的新副本挺好玩的，点赞。",
+      "publishedAt": "2026-10-22T14:52:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.96,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0024",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1023",
+      "text": "新版本优化了加载速度，体验不错。",
+      "publishedAt": "2026-10-22T21:43:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.87,
+        "needsReview": false,
+        "sentimentScore": 0.9
+      }
+    },
+    {
+      "id": "cm-0025",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1024",
+      "text": "版本更新追加的剧情很用心，满意。",
+      "publishedAt": "2026-10-22T11:46:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.92,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0026",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1025",
+      "text": "想问下版本更新一般多久一次？",
+      "publishedAt": "2026-10-22T19:11:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.97,
+        "needsReview": false,
+        "sentimentScore": -0.2
+      }
+    },
+    {
+      "id": "cm-0027",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1026",
+      "text": "任务奖励领取失败，背包里也没有，这个 BUG 太影响体验。",
+      "publishedAt": "2026-10-23T08:12:00+08:00",
+      "topicHints": [
+        "Bug",
+        "失败",
+        "领取失败"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「Bug」+ 明确影响「失败、领取失败」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.88,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0028",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1027",
+      "text": "跨服组队一直匹配失败，这个 BUG 什么时候修？",
+      "publishedAt": "2026-10-23T14:52:00+08:00",
+      "topicHints": [
+        "Bug",
+        "失败",
+        "匹配失败"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「Bug」+ 明确影响「失败、匹配失败」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.93,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0029",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1028",
+      "text": "游戏里的 BUG 反馈入口藏得太深，不太好找。",
+      "publishedAt": "2026-10-23T21:43:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0030",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1029",
+      "text": "这个 BUG 存在挺久了，一直没修复，有点失望。",
+      "publishedAt": "2026-10-23T11:46:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG",
+        "修复"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0031",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1030",
+      "text": "昨天反馈的 BUG 今天就修好了，效率不错。",
+      "publishedAt": "2026-10-23T19:11:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0032",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1031",
+      "text": "这次修复很及时，游戏流畅多了。",
+      "publishedAt": "2026-10-23T09:37:00+08:00",
+      "topicHints": [
+        "Bug",
+        "修复"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": 0.9
+      }
+    },
+    {
+      "id": "cm-0033",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1032",
+      "text": "BUG 修复后任务终于能正常完成了，满意。",
+      "publishedAt": "2026-10-23T16:07:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG",
+        "修复"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0034",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1033",
+      "text": "请问 BUG 反馈在哪里提交？",
+      "publishedAt": "2026-10-23T22:56:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": 0.1
+      }
+    },
+    {
+      "id": "cm-0035",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1034",
+      "text": "充值档位的赠送比例感觉比上月低了一点，有点失望。",
+      "publishedAt": "2026-10-24T11:46:00+08:00",
+      "topicHints": [
+        "充值",
+        "档位"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.86,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0036",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1035",
+      "text": "充值页面的活动入口不太显眼，找了半天。",
+      "publishedAt": "2026-10-24T19:11:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.91,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0037",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1036",
+      "text": "充值的到账速度很快，体验不错。",
+      "publishedAt": "2026-10-24T09:37:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.96,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0038",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1037",
+      "text": "这次充值活动送的时装很好看，满意。",
+      "publishedAt": "2026-10-24T16:07:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.87,
+        "needsReview": false,
+        "sentimentScore": 0.7
+      }
+    },
+    {
+      "id": "cm-0039",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1038",
+      "text": "请问充值有发票吗？",
+      "publishedAt": "2026-10-24T22:56:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.92,
+        "needsReview": false,
+        "sentimentScore": 0.1
+      }
+    },
+    {
+      "id": "cm-0040",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1039",
+      "text": "想了解下充值档位的区别。",
+      "publishedAt": "2026-10-24T13:18:00+08:00",
+      "topicHints": [
+        "充值",
+        "档位"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.97,
+        "needsReview": false,
+        "sentimentScore": 0.2
+      }
+    },
+    {
+      "id": "cm-0041",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1040",
+      "text": "活动奖励发放延迟三天了，到现在还没发。",
+      "publishedAt": "2026-10-25T16:07:00+08:00",
+      "topicHints": [
+        "活动",
+        "延迟",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「活动」+ 明确影响「延迟」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.88,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0042",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1041",
+      "text": "活动进度卡住不更新，奖励也领取失败，没法正常参与。",
+      "publishedAt": "2026-10-25T22:56:00+08:00",
+      "topicHints": [
+        "活动",
+        "失败",
+        "没法正常"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「活动」+ 明确影响「失败、没法正常、领取失败」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.93,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0043",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1042",
+      "text": "这次活动的奖励不太丰厚，吸引力一般。",
+      "publishedAt": "2026-10-25T13:18:00+08:00",
+      "topicHints": [
+        "活动",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0044",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1043",
+      "text": "活动规则写得太绕，看不懂怎么玩。",
+      "publishedAt": "2026-10-25T20:28:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0045",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1044",
+      "text": "这次活动福利挺多的，玩得很开心。",
+      "publishedAt": "2026-10-25T10:24:00+08:00",
+      "topicHints": [
+        "活动",
+        "福利"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0046",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1045",
+      "text": "活动奖励很给力，已经拿到限定时装了。",
+      "publishedAt": "2026-10-25T17:35:00+08:00",
+      "topicHints": [
+        "活动",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": 0.7
+      }
+    },
+    {
+      "id": "cm-0047",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1046",
+      "text": "活动设计得不错，希望以后多来点。",
+      "publishedAt": "2026-10-25T08:12:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0048",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1047",
+      "text": "活动什么时候结束？想问问时间。",
+      "publishedAt": "2026-10-25T14:52:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": 0
+      }
+    },
+    {
+      "id": "cm-0049",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1048",
+      "text": "新版本一更新就回档，昨天肝了一晚上的进度全没了，氪的金也白花了！",
+      "publishedAt": "2026-10-26T20:28:00+08:00",
+      "topicHints": [
+        "版本",
+        "回档",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「版本」+ 高危信号词「回档」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.86,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0050",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1049",
+      "text": "回档之后充值档位也丢了，扣款不到账，新版本客服还不处理，大家一起投诉！",
+      "publishedAt": "2026-10-26T10:24:00+08:00",
+      "topicHints": [
+        "版本",
+        "充值",
+        "回档"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本",
+          "充值"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「版本」+ 高危信号词「回档、扣款不到账、投诉」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.91,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0051",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1050",
+      "text": "大面积回档，好几个区的新版本都出问题了，官方再不管我们就集体维权。",
+      "publishedAt": "2026-10-26T17:35:00+08:00",
+      "topicHints": [
+        "版本",
+        "回档",
+        "大面积"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「版本」+ 高危信号词「回档、大面积、集体、维权」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.96,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0052",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1051",
+      "text": "版本更新后回档导致道具全部重置，这是数据丢失，媒体曝光一下才会有人管吧。",
+      "publishedAt": "2026-10-26T08:12:00+08:00",
+      "topicHints": [
+        "版本",
+        "Bug",
+        "回档"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本",
+          "Bug"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「版本」+ 高危信号词「回档、媒体曝光、数据丢失」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.87,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0053",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1052",
+      "text": "新版本界面改得有点复杂，希望官方再优化一下。",
+      "publishedAt": "2026-10-26T14:52:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.6,
+        "needsReview": true,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0054",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1053",
+      "text": "版本更新后字体太小了，看着有点累。",
+      "publishedAt": "2026-10-26T21:43:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.63,
+        "needsReview": true,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0055",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1054",
+      "text": "这次更新的新玩法不太好玩，有点失望。",
+      "publishedAt": "2026-10-26T11:46:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.66,
+        "needsReview": true,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0056",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1055",
+      "text": "版本更新的公告写得太长，没耐心看完。",
+      "publishedAt": "2026-10-26T19:11:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.69,
+        "needsReview": true,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0057",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1056",
+      "text": "新版本加载界面换了，感觉不如以前。",
+      "publishedAt": "2026-10-26T09:37:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.6,
+        "needsReview": true,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0058",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1057",
+      "text": "更新后活动入口换了位置，不太习惯。",
+      "publishedAt": "2026-10-26T16:07:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.63,
+        "needsReview": true,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0059",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1058",
+      "text": "客服回复太敷衍了，问了三遍都答非所问。",
+      "publishedAt": "2026-10-26T08:12:00+08:00",
+      "topicHints": [
+        "客服",
+        "敷衍"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「客服」+ 明确影响「敷衍」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0060",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1059",
+      "text": "排队等了四十分钟才轮到客服，效率太低了。",
+      "publishedAt": "2026-10-26T14:52:00+08:00",
+      "topicHints": [
+        "客服",
+        "排队"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「客服」+ 明确影响「排队」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0061",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1060",
+      "text": "客服的语气有点冷，希望热情一点。",
+      "publishedAt": "2026-10-26T21:43:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0062",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1061",
+      "text": "客服回复模板化严重，感觉没认真看问题。",
+      "publishedAt": "2026-10-26T11:46:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0063",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1062",
+      "text": "客服很快就帮我解决了，态度很好。",
+      "publishedAt": "2026-10-26T19:11:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.86,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0064",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1063",
+      "text": "这次的客服很专业，问题一次就处理好了。",
+      "publishedAt": "2026-10-26T09:37:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.91,
+        "needsReview": false,
+        "sentimentScore": 0.9
+      }
+    },
+    {
+      "id": "cm-0065",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1064",
+      "text": "客服响应速度不错，点赞。",
+      "publishedAt": "2026-10-26T16:07:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.96,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0066",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1065",
+      "text": "想咨询一下客服的服务时间是几点到几点？",
+      "publishedAt": "2026-10-26T22:56:00+08:00",
+      "topicHints": [
+        "客服",
+        "服务"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.87,
+        "needsReview": false,
+        "sentimentScore": -0.2
+      }
+    },
+    {
+      "id": "cm-0067",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1066",
+      "text": "活动奖励的吸引力一般，没什么参与欲望。",
+      "publishedAt": "2026-10-28T11:46:00+08:00",
+      "topicHints": [
+        "活动",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.92,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0068",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1067",
+      "text": "活动周期感觉有点短，希望延长一点。",
+      "publishedAt": "2026-10-28T19:11:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.97,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0069",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1068",
+      "text": "活动奖励挺良心的，满意。",
+      "publishedAt": "2026-10-28T09:37:00+08:00",
+      "topicHints": [
+        "活动",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.88,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0070",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1069",
+      "text": "这次活动玩法有意思，点赞。",
+      "publishedAt": "2026-10-28T16:07:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.93,
+        "needsReview": false,
+        "sentimentScore": 0.7
+      }
+    },
+    {
+      "id": "cm-0071",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1070",
+      "text": "活动每天几点刷新？",
+      "publishedAt": "2026-10-28T22:56:00+08:00",
+      "topicHints": [
+        "活动"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": -0.2
+      }
+    },
+    {
+      "id": "cm-0072",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1071",
+      "text": "想问下活动奖励怎么领取？",
+      "publishedAt": "2026-10-28T13:18:00+08:00",
+      "topicHints": [
+        "活动",
+        "奖励"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "活动"
+        ],
+        "primaryTopic": "活动",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": -0.1
+      }
+    },
+    {
+      "id": "cm-0073",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1072",
+      "text": "外挂脚本已经公开卖了，排行榜前十全是挂，官方大面积封号还误封正常玩家，再不处理我们就集体维权！",
+      "publishedAt": "2026-10-29T16:07:00+08:00",
+      "topicHints": [
+        "外挂",
+        "大面积",
+        "集体"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「外挂」+ 高危信号词「大面积、集体、维权」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0074",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1073",
+      "text": "外挂没处理，我正常上线却显示账号被封，客服说是封号误封还要等申诉，我们准备去 12315 投诉。",
+      "publishedAt": "2026-10-29T22:56:00+08:00",
+      "topicHints": [
+        "外挂",
+        "客服",
+        "封号误封"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂",
+          "客服"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「外挂」+ 高危信号词「封号误封、投诉、12315」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0075",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1074",
+      "text": "外挂这么猖狂，官方还在装死，媒体曝光都出来了，大家一起去维权。",
+      "publishedAt": "2026-10-29T13:18:00+08:00",
+      "topicHints": [
+        "外挂",
+        "维权",
+        "媒体曝光"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「外挂」+ 高危信号词「维权、媒体曝光」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0076",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1075",
+      "text": "外挂不封，正常玩家被封，大面积误封，扣款不到账也没人管，这游戏还能玩吗？",
+      "publishedAt": "2026-10-29T20:28:00+08:00",
+      "topicHints": [
+        "外挂",
+        "充值",
+        "扣款不到账"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂",
+          "充值"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P0",
+        "noise": false,
+        "note": "单条 P0：负面 + 高危主题「外挂」+ 高危信号词「扣款不到账、大面积」；簇内负面 10 条，簇级别 P0。",
+        "severity": "p0",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0077",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1076",
+      "text": "外挂举报了三次都没有回应，有点失望。",
+      "publishedAt": "2026-10-29T10:24:00+08:00",
+      "topicHints": [
+        "外挂"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.6,
+        "needsReview": true,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0078",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1077",
+      "text": "排行榜上的外挂号一直不处理，体验越来越差了。",
+      "publishedAt": "2026-10-29T17:35:00+08:00",
+      "topicHints": [
+        "外挂"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.63,
+        "needsReview": true,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0079",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1078",
+      "text": "外挂太多了，正常玩家根本没有游戏体验。",
+      "publishedAt": "2026-10-29T08:12:00+08:00",
+      "topicHints": [
+        "外挂"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.66,
+        "needsReview": true,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0080",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1079",
+      "text": "举报外挂后只收到一条自动回复，感觉没人管。",
+      "publishedAt": "2026-10-29T14:52:00+08:00",
+      "topicHints": [
+        "外挂"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.69,
+        "needsReview": true,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0081",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1080",
+      "text": "外挂这么多，官方真的该好好管管了。",
+      "publishedAt": "2026-10-29T21:43:00+08:00",
+      "topicHints": [
+        "外挂"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.6,
+        "needsReview": true,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0082",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1081",
+      "text": "每次举报外挂都没下文，对官方越来越失望了。",
+      "publishedAt": "2026-10-29T11:46:00+08:00",
+      "topicHints": [
+        "外挂"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "外挂"
+        ],
+        "primaryTopic": "外挂",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.63,
+        "needsReview": true,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0083",
+      "source": "taptap",
+      "brand": "机甲前线",
+      "author": "tap_1082",
+      "text": "手柄适配感觉一般，操作起来不太顺手。",
+      "publishedAt": "2026-10-30T20:28:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.88,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0084",
+      "source": "googleplay",
+      "brand": "机甲前线",
+      "author": "gp_1083",
+      "text": "希望增加云存档功能，现在换设备很麻烦。",
+      "publishedAt": "2026-10-30T10:24:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 2 条，聚合达到 P2，簇级别 P2。",
+        "severity": "p2",
+        "confidence": 0.93,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0085",
+      "source": "community",
+      "brand": "机甲前线",
+      "author": "社区_1084",
+      "text": "代充折扣低至 5 折，加 V 详聊，非诚勿扰。",
+      "publishedAt": "2026-10-30T17:35:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": 0.2
+      }
+    },
+    {
+      "id": "cm-0086",
+      "source": "ticket",
+      "brand": "机甲前线",
+      "author": "用户_1085",
+      "text": "出租高战账号，日结，私聊。",
+      "publishedAt": "2026-10-30T08:12:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": -0.2
+      }
+    },
+    {
+      "id": "cm-0087",
+      "source": "steam",
+      "brand": "机甲前线",
+      "author": "steam_1086",
+      "text": "666666 沙发 打卡",
+      "publishedAt": "2026-10-30T14:52:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": true,
+        "note": "噪声评论（广告/灌水/无行动价值）：neutral，单条 none；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": -0.1
+      }
+    },
+    {
+      "id": "cm-0088",
+      "source": "taptap",
+      "brand": "机甲前线",
+      "author": "tap_1087",
+      "text": "云存档这个功能确实挺需要的。",
+      "publishedAt": "2026-10-30T21:43:00+08:00",
+      "topicHints": [
+        "其他"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "其他"
+        ],
+        "primaryTopic": "其他",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 2 条，簇级别 P2。",
+        "severity": "none",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": 0
+      }
+    },
+    {
+      "id": "cm-0089",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1088",
+      "text": "这次版本优化很到位，流畅了不少。",
+      "publishedAt": "2026-10-30T08:12:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0090",
+      "source": "community",
+      "brand": "星海远征",
+      "author": "社区_1089",
+      "text": "新版本体验不错，推荐。",
+      "publishedAt": "2026-10-30T14:52:00+08:00",
+      "topicHints": [
+        "版本"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": 0.7
+      }
+    },
+    {
+      "id": "cm-0091",
+      "source": "ticket",
+      "brand": "星海远征",
+      "author": "用户_1090",
+      "text": "版本更新后画面更精致了，满意。",
+      "publishedAt": "2026-10-30T21:43:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.86,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0092",
+      "source": "steam",
+      "brand": "星海远征",
+      "author": "steam_1091",
+      "text": "版本更新后登录界面换了，还挺新鲜。",
+      "publishedAt": "2026-10-30T11:46:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.91,
+        "needsReview": false,
+        "sentimentScore": -0.1
+      }
+    },
+    {
+      "id": "cm-0093",
+      "source": "taptap",
+      "brand": "星海远征",
+      "author": "tap_1092",
+      "text": "想问下 10 月版本更新了什么内容？",
+      "publishedAt": "2026-10-30T19:11:00+08:00",
+      "topicHints": [
+        "版本",
+        "更新"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.96,
+        "needsReview": false,
+        "sentimentScore": 0
+      }
+    },
+    {
+      "id": "cm-0094",
+      "source": "googleplay",
+      "brand": "星海远征",
+      "author": "gp_1093",
+      "text": "版更后回归玩家有奖励吗？",
+      "publishedAt": "2026-10-30T09:37:00+08:00",
+      "topicHints": [
+        "版本",
+        "版更"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "版本"
+        ],
+        "primaryTopic": "版本",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 0 条，簇级别 none。",
+        "severity": "none",
+        "confidence": 0.87,
+        "needsReview": false,
+        "sentimentScore": 0.1
+      }
+    },
+    {
+      "id": "cm-0095",
+      "source": "community",
+      "brand": "机甲前线",
+      "author": "社区_1094",
+      "text": "跨服战一进入就掉线，重连好几次都不行。",
+      "publishedAt": "2026-10-31T11:46:00+08:00",
+      "topicHints": [
+        "Bug",
+        "掉线"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「Bug」+ 明确影响「掉线」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.92,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0096",
+      "source": "ticket",
+      "brand": "机甲前线",
+      "author": "用户_1095",
+      "text": "新机甲技能释放卡顿严重，战斗根本没法正常进行。",
+      "publishedAt": "2026-10-31T19:11:00+08:00",
+      "topicHints": [
+        "Bug",
+        "卡顿",
+        "没法正常"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「Bug」+ 明确影响「卡顿、没法正常」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.97,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0097",
+      "source": "steam",
+      "brand": "机甲前线",
+      "author": "steam_1096",
+      "text": "机甲外观建模不太满意，BUG 修完希望能优化一下。",
+      "publishedAt": "2026-10-31T09:37:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.88,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0098",
+      "source": "taptap",
+      "brand": "机甲前线",
+      "author": "tap_1097",
+      "text": "这个 BUG 反馈很久了，优先级感觉很低。",
+      "publishedAt": "2026-10-31T16:07:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.93,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0099",
+      "source": "googleplay",
+      "brand": "机甲前线",
+      "author": "gp_1098",
+      "text": "昨天的热更新修复了掉线问题，现在稳定多了。",
+      "publishedAt": "2026-10-31T22:56:00+08:00",
+      "topicHints": [
+        "Bug",
+        "掉线",
+        "修复"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0100",
+      "source": "community",
+      "brand": "机甲前线",
+      "author": "社区_1099",
+      "text": "机甲平衡性调整后 BUG 少了很多，体验好多了，满意。",
+      "publishedAt": "2026-10-31T13:18:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": 0.9
+      }
+    },
+    {
+      "id": "cm-0101",
+      "source": "ticket",
+      "brand": "机甲前线",
+      "author": "用户_1100",
+      "text": "这次 BUG 修复速度很快，给开发点赞。",
+      "publishedAt": "2026-10-31T20:28:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG",
+        "修复"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0102",
+      "source": "steam",
+      "brand": "机甲前线",
+      "author": "steam_1101",
+      "text": "想问下下次版本更新和 BUG 修复是什么时候？",
+      "publishedAt": "2026-10-31T10:24:00+08:00",
+      "topicHints": [
+        "Bug",
+        "BUG",
+        "修复"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "Bug"
+        ],
+        "primaryTopic": "Bug",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": -0.1
+      }
+    },
+    {
+      "id": "cm-0103",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1102",
+      "text": "新充值活动的折扣力度比上个月小，有点失望。",
+      "publishedAt": "2026-11-01T16:07:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.66,
+        "needsReview": true,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0104",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1103",
+      "text": "充值界面改版后感觉不如以前顺手，希望优化。",
+      "publishedAt": "2026-11-01T22:56:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.69,
+        "needsReview": true,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0105",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1104",
+      "text": "这次充值的档位设置不太合理，6 元档没有额外奖励。",
+      "publishedAt": "2026-11-01T13:18:00+08:00",
+      "topicHints": [
+        "充值",
+        "档位"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.6,
+        "needsReview": true,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0106",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1105",
+      "text": "充值返利的规则写得太复杂，看不懂，体验一般。",
+      "publishedAt": "2026-11-01T20:28:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.63,
+        "needsReview": true,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0107",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1106",
+      "text": "月卡价格涨了，但内容没变，感觉不太划算。",
+      "publishedAt": "2026-11-01T10:24:00+08:00",
+      "topicHints": [
+        "充值",
+        "月卡"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.66,
+        "needsReview": true,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0108",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1107",
+      "text": "充值活动的赠送比例感觉变低了，不太满意。",
+      "publishedAt": "2026-11-01T17:35:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.69,
+        "needsReview": true,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0109",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1108",
+      "text": "希望充值能多几个档位选择，现在可选太少。",
+      "publishedAt": "2026-11-01T08:12:00+08:00",
+      "topicHints": [
+        "充值",
+        "档位"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.6,
+        "needsReview": true,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0110",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1109",
+      "text": "充值到账的提示音太吵，建议加个开关。",
+      "publishedAt": "2026-11-01T14:52:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.63,
+        "needsReview": true,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0111",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1110",
+      "text": "充值记录页面加载有点慢，希望优化一下。",
+      "publishedAt": "2026-11-01T21:43:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.66,
+        "needsReview": true,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0112",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1111",
+      "text": "这次充值活动的时间安排不太合理，赶上工作日。",
+      "publishedAt": "2026-11-01T11:46:00+08:00",
+      "topicHints": [
+        "充值"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "充值"
+        ],
+        "primaryTopic": "充值",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 10 条，聚合达到 P0，簇级别 P0。",
+        "severity": "p2",
+        "confidence": 0.69,
+        "needsReview": true,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0113",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1112",
+      "text": "工单提交三天了还没人处理，进度一直停滞。",
+      "publishedAt": "2026-11-02T20:28:00+08:00",
+      "topicHints": [
+        "客服",
+        "没人处理",
+        "工单"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「客服」+ 明确影响「没人处理」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.84,
+        "needsReview": false,
+        "sentimentScore": -0.6
+      }
+    },
+    {
+      "id": "cm-0114",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1113",
+      "text": "客服电话一直排队，等了二十分钟也没人接。",
+      "publishedAt": "2026-11-02T10:24:00+08:00",
+      "topicHints": [
+        "客服",
+        "排队"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P1",
+        "noise": false,
+        "note": "单条 P1：负面 + 主题「客服」+ 明确影响「排队」，无 P0 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "p1",
+        "confidence": 0.89,
+        "needsReview": false,
+        "sentimentScore": -0.7
+      }
+    },
+    {
+      "id": "cm-0115",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1114",
+      "text": "客服的话术太官方了，听着有点距离感。",
+      "publishedAt": "2026-11-02T17:35:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.94,
+        "needsReview": false,
+        "sentimentScore": -0.8
+      }
+    },
+    {
+      "id": "cm-0116",
+      "source": "community",
+      "brand": "云上大陆",
+      "author": "社区_1115",
+      "text": "希望客服能提供夜间服务，现在晚上找不到人。",
+      "publishedAt": "2026-11-02T08:12:00+08:00",
+      "topicHints": [
+        "客服",
+        "服务"
+      ],
+      "labels": {
+        "sentiment": "negative",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "P2",
+        "noise": false,
+        "note": "单条 P2：负面情绪但无 P0/P1 信号；簇内负面 4 条，聚合达到 P1，簇级别 P1。",
+        "severity": "p2",
+        "confidence": 0.85,
+        "needsReview": false,
+        "sentimentScore": -0.9
+      }
+    },
+    {
+      "id": "cm-0117",
+      "source": "ticket",
+      "brand": "云上大陆",
+      "author": "用户_1116",
+      "text": "工单处理速度很快，当天就解决了。",
+      "publishedAt": "2026-11-02T14:52:00+08:00",
+      "topicHints": [
+        "客服",
+        "工单"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.9,
+        "needsReview": false,
+        "sentimentScore": 0.6
+      }
+    },
+    {
+      "id": "cm-0118",
+      "source": "steam",
+      "brand": "云上大陆",
+      "author": "steam_1117",
+      "text": "客服态度很好，问题解释得很清楚。",
+      "publishedAt": "2026-11-02T21:43:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.95,
+        "needsReview": false,
+        "sentimentScore": 0.7
+      }
+    },
+    {
+      "id": "cm-0119",
+      "source": "taptap",
+      "brand": "云上大陆",
+      "author": "tap_1118",
+      "text": "这次客服响应及时，体验不错。",
+      "publishedAt": "2026-11-02T11:46:00+08:00",
+      "topicHints": [
+        "客服"
+      ],
+      "labels": {
+        "sentiment": "positive",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：正面评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.86,
+        "needsReview": false,
+        "sentimentScore": 0.8
+      }
+    },
+    {
+      "id": "cm-0120",
+      "source": "googleplay",
+      "brand": "云上大陆",
+      "author": "gp_1119",
+      "text": "请问客服工单一般多久回复一次？",
+      "publishedAt": "2026-11-02T19:11:00+08:00",
+      "topicHints": [
+        "客服",
+        "工单"
+      ],
+      "labels": {
+        "sentiment": "neutral",
+        "topics": [
+          "客服"
+        ],
+        "primaryTopic": "客服",
+        "expectedLevel": "none",
+        "noise": false,
+        "note": "单条 none：中性评论，无 P0/P1 信号；簇内负面 4 条，簇级别 P1。",
+        "severity": "none",
+        "confidence": 0.91,
+        "needsReview": false,
+        "sentimentScore": 0.2
+      }
+    }
+  ]
+}

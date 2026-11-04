@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QCC Workbench · 单文件演示（MVP）</title>
+<style>
+/* ===== 设计 token（与 apps/web/src/styles/tokens.css 对齐） ===== */
+:root{
+  --paper:#f5f4f0;--paper-deep:#ece9e2;--surface:#fff;--surface-subtle:#faf9f6;
+  --ink:#17191d;--ink-soft:#3f434b;--ink-muted:#6f747e;--ink-faint:#9a9ea7;
+  --line:#e4e1d8;--line-strong:#cfcbc0;
+  --primary:#145c4c;--primary-hover:#0e4a3d;--primary-wash:#e7f0ec;--primary-wash-strong:#d6e7e0;--primary-ink:#0b3a30;
+  --ok:#2b7554;--ok-wash:#e5f1ea;--ok-ink:#1c523a;
+  --warn:#9c6612;--warn-wash:#f7efdd;--warn-ink:#6e4708;
+  --danger:#b0372a;--danger-wash:#f8e8e4;--danger-ink:#7d241b;
+  --info:#325d94;--info-wash:#e7eef7;--info-ink:#21406a;
+  --neutral-wash:#efeee9;--neutral-ink:#4d5158;
+  --sidebar-bg:#14171a;--sidebar-bg-soft:#1a1e22;--sidebar-ink:#e9e9e5;--sidebar-muted:#9298a0;--sidebar-faint:#6b7178;--sidebar-line:#272c31;--sidebar-active:#223029;--sidebar-active-ink:#f0f4f1;--sidebar-accent:#7fb8a5;
+  --font-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --font-serif:"Songti SC","Noto Serif SC","STSong",Georgia,serif;
+  --font-mono:"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;--sp-10:40px;
+  --r-xs:3px;--r-sm:4px;--r-md:6px;--r-lg:10px;--r-pill:999px;
+  --shadow-pop:0 6px 20px rgba(23,25,29,.1);--shadow-drawer:-16px 0 40px rgba(23,25,29,.16);--shadow-modal:0 20px 56px rgba(23,25,29,.22);
+  --sidebar-w:232px;--topbar-h:56px;--content-max:1440px;
+  --dur-1:120ms;--dur-2:180ms;--ease:cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:22px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--primary);text-decoration:none}
+button:focus:not(:focus-visible){outline:none}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.num,.tnum{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--font-mono);font-size:.94em}
+.muted{color:var(--ink-muted)}
+.faint{color:var(--ink-faint)}
+.serif{font-family:var(--font-serif)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--line-strong);border:3px solid transparent;border-radius:999px;background-clip:content-box}
+
+/* ===== 骨架 ===== */
+.app{display:grid;grid-template-columns:var(--sidebar-w) minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;z-index:20;height:100vh;display:flex;flex-direction:column;background:var(--sidebar-bg);color:var(--sidebar-ink);border-right:1px solid var(--sidebar-line);overflow:hidden}
+.brand{display:flex;align-items:center;gap:12px;height:var(--topbar-h);padding:0 16px;border-bottom:1px solid var(--sidebar-line);flex:none}
+.brand__logo{width:26px;height:26px;flex:none;display:grid;place-items:center;border:1px solid var(--sidebar-accent);border-radius:4px;color:var(--sidebar-accent);font-family:var(--font-serif);font-size:13px;font-weight:600}
+.brand__text{display:flex;flex-direction:column;min-width:0}
+.brand__name{font-size:13px;font-weight:600;white-space:nowrap}
+.brand__sub{font-size:11px;line-height:16px;color:var(--sidebar-muted);white-space:nowrap}
+.nav{flex:1;overflow-y:auto;padding:16px 8px;display:flex;flex-direction:column;gap:4px}
+.nav__label{padding:12px 12px 8px;font-size:11px;letter-spacing:.08em;color:var(--sidebar-faint);white-space:nowrap}
+.nav__item{display:flex;align-items:center;gap:12px;height:36px;padding:0 12px;border-radius:6px;color:var(--sidebar-muted);white-space:nowrap;background:none;border:0;text-align:left;font-size:14px;transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease)}
+.nav__item:hover{background:var(--sidebar-bg-soft);color:var(--sidebar-ink)}
+.nav__item.is-active{background:var(--sidebar-active);color:var(--sidebar-active-ink);box-shadow:inset 2px 0 0 var(--sidebar-accent)}
+.nav__item svg{flex:none;width:18px;height:18px;stroke-width:1.6}
+.nav__item.is-active svg{color:var(--sidebar-accent)}
+.sidebar__foot{flex:none;border-top:1px solid var(--sidebar-line);padding:12px 16px;display:flex;flex-direction:column;gap:4px;font-size:11px;line-height:16px;color:var(--sidebar-faint);white-space:nowrap}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{position:sticky;top:0;z-index:20;height:var(--topbar-h);flex:none;display:flex;align-items:center;gap:16px;padding:0 32px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-muted);min-width:0}
+.crumbs b{color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumbs svg{width:12px;height:12px;color:var(--ink-faint)}
+.spacer{flex:1}
+.topbar__actions{display:flex;align-items:center;gap:12px}
+.demo-badge{display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 8px;border:1px solid var(--warn);border-radius:4px;color:var(--warn-ink);background:var(--warn-wash);font-size:11px;line-height:1;letter-spacing:.04em;white-space:nowrap}
+.demo-badge i{width:6px;height:6px;border-radius:50%;background:var(--warn)}
+.content{flex:1;width:100%;max-width:var(--content-max);margin:0 auto;padding:24px 32px 48px;min-width:0}
+.page-head{display:flex;align-items:flex-end;gap:16px;margin-bottom:20px}
+.page-head h1{font-size:20px;line-height:28px;font-weight:600;letter-spacing:.01em}
+.page-head p{margin-top:4px;font-size:13px;line-height:20px;color:var(--ink-muted);max-width:760px}
+.page-head .spacer{flex:1}
+.section-title{font-size:16px;line-height:24px;font-weight:600}
+.section-sub{font-size:12px;line-height:18px;color:var(--ink-muted)}
+
+/* ===== 通用组件 ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);color:var(--ink);font-size:13px;white-space:nowrap;transition:background var(--dur-1),border-color var(--dur-1)}
+.btn:hover{border-color:var(--ink-faint);background:var(--surface-subtle)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn svg{width:15px;height:15px;stroke-width:1.7}
+.btn--primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn--primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+.btn--danger{background:var(--danger);border-color:var(--danger);color:#fff}
+.btn--danger:hover{filter:brightness(.94)}
+.btn--ghost{border-color:transparent;background:transparent;color:var(--ink-muted)}
+.btn--ghost:hover{background:var(--neutral-wash);color:var(--ink)}
+.btn--sm{height:28px;padding:0 10px;font-size:12px}
+.segmented{display:inline-flex;padding:2px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface)}
+.segmented button{height:26px;padding:0 10px;border:0;border-radius:4px;background:transparent;color:var(--ink-muted);font-size:12px}
+.segmented button.is-active{background:var(--primary-wash);color:var(--primary-ink);font-weight:500}
+.card{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.card__head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.card__head h3{font-size:14px;font-weight:600}
+.card__head .section-sub{margin-top:2px}
+.card__body{padding:18px}
+.card__body--flush{padding:0}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.stack{display:grid;gap:12px}
+.row{display:flex;align-items:center;gap:8px}
+.badge{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:4px;font-size:11px;line-height:1;white-space:nowrap;letter-spacing:.02em}
+.badge--ok{background:var(--ok-wash);color:var(--ok-ink)}
+.badge--warn{background:var(--warn-wash);color:var(--warn-ink)}
+.badge--danger{background:var(--danger-wash);color:var(--danger-ink)}
+.badge--info{background:var(--info-wash);color:var(--info-ink)}
+.badge--muted{background:var(--neutral-wash);color:var(--neutral-ink)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{padding:16px 16px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--line)}
+.kpi.ok::after{background:var(--ok)}.kpi.warn::after{background:var(--warn)}.kpi.bad::after{background:var(--danger)}
+.kpi__label{font-size:12px;color:var(--ink-muted);display:flex;align-items:center;gap:6px}
+.kpi__value{margin-top:8px;font-size:30px;line-height:36px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi__value small{font-size:14px;font-weight:500;color:var(--ink-muted);margin-left:2px}
+.kpi__meta{margin-top:6px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-faint)}
+.kpi__delta{font-variant-numeric:tabular-nums}
+.kpi__delta.up{color:var(--ok-ink)}.kpi__delta.down{color:var(--danger-ink)}
+.stats-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.stat{padding:14px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat__label{font-size:12px;color:var(--ink-muted)}
+.stat__value{margin-top:4px;font-size:22px;line-height:28px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat__hint{margin-top:2px;font-size:11px;color:var(--ink-faint)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--ink-muted);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface-subtle);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr[data-click]{cursor:pointer;transition:background var(--dur-1)}
+tbody tr[data-click]:hover{background:var(--surface-subtle)}
+.cell-title{font-weight:500;color:var(--ink)}
+.cell-sub{margin-top:2px;font-size:11px;color:var(--ink-faint)}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.input,.select{height:34px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);padding:0 10px;font-size:13px;min-width:0}
+.input{width:240px}
+.input::placeholder{color:var(--ink-faint)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tabs button{height:38px;padding:0 14px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--ink-muted);font-size:13px}
+.tabs button.is-active{color:var(--primary);border-bottom-color:var(--primary);font-weight:500}
+.bar-list{display:grid;gap:10px}
+.bar-row{display:grid;grid-template-columns:110px minmax(0,1fr) 42px;align-items:center;gap:10px;font-size:12px}
+.bar-track{height:8px;border-radius:999px;background:var(--neutral-wash);overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;background:var(--primary);transition:width .5s var(--ease)}
+.bar-fill.info{background:var(--info)}.bar-fill.warn{background:var(--warn)}.bar-fill.danger{background:var(--danger)}.bar-fill.ok{background:var(--ok)}
+.bar-value{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-muted)}
+.chart{width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--font-sans);font-size:10px;fill:var(--ink-faint)}
+.chart .grid-line{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4}
+.chart .axis{stroke:var(--line-strong)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--ink-muted)}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle}
+.anomaly{display:flex;gap:12px;padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--danger);border-radius:6px;background:var(--surface-subtle);cursor:pointer;transition:background var(--dur-1)}
+.anomaly:hover{background:var(--danger-wash)}
+.anomaly__icon{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--danger-wash);color:var(--danger-ink)}
+.anomaly__icon svg{width:15px;height:15px}
+.anomaly__title{font-size:13px;font-weight:500}
+.anomaly__desc{margin-top:2px;font-size:12px;color:var(--ink-muted)}
+.empty{padding:36px 16px;text-align:center;color:var(--ink-faint);font-size:13px}
+.hint{font-size:12px;color:var(--ink-faint);line-height:18px}
+.timeline{display:grid;gap:0}
+.tl-item{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;padding-bottom:14px;position:relative}
+.tl-item:not(:last-child)::before{content:"";position:absolute;left:7px;top:14px;bottom:0;width:1px;background:var(--line)}
+.tl-dot{width:8px;height:8px;margin-top:5px;border-radius:50%;background:var(--surface);border:2px solid var(--primary);z-index:1}
+.tl-item:first-child .tl-dot{background:var(--primary)}
+.tl-title{font-size:12px;font-weight:500;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tl-note{margin-top:2px;font-size:12px;color:var(--ink-muted)}
+.tl-time{font-size:11px;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.tl-by{font-size:11px;color:var(--ink-faint)}
+.sev{border-left:3px solid var(--line)}
+.sev--danger{border-left-color:var(--danger)}
+.sev--warn{border-left-color:var(--warn)}
+.sev--info{border-left-color:var(--info)}
+.msg{padding:10px 12px;border-radius:6px;background:var(--surface-subtle);border:1px solid var(--line);font-size:13px;line-height:20px}
+.msg--agent{background:var(--primary-wash);border-color:var(--primary-wash-strong);margin-left:32px}
+.msg--hit{outline:2px solid var(--danger);outline-offset:1px;background:var(--danger-wash)}
+.msg__meta{font-size:11px;color:var(--ink-faint);margin-bottom:4px;display:flex;gap:8px}
+.tagchip{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface-subtle);font-size:12px;line-height:18px}
+.tagchip b{font-weight:600}
+.tagchip .mono{color:var(--ink-faint)}
+.tagchip__evidence{color:var(--ink-muted);font-size:11px;display:block;margin-top:4px;border-left:2px solid var(--line-strong);padding-left:8px}
+
+/* ===== 抽屉 / toast ===== */
+.drawer-mask{position:fixed;inset:0;background:rgba(23,25,29,.28);opacity:0;pointer-events:none;transition:opacity var(--dur-2);z-index:60}
+.drawer-mask.is-open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(620px,94vw);background:var(--paper);box-shadow:var(--shadow-drawer);transform:translateX(102%);transition:transform var(--dur-3) var(--ease);z-index:61;display:flex;flex-direction:column}
+.drawer.is-open{transform:translateX(0)}
+.drawer__head{flex:none;display:flex;align-items:flex-start;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);background:var(--surface)}
+.drawer__head h2{font-size:16px;line-height:24px;font-weight:600}
+.drawer__head p{margin-top:3px;font-size:12px;line-height:18px;color:var(--ink-muted)}
+.drawer__body{flex:1;overflow-y:auto;padding:20px 22px}
+.drawer__foot{flex:none;display:flex;gap:8px;justify-content:flex-end;padding:14px 22px;border-top:1px solid var(--line);background:var(--surface)}
+.icon-btn{width:30px;height:30px;border:1px solid transparent;border-radius:6px;background:transparent;display:grid;place-items:center;color:var(--ink-muted)}
+.icon-btn:hover{background:var(--neutral-wash);color:var(--ink)}
+.icon-btn svg{width:18px;height:18px}
+#toast{position:fixed;right:24px;bottom:24px;z-index:100;display:grid;gap:8px;pointer-events:none}
+.toast{padding:12px 16px;border-radius:8px;background:var(--ink);color:#fff;box-shadow:0 10px 28px rgba(23,25,29,.18);font-size:13px;max-width:360px;animation:toast-in .18s var(--ease)}
+.toast b{display:block;font-weight:600;margin-bottom:2px}
+.toast span{color:#c9ccd2;font-size:12px}
+@keyframes toast-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media (max-width:1279px){
+  .app{grid-template-columns:64px minmax(0,1fr)}
+  .brand{padding:0;justify-content:center}
+  .brand__text,.nav__label,.nav__item span,.sidebar__foot{display:none}
+  .nav{padding:16px 8px}.nav__item{justify-content:center;padding:0}
+  .topbar{padding:0 20px}.content{padding-left:20px;padding-right:20px}
+}
+@media (max-width:1100px){
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:nth-child(2){border-right:0}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand__logo">QC</span>
+      <span class="brand__text"><span class="brand__name">QCC Workbench</span><span class="brand__sub">客服运营质量管控</span></span>
+    </div>
+    <nav class="nav" id="nav" aria-label="主导航">
+      <div class="nav__label">运营</div>
+      <button class="nav__item" data-route="dashboard" data-end="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>运营总览</span></button>
+      <button class="nav__item" data-route="qc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5h6M9 3h6a2 2 0 0 1 2 2v16l-5-3-5 3V5a2 2 0 0 1 2-2Z"/><path d="m9 12 2 2 4-4"/></svg><span>质检</span></button>
+      <button class="nav__item" data-route="badcases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg><span>badcase</span></button>
+      <button class="nav__item" data-route="sentiment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/><path d="M8 9h8M8 13h5"/></svg><span>舆情</span></button>
+      <button class="nav__item" data-route="clues"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2V17h6v-.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg><span>线索</span></button>
+      <button class="nav__item" data-route="eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="m4.9 4.9 3.2 3.2M19.1 4.9l-3.2 3.2M4.9 19.1l3.2-3.2M19.1 19.1l-3.2-3.2M2 12h3M19 12h3M12 2v3M12 19v3"/></svg><span>评测</span></button>
+      <div class="nav__label">系统</div>
+      <button class="nav__item" data-route="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg><span>关于</span></button>
+    </nav>
+    <div class="sidebar__foot"><span class="mono">v0.1.0 · demo</span><span>合成数据 · 非真实业务</span></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <nav class="crumbs" id="crumbs"></nav>
+      <span class="spacer"></span>
+      <div class="topbar__actions">
+        <div class="segmented" id="range-switch">
+          <button data-range="7d">近 7 天</button><button data-range="14d">近 14 天</button><button data-range="30d">近 30 天</button>
+        </div>
+        <span class="demo-badge"><i></i>演示态</span>
+        <button class="btn btn--sm" data-action="reset-demo">重置演示</button>
+      </div>
+    </header>
+    <main class="content" id="view"></main>
+  </div>
+</div>
+<div class="drawer-mask" id="drawer-mask"></div>
+<aside class="drawer" id="drawer" aria-live="polite"></aside>
+<div id="toast"></div>
+
+<script>
+"use strict";
+const DATA = {"meta":{"product":"AI客服运营质量管控工作台","version":"0.1.0","generatedAt":"2026-11-03T10:00:00+08:00","modelVersion":"rule-engine-v0.1.0","roles":[{"id":"qc","label":"质检 / 培训"},{"id":"lead","label":"客服主管"},{"id":"agent","label":"坐席"},{"id":"brand","label":"品牌 / 市场"},{"id":"product","label":"产研"},{"id":"algo","label":"算法 / 研发"}],"owners":[{"role":"qc","name":"沈言"},{"role":"lead","name":"陆川"},{"role":"brand","name":"江岚"},{"role":"product","name":"周野"},{"role":"market","name":"程雨"},{"role":"knowledge","name":"顾清"},{"role":"training","name":"唐沐"}],"tagTaxonomy":[{"code":"attitude","name":"服务态度","description":"辱骂、指责、嘲讽反问、驱赶、明显不耐烦等态度问题","severity":"high","weight":25},{"code":"forbidden","name":"违规话术","description":"索要好评、私下交易/站外引流、泄露隐私、绝对化承诺、诱导充值返利","severity":"high","weight":30},{"code":"off_topic","name":"答非所问","description":"用户问题与坐席回答意图不匹配、模板回复、连续多轮未回应核心诉求","severity":"medium","weight":15},{"code":"wrong_knowledge","name":"知识错误","description":"与知识库事实冲突的陈述（费率、返还比例、活动时间、退款规则、版本信息）","severity":"high","weight":25},{"code":"timeout","name":"响应超时","description":"坐席回复间隔超过 180 秒","severity":"medium","weight":10},{"code":"escalation","name":"情绪升级","description":"用户从平静转为愤怒，或提出投诉/曝光/退款升级等诉求（会话风险标记）","severity":"medium","weight":20}],"topics":["版本","充值","外挂","客服","活动","Bug","其他"],"sources":[{"id":"steam","label":"Steam 商店"},{"id":"taptap","label":"TapTap"},{"id":"googleplay","label":"Google Play"},{"id":"community","label":"官方社区"},{"id":"ticket","label":"客服工单"}],"clueTargets":[{"id":"product","label":"产研（周野）"},{"id":"brand","label":"品牌市场（江岚）"},{"id":"market","label":"市场（程雨）"},{"id":"cs","label":"客服（陆川）"}],"statusLabels":{"badcase":{"open":"待处理","in_progress":"处理中","pending_verify":"待验证","closed":"已闭环"},"alert":{"new":"待响应","acknowledged":"已确认","responding":"处理中","escalated":"已升级","resolved":"已解决"},"clue":{"draft":"草稿","routed":"已提交","accepted":"已接收","rejected":"已拒绝","closed":"已关闭"}},"demo":{"datasetVersion":"2026.11.03","resetAvailable":true,"itemCounts":{"qc":60,"sentiment":120}}},"summary":{"7d":{"range":"7d","generatedAt":"2026-11-03T10:00:00+08:00","kpis":[{"id":"qcCoverage","label":"质检覆盖率","value":1,"target":0.9,"op":">=","status":"ok","delta":0.06,"unit":"percent","hint":"目标 ≥90%：已质检会话 / 导入会话"},{"id":"qcAccuracy","label":"质检准确率","value":0.821,"target":0.8,"op":">=","status":"ok","delta":0.001,"unit":"percent","hint":"目标 ≥80%：质检平均分/100"},{"id":"badcaseCloseRate","label":"badcase 关闭率","value":0.143,"target":0.7,"op":">=","status":"bad","delta":-0.157,"unit":"percent","hint":"目标 ≥70%：已关闭 / 全部 badcase"},{"id":"p0ResponseMin","label":"P0 首响时长","value":9,"target":30,"op":"\u003c=","status":"ok","delta":-7,"unit":"min","hint":"目标 ≤30 分钟：P0 预警首响均值"},{"id":"alertPrecision","label":"预警准确率","value":0.4762,"target":0.8,"op":">=","status":"bad","delta":-0.344,"unit":"percent","hint":"目标 ≥80%：最近一次舆情评测预警 precision"},{"id":"clueCloseRate","label":"线索关闭率","value":0.2,"target":0.7,"op":">=","status":"bad","delta":0,"unit":"percent","hint":"目标 ≥70%：已关闭 / 全部线索"},{"id":"csat","label":"客户满意度","value":4.4,"target":4.2,"op":">=","status":"ok","delta":0.1,"unit":"score","hint":"目标 ≥4.2 分（5 分制）"}],"volume":{"conversations":60,"reviewPending":7,"badcasesOpen":12,"alertsOpen":14,"cluesOpen":8},"quality":{"avgScore":82.1,"violationRate":0.667},"distribution":{"tags":[{"code":"attitude","name":"服务态度","count":9},{"code":"forbidden","name":"违规话术","count":8},{"code":"off_topic","name":"答非所问","count":8},{"code":"wrong_knowledge","name":"知识错误","count":8},{"code":"timeout","name":"响应超时","count":7},{"code":"escalation","name":"情绪升级","count":11}],"channels":[{"channel":"online","count":20},{"channel":"ticket","count":20},{"channel":"phone","count":20}],"alertLevels":[{"level":"P0","count":3},{"level":"P1","count":8},{"level":"P2","count":10}],"clueTargets":[{"target":"product","count":3},{"target":"brand","count":2},{"target":"market","count":2},{"target":"cs","count":3}]}},"14d":{"range":"14d","generatedAt":"2026-11-03T10:00:00+08:00","kpis":[{"id":"qcCoverage","label":"质检覆盖率","value":1,"target":0.9,"op":">=","status":"ok","delta":0.06,"unit":"percent","hint":"目标 ≥90%：已质检会话 / 导入会话"},{"id":"qcAccuracy","label":"质检准确率","value":0.821,"target":0.8,"op":">=","status":"ok","delta":0.001,"unit":"percent","hint":"目标 ≥80%：质检平均分/100"},{"id":"badcaseCloseRate","label":"badcase 关闭率","value":0.143,"target":0.7,"op":">=","status":"bad","delta":-0.157,"unit":"percent","hint":"目标 ≥70%：已关闭 / 全部 badcase"},{"id":"p0ResponseMin","label":"P0 首响时长","value":9,"target":30,"op":"\u003c=","status":"ok","delta":-7,"unit":"min","hint":"目标 ≤30 分钟：P0 预警首响均值"},{"id":"alertPrecision","label":"预警准确率","value":0.4762,"target":0.8,"op":">=","status":"bad","delta":-0.344,"unit":"percent","hint":"目标 ≥80%：最近一次舆情评测预警 precision"},{"id":"clueCloseRate","label":"线索关闭率","value":0.2,"target":0.7,"op":">=","status":"bad","delta":0,"unit":"percent","hint":"目标 ≥70%：已关闭 / 全部线索"},{"id":"csat","label":"客户满意度","value":4.4,"target":4.2,"op":">=","status":"ok","delta":0.1,"unit":"score","hint":"目标 ≥4.2 分（5 分制）"}],"volume":{"conversations":60,"reviewPending":7,"badcasesOpen":12,"alertsOpen":14,"cluesOpen":8},"quality":{"avgScore":82.1,"violationRate":0.667},"distribution":{"tags":[{"code":"attitude","name":"服务态度","count":9},{"code":"forbidden","name":"违规话术","count":8},{"code":"off_topic","name":"答非所问","count":8},{"code":"wrong_knowledge","name":"知识错误","count":8},{"code":"timeout","name":"响应超时","count":7},{"code":"escalation","name":"情绪升级","count":11}],"channels":[{"channel":"online","count":20},{"channel":"ticket","count":20},{"channel":"phone","count":20}],"alertLevels":[{"level":"P0","count":3},{"level":"P1","count":8},{"level":"P2","count":10}],"clueTargets":[{"target":"product","count":3},{"target":"brand","count":2},{"target":"market","count":2},{"target":"cs","count":3}]}},"30d":{"range":"30d","generatedAt":"2026-11-03T10:00:00+08:00","kpis":[{"id":"qcCoverage","label":"质检覆盖率","value":1,"target":0.9,"op":">=","status":"ok","delta":0.06,"unit":"percent","hint":"目标 ≥90%：已质检会话 / 导入会话"},{"id":"qcAccuracy","label":"质检准确率","value":0.821,"target":0.8,"op":">=","status":"ok","delta":0.001,"unit":"percent","hint":"目标 ≥80%：质检平均分/100"},{"id":"badcaseCloseRate","label":"badcase 关闭率","value":0.143,"target":0.7,"op":">=","status":"bad","delta":-0.157,"unit":"percent","hint":"目标 ≥70%：已关闭 / 全部 badcase"},{"id":"p0ResponseMin","label":"P0 首响时长","value":9,"target":30,"op":"\u003c=","status":"ok","delta":-7,"unit":"min","hint":"目标 ≤30 分钟：P0 预警首响均值"},{"id":"alertPrecision","label":"预警准确率","value":0.4762,"target":0.8,"op":">=","status":"bad","delta":-0.344,"unit":"percent","hint":"目标 ≥80%：最近一次舆情评测预警 precision"},{"id":"clueCloseRate","label":"线索关闭率","value":0.2,"target":0.7,"op":">=","status":"bad","delta":0,"unit":"percent","hint":"目标 ≥70%：已关闭 / 全部线索"},{"id":"csat","label":"客户满意度","value":4.4,"target":4.2,"op":">=","status":"ok","delta":0.1,"unit":"score","hint":"目标 ≥4.2 分（5 分制）"}],"volume":{"conversations":60,"reviewPending":7,"badcasesOpen":12,"alertsOpen":14,"cluesOpen":8},"quality":{"avgScore":82.1,"violationRate":0.667},"distribution":{"tags":[{"code":"attitude","name":"服务态度","count":9},{"code":"forbidden","name":"违规话术","count":8},{"code":"off_topic","name":"答非所问","count":8},{"code":"wrong_knowledge","name":"知识错误","count":8},{"code":"timeout","name":"响应超时","count":7},{"code":"escalation","name":"情绪升级","count":11}],"channels":[{"channel":"online","count":20},{"channel":"ticket","count":20},{"channel":"phone","count":20}],"alertLevels":[{"level":"P0","count":3},{"level":"P1","count":8},{"level":"P2","count":10}],"clueTargets":[{"target":"product","count":3},{"target":"brand","count":2},{"target":"market","count":2},{"target":"cs","count":3}]}}},"trends":{"7d":{"range":"7d","rows":[{"date":"2026-10-28","qcCoverage":0.96,"qcAccuracy":0.88,"badcaseCloseRate":0.35,"p0ResponseMin":16,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.3},{"date":"2026-10-29","qcCoverage":0.98,"qcAccuracy":0.82,"badcaseCloseRate":0.4,"p0ResponseMin":18,"alertPrecision":0.88,"clueCloseRate":0.2,"csat":4.4},{"date":"2026-10-30","qcCoverage":0.94,"qcAccuracy":0.84,"badcaseCloseRate":0.3,"p0ResponseMin":20,"alertPrecision":0.82,"clueCloseRate":0.3,"csat":4.5},{"date":"2026-10-31","qcCoverage":0.96,"qcAccuracy":0.86,"badcaseCloseRate":0.35,"p0ResponseMin":12,"alertPrecision":0.85,"clueCloseRate":0.2,"csat":4.1},{"date":"2026-11-01","qcCoverage":0.98,"qcAccuracy":0.88,"badcaseCloseRate":0.4,"p0ResponseMin":14,"alertPrecision":0.88,"clueCloseRate":0.3,"csat":4.2},{"date":"2026-11-02","qcCoverage":0.94,"qcAccuracy":0.82,"badcaseCloseRate":0.3,"p0ResponseMin":16,"alertPrecision":0.82,"clueCloseRate":0.2,"csat":4.3},{"date":"2026-11-03","qcCoverage":0.96,"qcAccuracy":0.84,"badcaseCloseRate":0.35,"p0ResponseMin":18,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.4}]},"14d":{"range":"14d","rows":[{"date":"2026-10-21","qcCoverage":0.94,"qcAccuracy":0.82,"badcaseCloseRate":0.3,"p0ResponseMin":12,"alertPrecision":0.82,"clueCloseRate":0.2,"csat":4.1},{"date":"2026-10-22","qcCoverage":0.96,"qcAccuracy":0.84,"badcaseCloseRate":0.35,"p0ResponseMin":14,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.2},{"date":"2026-10-23","qcCoverage":0.98,"qcAccuracy":0.86,"badcaseCloseRate":0.4,"p0ResponseMin":16,"alertPrecision":0.88,"clueCloseRate":0.2,"csat":4.3},{"date":"2026-10-24","qcCoverage":0.94,"qcAccuracy":0.88,"badcaseCloseRate":0.3,"p0ResponseMin":18,"alertPrecision":0.82,"clueCloseRate":0.3,"csat":4.4},{"date":"2026-10-25","qcCoverage":0.96,"qcAccuracy":0.82,"badcaseCloseRate":0.35,"p0ResponseMin":20,"alertPrecision":0.85,"clueCloseRate":0.2,"csat":4.5},{"date":"2026-10-26","qcCoverage":0.98,"qcAccuracy":0.84,"badcaseCloseRate":0.4,"p0ResponseMin":12,"alertPrecision":0.88,"clueCloseRate":0.3,"csat":4.1},{"date":"2026-10-27","qcCoverage":0.94,"qcAccuracy":0.86,"badcaseCloseRate":0.3,"p0ResponseMin":14,"alertPrecision":0.82,"clueCloseRate":0.2,"csat":4.2},{"date":"2026-10-28","qcCoverage":0.96,"qcAccuracy":0.88,"badcaseCloseRate":0.35,"p0ResponseMin":16,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.3},{"date":"2026-10-29","qcCoverage":0.98,"qcAccuracy":0.82,"badcaseCloseRate":0.4,"p0ResponseMin":18,"alertPrecision":0.88,"clueCloseRate":0.2,"csat":4.4},{"date":"2026-10-30","qcCoverage":0.94,"qcAccuracy":0.84,"badcaseCloseRate":0.3,"p0ResponseMin":20,"alertPrecision":0.82,"clueCloseRate":0.3,"csat":4.5},{"date":"2026-10-31","qcCoverage":0.96,"qcAccuracy":0.86,"badcaseCloseRate":0.35,"p0ResponseMin":12,"alertPrecision":0.85,"clueCloseRate":0.2,"csat":4.1},{"date":"2026-11-01","qcCoverage":0.98,"qcAccuracy":0.88,"badcaseCloseRate":0.4,"p0ResponseMin":14,"alertPrecision":0.88,"clueCloseRate":0.3,"csat":4.2},{"date":"2026-11-02","qcCoverage":0.94,"qcAccuracy":0.82,"badcaseCloseRate":0.3,"p0ResponseMin":16,"alertPrecision":0.82,"clueCloseRate":0.2,"csat":4.3},{"date":"2026-11-03","qcCoverage":0.96,"qcAccuracy":0.84,"badcaseCloseRate":0.35,"p0ResponseMin":18,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.4}]},"30d":{"range":"30d","rows":[{"date":"2026-10-05","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-06","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-07","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-08","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-09","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-10","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-11","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-12","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-13","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-14","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-15","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-16","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-17","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-18","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-19","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-20","qcCoverage":null,"qcAccuracy":null,"badcaseCloseRate":null,"p0ResponseMin":null,"alertPrecision":null,"clueCloseRate":null,"csat":null},{"date":"2026-10-21","qcCoverage":0.94,"qcAccuracy":0.82,"badcaseCloseRate":0.3,"p0ResponseMin":12,"alertPrecision":0.82,"clueCloseRate":0.2,"csat":4.1},{"date":"2026-10-22","qcCoverage":0.96,"qcAccuracy":0.84,"badcaseCloseRate":0.35,"p0ResponseMin":14,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.2},{"date":"2026-10-23","qcCoverage":0.98,"qcAccuracy":0.86,"badcaseCloseRate":0.4,"p0ResponseMin":16,"alertPrecision":0.88,"clueCloseRate":0.2,"csat":4.3},{"date":"2026-10-24","qcCoverage":0.94,"qcAccuracy":0.88,"badcaseCloseRate":0.3,"p0ResponseMin":18,"alertPrecision":0.82,"clueCloseRate":0.3,"csat":4.4},{"date":"2026-10-25","qcCoverage":0.96,"qcAccuracy":0.82,"badcaseCloseRate":0.35,"p0ResponseMin":20,"alertPrecision":0.85,"clueCloseRate":0.2,"csat":4.5},{"date":"2026-10-26","qcCoverage":0.98,"qcAccuracy":0.84,"badcaseCloseRate":0.4,"p0ResponseMin":12,"alertPrecision":0.88,"clueCloseRate":0.3,"csat":4.1},{"date":"2026-10-27","qcCoverage":0.94,"qcAccuracy":0.86,"badcaseCloseRate":0.3,"p0ResponseMin":14,"alertPrecision":0.82,"clueCloseRate":0.2,"csat":4.2},{"date":"2026-10-28","qcCoverage":0.96,"qcAccuracy":0.88,"badcaseCloseRate":0.35,"p0ResponseMin":16,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.3},{"date":"2026-10-29","qcCoverage":0.98,"qcAccuracy":0.82,"badcaseCloseRate":0.4,"p0ResponseMin":18,"alertPrecision":0.88,"clueCloseRate":0.2,"csat":4.4},{"date":"2026-10-30","qcCoverage":0.94,"qcAccuracy":0.84,"badcaseCloseRate":0.3,"p0ResponseMin":20,"alertPrecision":0.82,"clueCloseRate":0.3,"csat":4.5},{"date":"2026-10-31","qcCoverage":0.96,"qcAccuracy":0.86,"badcaseCloseRate":0.35,"p0ResponseMin":12,"alertPrecision":0.85,"clueCloseRate":0.2,"csat":4.1},{"date":"2026-11-01","qcCoverage":0.98,"qcAccuracy":0.88,"badcaseCloseRate":0.4,"p0ResponseMin":14,"alertPrecision":0.88,"clueCloseRate":0.3,"csat":4.2},{"date":"2026-11-02","qcCoverage":0.94,"qcAccuracy":0.82,"badcaseCloseRate":0.3,"p0ResponseMin":16,"alertPrecision":0.82,"clueCloseRate":0.2,"csat":4.3},{"date":"2026-11-03","qcCoverage":0.96,"qcAccuracy":0.84,"badcaseCloseRate":0.35,"p0ResponseMin":18,"alertPrecision":0.85,"clueCloseRate":0.3,"csat":4.4}]}},"anomalies":[{"id":"ano-badcaseCloseRate","metric":"badcaseCloseRate","metricLabel":"badcase 关闭率","current":0.143,"target":0.7,"deviation":-0.557,"severity":"bad","drillType":"badcase","drillFilter":{"status":"open"},"owner":"陆川","suggestion":"优先清理超期未关闭 badcase，按归因类别分派责任人。"},{"id":"ano-alertPrecision","metric":"alertPrecision","metricLabel":"预警准确率","current":0.4762,"target":0.8,"deviation":-0.324,"severity":"bad","drillType":"sentiment","drillFilter":{"level":"P1"},"owner":"陆川","suggestion":"复核误报预警的聚簇与分级规则，调整主题词表与聚合阈值。"},{"id":"ano-clueCloseRate","metric":"clueCloseRate","metricLabel":"线索关闭率","current":0.2,"target":0.7,"deviation":-0.5,"severity":"bad","drillType":"clue","drillFilter":{"status":"draft"},"owner":"周野","suggestion":"推动草稿态线索尽快路由与验收，清理长期未关闭线索。"}],"qcStats":{"total":60,"analyzed":60,"pass":20,"violation":40,"needsReview":7,"reviewed":0,"avgScore":82.1,"reviewRatio":0.117,"tagDistribution":[{"code":"attitude","name":"服务态度","count":9},{"code":"forbidden","name":"违规话术","count":8},{"code":"off_topic","name":"答非所问","count":8},{"code":"wrong_knowledge","name":"知识错误","count":8},{"code":"timeout","name":"响应超时","count":7},{"code":"escalation","name":"情绪升级","count":11}],"channelDistribution":[{"channel":"online","count":20},{"channel":"ticket","count":20},{"channel":"phone","count":20}]},"conversations":[{"conversation":{"id":"conv-1026","channel":"ticket","product":"星海远征","agent":{"id":"A-1002","name":"陈默"},"customer":{"id":"C-7726","name":"用户8925"},"startedAt":"2026-10-31T13:40:00+08:00","durationSec":335,"messages":[{"seq":1,"role":"customer","text":"这个活动奖励怎么还没发？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"稍等，我核实一下。","atSec":18,"gapSec":18},{"seq":3,"role":"customer","text":"嗯。","atSec":40,"gapSec":22},{"seq":4,"role":"agent","text":"核实完了，奖励会在 24 小时内补发。","atSec":248,"gapSec":208},{"seq":5,"role":"customer","text":"好。","atSec":270,"gapSec":22}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1026","conversationId":"conv-1026","score":90,"verdict":"violation","tags":[{"code":"timeout","name":"响应超时","severity":"medium","confidence":0.72,"evidence":[{"seq":4,"quote":"核实完了，奖励会在 24 小时内补发。","note":"客户等待 208s，接近/超过 180s 阈值"}],"ruleId":"R-QC-TIM"}],"summary":"客户情绪焦虑；命中 1 个标签：响应超时（客户等待 208s，接近/超过 180s 阈值）。建议：排班与响应时效治理。","emotion":"anxious","confidence":0.72,"needsReview":true,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":{"id":"rvw-0003","qcResultId":"qcr-1026","conversationId":"conv-1026","status":"pending","assignee":"沈言","decision":null,"finalVerdict":null,"finalTags":[],"note":"引擎置信度低于 0.75，自动生成人工复核任务。","createdAt":"2026-11-03T10:00:00+08:00","reviewedAt":null},"badcase":null},{"conversation":{"id":"conv-1038","channel":"ticket","product":"云上大陆","agent":{"id":"A-1002","name":"陈默"},"customer":{"id":"C-7738","name":"用户9369"},"startedAt":"2026-10-29T21:10:00+08:00","durationSec":371,"messages":[{"seq":1,"role":"customer","text":"我提交的申诉三天没回复了。","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"请提供申诉单号。","atSec":20,"gapSec":20},{"seq":3,"role":"customer","text":"AP-2026-****771。","atSec":48,"gapSec":28},{"seq":4,"role":"agent","text":"帮您查询一下。","atSec":70,"gapSec":22},{"seq":5,"role":"customer","text":"都 5 分钟了，你们效率太低了，我要投诉！","atSec":120,"gapSec":50},{"seq":6,"role":"agent","text":"查询到处理结果，已通过。","atSec":330,"gapSec":210}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1038","conversationId":"conv-1038","score":70,"verdict":"violation","tags":[{"code":"escalation","name":"情绪升级","severity":"medium","confidence":0.88,"evidence":[{"seq":5,"quote":"都 5 分钟了，你们效率太低了，我要投诉！","note":"用户提出投诉/曝光/维权等升级诉求"}],"ruleId":"R-QC-ESC-01"},{"code":"timeout","name":"响应超时","severity":"medium","confidence":0.72,"evidence":[{"seq":6,"quote":"查询到处理结果，已通过。","note":"客户等待 210s，接近/超过 180s 阈值"}],"ruleId":"R-QC-TIM"}],"summary":"客户情绪平静；命中 2 个标签：情绪升级、响应超时（用户提出投诉/曝光/维权等升级诉求）。建议：客诉预警与安抚流程；排班与响应时效治理。","emotion":"calm","confidence":0.72,"needsReview":true,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":{"id":"rvw-0006","qcResultId":"qcr-1038","conversationId":"conv-1038","status":"pending","assignee":"沈言","decision":null,"finalVerdict":null,"finalTags":[],"note":"引擎置信度低于 0.75，自动生成人工复核任务。","createdAt":"2026-11-03T10:00:00+08:00","reviewedAt":null},"badcase":null},{"conversation":{"id":"conv-1037","channel":"online","product":"星海远征","agent":{"id":"A-1001","name":"林晓"},"customer":{"id":"C-7737","name":"用户9332"},"startedAt":"2026-10-28T15:18:00+08:00","durationSec":388,"messages":[{"seq":1,"role":"customer","text":"我的账号被限制了，说自己看公告，公告在哪？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，请提供您的角色 ID。","atSec":22,"gapSec":22},{"seq":3,"role":"customer","text":"ID 7731，我问的是限制原因。","atSec":55,"gapSec":33},{"seq":4,"role":"agent","text":"这边建议您先看活动规则，感谢您的支持。","atSec":270,"gapSec":215},{"seq":5,"role":"customer","text":"你们就这样敷衍？","atSec":300,"gapSec":30}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1037","conversationId":"conv-1037","score":90,"verdict":"violation","tags":[{"code":"timeout","name":"响应超时","severity":"medium","confidence":0.72,"evidence":[{"seq":4,"quote":"这边建议您先看活动规则，感谢您的支持。","note":"客户等待 215s，接近/超过 180s 阈值"}],"ruleId":"R-QC-TIM"}],"summary":"客户情绪平静；命中 1 个标签：响应超时（客户等待 215s，接近/超过 180s 阈值）。建议：排班与响应时效治理。","emotion":"calm","confidence":0.72,"needsReview":true,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":{"id":"rvw-0005","qcResultId":"qcr-1037","conversationId":"conv-1037","status":"pending","assignee":"沈言","decision":null,"finalVerdict":null,"finalTags":[],"note":"引擎置信度低于 0.75，自动生成人工复核任务。","createdAt":"2026-11-03T10:00:00+08:00","reviewedAt":null},"badcase":null},{"conversation":{"id":"conv-1023","channel":"ticket","product":"机甲前线","agent":{"id":"A-1003","name":"苏禾"},"customer":{"id":"C-7723","name":"用户8814"},"startedAt":"2026-10-28T11:24:00+08:00","durationSec":426,"messages":[{"seq":1,"role":"customer","text":"你好，我想查一下我的订单有没有发货。","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"稍等，我帮您查一下。","atSec":35,"gapSec":35},{"seq":3,"role":"customer","text":"好的。","atSec":60,"gapSec":25},{"seq":4,"role":"agent","text":"查到了，订单已经发货，物流单号 SF****8821。","atSec":305,"gapSec":245},{"seq":5,"role":"customer","text":"好的，谢谢。","atSec":340,"gapSec":35}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1023","conversationId":"conv-1023","score":90,"verdict":"violation","tags":[{"code":"timeout","name":"响应超时","severity":"medium","confidence":0.72,"evidence":[{"seq":4,"quote":"查到了，订单已经发货，物流单号 SF****8821。","note":"客户等待 245s，接近/超过 180s 阈值"}],"ruleId":"R-QC-TIM"}],"summary":"客户情绪平静；命中 1 个标签：响应超时（客户等待 245s，接近/超过 180s 阈值）。建议：排班与响应时效治理。","emotion":"calm","confidence":0.72,"needsReview":true,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":{"id":"rvw-0002","qcResultId":"qcr-1023","conversationId":"conv-1023","status":"pending","assignee":"沈言","decision":null,"finalVerdict":null,"finalTags":[],"note":"引擎置信度低于 0.75，自动生成人工复核任务。","createdAt":"2026-11-03T10:00:00+08:00","reviewedAt":null},"badcase":null},{"conversation":{"id":"conv-1036","channel":"phone","product":"云上大陆","agent":{"id":"A-1004","name":"何洋"},"customer":{"id":"C-7736","name":"用户9295"},"startedAt":"2026-10-27T10:05:00+08:00","durationSec":430,"messages":[{"seq":1,"role":"customer","text":"你好，我申请的退款审核到哪一步了？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，我们最近上线了新活动，欢迎体验。","atSec":30,"gapSec":30},{"seq":3,"role":"customer","text":"我问退款进度。","atSec":64,"gapSec":34},{"seq":4,"role":"agent","text":"活动期间充值有双倍奖励哦。","atSec":300,"gapSec":236},{"seq":5,"role":"customer","text":"能不能好好回答我的问题？","atSec":335,"gapSec":35},{"seq":6,"role":"agent","text":"请您关注官方公告。","atSec":355,"gapSec":20}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1036","conversationId":"conv-1036","score":75,"verdict":"violation","tags":[{"code":"off_topic","name":"答非所问","severity":"medium","confidence":0.82,"evidence":[{"seq":2,"quote":"您好，我们最近上线了新活动，欢迎体验。","note":"用户诉求主题与坐席回答主题不一致"}],"ruleId":"R-QC-OFF-01"},{"code":"timeout","name":"响应超时","severity":"medium","confidence":0.72,"evidence":[{"seq":4,"quote":"活动期间充值有双倍奖励哦。","note":"客户等待 236s，接近/超过 180s 阈值"}],"ruleId":"R-QC-TIM"}],"summary":"客户情绪平静；命中 2 个标签：答非所问、响应超时（用户诉求主题与坐席回答主题不一致）。建议：知识库与流程对齐；排班与响应时效治理。","emotion":"calm","confidence":0.72,"needsReview":true,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":{"id":"rvw-0004","qcResultId":"qcr-1036","conversationId":"conv-1036","status":"pending","assignee":"沈言","decision":null,"finalVerdict":null,"finalTags":[],"note":"引擎置信度低于 0.75，自动生成人工复核任务。","createdAt":"2026-11-03T10:00:00+08:00","reviewedAt":null},"badcase":null},{"conversation":{"id":"conv-1016","channel":"online","product":"机甲前线","agent":{"id":"A-1004","name":"何洋"},"customer":{"id":"C-7716","name":"用户8555"},"startedAt":"2026-10-21T17:06:00+08:00","durationSec":147,"messages":[{"seq":1,"role":"customer","text":"我想问下，充值的钱能退吗？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"请提供一下您的角色名和区服。","atSec":24,"gapSec":24},{"seq":3,"role":"customer","text":"角色名 夜航星，区服 S12，我是想问退款。","atSec":58,"gapSec":34},{"seq":4,"role":"agent","text":"感谢您的支持，祝您游戏愉快，再见。","atSec":92,"gapSec":34}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1016","conversationId":"conv-1016","score":85,"verdict":"violation","tags":[{"code":"off_topic","name":"答非所问","severity":"medium","confidence":0.72,"evidence":[{"seq":4,"quote":"感谢您的支持，祝您游戏愉快，再见。","note":"用户核心诉求未解决，坐席以结束语/公告模板回避"}],"ruleId":"R-QC-OFF-02"}],"summary":"客户情绪平静；命中 1 个标签：答非所问（用户核心诉求未解决，坐席以结束语/公告模板回避）。建议：知识库与流程对齐。","emotion":"calm","confidence":0.72,"needsReview":true,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":{"id":"rvw-0001","qcResultId":"qcr-1016","conversationId":"conv-1016","status":"pending","assignee":"沈言","decision":null,"finalVerdict":null,"finalTags":[],"note":"引擎置信度低于 0.75，自动生成人工复核任务。","createdAt":"2026-11-03T10:00:00+08:00","reviewedAt":null},"badcase":{"id":"bc-0005","code":"BC-2026-0005","conversationId":"conv-1016","qcResultId":"qcr-1016","title":"答非所问问题 · 何洋 · 10-21","category":"process","rootCause":"用户问题与坐席回答意图不匹配、模板回复、连续多轮未回应核心诉求。会话摘要：客户情绪平静；命中 1 个标签：答非所问（用户核心诉求未解决，坐席以结束语/公告模板回避）。建议：知识库与流程对齐。","owner":"陆川","creator":"沈言","severity":"medium","slaHours":24,"dueAt":"2026-10-22T19:06:00+08:00","status":"in_progress","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":4,"quote":"感谢您的支持，祝您游戏愉快，再见。","note":"答非所问"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-21T19:06:00+08:00","by":"沈言","type":"created","note":"质检命中「答非所问」，自动创建 badcase 并路由给 陆川。","from":null,"to":"open"},{"at":"2026-10-21T19:36:00+08:00","by":"沈言","type":"assigned","note":"指派给 陆川 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-21T20:36:00+08:00","by":"陆川","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"}],"createdAt":"2026-10-21T19:06:00+08:00","updatedAt":"2026-10-21T20:36:00+08:00"}},{"conversation":{"id":"conv-1057","channel":"phone","product":"机甲前线","agent":{"id":"A-1001","name":"林晓"},"customer":{"id":"C-7757","name":"用户8073"},"startedAt":"2026-10-20T09:12:00+08:00","durationSec":126,"messages":[{"seq":1,"role":"customer","text":"收到短信说我账号异地登录，是真的吗？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，请勿点击短信中的链接，建议您立即修改密码并开启二次验证。","atSec":24,"gapSec":24},{"seq":3,"role":"customer","text":"好的，我现在去改。","atSec":50,"gapSec":26},{"seq":4,"role":"agent","text":"修改完成后可以在安全中心查看登录记录，有问题随时联系我们。","atSec":78,"gapSec":28}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1057","conversationId":"conv-1057","score":100,"verdict":"pass","tags":[],"summary":"客户情绪平静；未命中违规标签，但存在 1 处边界信号，建议人工复核确认。","emotion":"calm","confidence":0.72,"needsReview":true,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":{"id":"rvw-0007","qcResultId":"qcr-1057","conversationId":"conv-1057","status":"pending","assignee":"沈言","decision":null,"finalVerdict":null,"finalTags":[],"note":"引擎置信度低于 0.75，自动生成人工复核任务。","createdAt":"2026-11-03T10:00:00+08:00","reviewedAt":null},"badcase":null},{"conversation":{"id":"conv-1006","channel":"phone","product":"星海远征","agent":{"id":"A-1002","name":"陈默"},"customer":{"id":"C-7706","name":"用户8185"},"startedAt":"2026-10-25T21:10:00+08:00","durationSec":165,"messages":[{"seq":1,"role":"customer","text":"为什么我完成任务没有发奖励？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"请您先确认一下任务是否真的完成了。","atSec":24,"gapSec":24},{"seq":3,"role":"customer","text":"我确定完成了，进度条都满了。","atSec":58,"gapSec":34},{"seq":4,"role":"agent","text":"那请您说话客气一点，我这边也很忙。","atSec":92,"gapSec":34},{"seq":5,"role":"customer","text":"我没有不客气啊……","atSec":120,"gapSec":28}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1006","conversationId":"conv-1006","score":75,"verdict":"violation","tags":[{"code":"attitude","name":"服务态度","severity":"high","confidence":0.84,"evidence":[{"seq":4,"quote":"那请您说话客气一点，我这边也很忙。","note":"坐席表现出明显不耐烦/反向指责"}],"ruleId":"R-QC-ATT-05"}],"summary":"客户情绪平静；命中 1 个标签：服务态度（坐席表现出明显不耐烦/反向指责）。建议：话术培训与主管复盘。","emotion":"calm","confidence":0.84,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1005","channel":"ticket","product":"机甲前线","agent":{"id":"A-1001","name":"林晓"},"customer":{"id":"C-7705","name":"用户8148"},"startedAt":"2026-10-24T15:18:00+08:00","durationSec":232,"messages":[{"seq":1,"role":"customer","text":"我提交的退款申请三天了还没处理，能帮我催一下吗？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，退款按流程处理，请耐心等待。","atSec":30,"gapSec":30},{"seq":3,"role":"customer","text":"可是我等着用钱，能不能给个具体时间？","atSec":72,"gapSec":42},{"seq":4,"role":"agent","text":"行吧，随便您怎么想，反正流程就是这样。","atSec":108,"gapSec":36},{"seq":5,"role":"customer","text":"……那我再等等吧。","atSec":140,"gapSec":32}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1005","conversationId":"conv-1005","score":75,"verdict":"violation","tags":[{"code":"attitude","name":"服务态度","severity":"high","confidence":0.88,"evidence":[{"seq":4,"quote":"行吧，随便您怎么想，反正流程就是这样。","note":"坐席使用驱赶/推脱类表达"}],"ruleId":"R-QC-ATT-04"}],"summary":"客户情绪焦虑；命中 1 个标签：服务态度（坐席使用驱赶/推脱类表达）。建议：话术培训与主管复盘。","emotion":"anxious","confidence":0.88,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1012","channel":"phone","product":"机甲前线","agent":{"id":"A-1004","name":"何洋"},"customer":{"id":"C-7712","name":"用户8407"},"startedAt":"2026-10-31T10:05:00+08:00","durationSec":127,"messages":[{"seq":1,"role":"customer","text":"礼包补偿收到了，谢谢。","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"给个好评截图发我，我送您 200 钻石。","atSec":20,"gapSec":20},{"seq":3,"role":"customer","text":"还要截图啊？","atSec":46,"gapSec":26},{"seq":4,"role":"agent","text":"对，好评越多我们绩效越高。","atSec":64,"gapSec":18}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1012","conversationId":"conv-1012","score":70,"verdict":"violation","tags":[{"code":"forbidden","name":"违规话术","severity":"high","confidence":0.9,"evidence":[{"seq":2,"quote":"给个好评截图发我，我送您 200 钻石。","note":"坐席索要好评/评价（违规话术）"}],"ruleId":"R-QC-FOR-01"}],"summary":"客户情绪平静；命中 1 个标签：违规话术（坐席索要好评/评价（违规话术））。建议：违规话术专项治理。","emotion":"calm","confidence":0.9,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1011","channel":"ticket","product":"云上大陆","agent":{"id":"A-1003","name":"苏禾"},"customer":{"id":"C-7711","name":"用户8370"},"startedAt":"2026-10-30T19:32:00+08:00","durationSec":122,"messages":[{"seq":1,"role":"customer","text":"充值有什么优惠吗？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"有内部返利，充值返利 30%，私下返给你，别走官方活动。","atSec":22,"gapSec":22},{"seq":3,"role":"customer","text":"还有这种？","atSec":50,"gapSec":28},{"seq":4,"role":"agent","text":"对，您把款转我，我这边给您操作。","atSec":72,"gapSec":22}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1011","conversationId":"conv-1011","score":45,"verdict":"violation","tags":[{"code":"forbidden","name":"违规话术","severity":"high","confidence":0.88,"evidence":[{"seq":2,"quote":"有内部返利，充值返利 30%，私下返给你，别走官方活动。","note":"坐席诱导充值/返利"}],"ruleId":"R-QC-FOR-05"},{"code":"wrong_knowledge","name":"知识错误","severity":"high","confidence":0.88,"evidence":[{"seq":2,"quote":"有内部返利，充值返利 30%，私下返给你，别走官方活动。","note":"返还比例/费率陈述与知识库冲突"}],"ruleId":"R-QC-KNW-08"}],"summary":"客户情绪平静；命中 2 个标签：违规话术、知识错误（坐席诱导充值/返利）。建议：违规话术专项治理；知识库修订并复测。","emotion":"calm","confidence":0.88,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1014","channel":"ticket","product":"机甲前线","agent":{"id":"A-1002","name":"陈默"},"customer":{"id":"C-7714","name":"用户8481"},"startedAt":"2026-11-02T21:10:00+08:00","durationSec":177,"messages":[{"seq":1,"role":"customer","text":"我充值显示失败，但是扣款了，怎么处理？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"亲爱的玩家，版本更新将于今晚 24 点开始，请提前下线。","atSec":26,"gapSec":26},{"seq":3,"role":"customer","text":"我是说扣款了没到账！","atSec":60,"gapSec":34},{"seq":4,"role":"agent","text":"感谢您的支持，祝您游戏愉快。","atSec":88,"gapSec":28}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1014","conversationId":"conv-1014","score":85,"verdict":"violation","tags":[{"code":"off_topic","name":"答非所问","severity":"medium","confidence":0.82,"evidence":[{"seq":2,"quote":"亲爱的玩家，版本更新将于今晚 24 点开始，请提前下线。","note":"用户诉求主题与坐席回答主题不一致"}],"ruleId":"R-QC-OFF-01"}],"summary":"客户情绪平静；命中 1 个标签：答非所问（用户诉求主题与坐席回答主题不一致）。建议：知识库与流程对齐。","emotion":"calm","confidence":0.82,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1013","channel":"online","product":"云上大陆","agent":{"id":"A-1001","name":"林晓"},"customer":{"id":"C-7713","name":"用户8444"},"startedAt":"2026-11-01T15:18:00+08:00","durationSec":170,"messages":[{"seq":1,"role":"customer","text":"你好，我申请的退款什么时候能到账？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，建议您多关注游戏内的限时活动哦，最近活动很丰富。","atSec":30,"gapSec":30},{"seq":3,"role":"customer","text":"我问的是退款到账时间。","atSec":66,"gapSec":36},{"seq":4,"role":"agent","text":"活动期间充值还有额外奖励，您可以看看。","atSec":94,"gapSec":28}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1013","conversationId":"conv-1013","score":85,"verdict":"violation","tags":[{"code":"off_topic","name":"答非所问","severity":"medium","confidence":0.82,"evidence":[{"seq":2,"quote":"您好，建议您多关注游戏内的限时活动哦，最近活动很丰富。","note":"用户诉求主题与坐席回答主题不一致"}],"ruleId":"R-QC-OFF-01"}],"summary":"客户情绪焦虑；命中 1 个标签：答非所问（用户诉求主题与坐席回答主题不一致）。建议：知识库与流程对齐。","emotion":"anxious","confidence":0.82,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1040","channel":"online","product":"云上大陆","agent":{"id":"A-1004","name":"何洋"},"customer":{"id":"C-7740","name":"用户9443"},"startedAt":"2026-10-31T17:06:00+08:00","durationSec":149,"messages":[{"seq":1,"role":"customer","text":"我申请退款了，钱多久能到？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"退款一般要 7 个工作日。","atSec":22,"gapSec":22},{"seq":3,"role":"customer","text":"能不能具体一点，是 7 个自然日还是工作日？","atSec":54,"gapSec":32},{"seq":4,"role":"agent","text":"您先关注游戏内公告吧，公告里都有。","atSec":82,"gapSec":28}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1040","conversationId":"conv-1040","score":75,"verdict":"violation","tags":[{"code":"wrong_knowledge","name":"知识错误","severity":"high","confidence":0.86,"evidence":[{"seq":2,"quote":"退款一般要 7 个工作日。","note":"退款到账时长陈述与知识库（24 小时内原路退回）冲突"}],"ruleId":"R-QC-KNW-07"}],"summary":"客户情绪焦虑；命中 1 个标签：知识错误（退款到账时长陈述与知识库（24 小时内原路退回）冲突）。建议：知识库修订并复测。","emotion":"anxious","confidence":0.86,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1025","channel":"online","product":"机甲前线","agent":{"id":"A-1001","name":"林晓"},"customer":{"id":"C-7725","name":"用户8888"},"startedAt":"2026-10-30T09:12:00+08:00","durationSec":672,"messages":[{"seq":1,"role":"customer","text":"我想改一下绑定邮箱。","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"请提供原邮箱和新邮箱。","atSec":20,"gapSec":20},{"seq":3,"role":"customer","text":"原邮箱 u***2***@example.com，新邮箱 u***8***@example.com。","atSec":55,"gapSec":35},{"seq":4,"role":"agent","text":"好的，正在为您处理。","atSec":575,"gapSec":520},{"seq":5,"role":"customer","text":"好了吗？","atSec":600,"gapSec":25},{"seq":6,"role":"agent","text":"已经修改成功。","atSec":620,"gapSec":20}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1025","conversationId":"conv-1025","score":90,"verdict":"violation","tags":[{"code":"timeout","name":"响应超时","severity":"medium","confidence":0.9,"evidence":[{"seq":4,"quote":"好的，正在为您处理。","note":"客户等待 520s 后坐席才回复（阈值 180s）"}],"ruleId":"R-QC-TIM"}],"summary":"客户情绪平静；命中 1 个标签：响应超时（客户等待 520s 后坐席才回复（阈值 180s））。建议：排班与响应时效治理。","emotion":"calm","confidence":0.9,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1028","channel":"online","product":"星海远征","agent":{"id":"A-1004","name":"何洋"},"customer":{"id":"C-7728","name":"用户8999"},"startedAt":"2026-11-02T10:05:00+08:00","durationSec":181,"messages":[{"seq":1,"role":"customer","text":"我的角色被误封了，怎么回事？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，封禁原因需要人工审核，请提交申诉。","atSec":26,"gapSec":26},{"seq":3,"role":"customer","text":"我提交了三次都没人理，我要去 12315 投诉你们。","atSec":62,"gapSec":36},{"seq":4,"role":"agent","text":"申诉会按顺序处理，请您耐心等待。","atSec":90,"gapSec":28}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1028","conversationId":"conv-1028","score":80,"verdict":"violation","tags":[{"code":"escalation","name":"情绪升级","severity":"medium","confidence":0.88,"evidence":[{"seq":3,"quote":"我提交了三次都没人理，我要去 12315 投诉你们。","note":"用户提出投诉/曝光/维权等升级诉求"}],"ruleId":"R-QC-ESC-01"}],"summary":"客户情绪平静；命中 1 个标签：情绪升级（用户提出投诉/曝光/维权等升级诉求）。建议：客诉预警与安抚流程。","emotion":"calm","confidence":0.88,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1027","channel":"phone","product":"云上大陆","agent":{"id":"A-1003","name":"苏禾"},"customer":{"id":"C-7727","name":"用户8962"},"startedAt":"2026-11-01T19:32:00+08:00","durationSec":208,"messages":[{"seq":1,"role":"customer","text":"你好，我买的礼包没收到。","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，请提供订单号。","atSec":22,"gapSec":22},{"seq":3,"role":"customer","text":"SO2026****3344。","atSec":50,"gapSec":28},{"seq":4,"role":"agent","text":"订单显示已发放，请在背包查看。","atSec":76,"gapSec":26},{"seq":5,"role":"customer","text":"背包真的没有，你们是不是在骗人？我要投诉！","atSec":108,"gapSec":32},{"seq":6,"role":"agent","text":"我再帮您核实一下，请稍等。","atSec":130,"gapSec":22}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1027","conversationId":"conv-1027","score":80,"verdict":"violation","tags":[{"code":"escalation","name":"情绪升级","severity":"medium","confidence":0.88,"evidence":[{"seq":5,"quote":"背包真的没有，你们是不是在骗人？我要投诉！","note":"用户提出投诉/曝光/维权等升级诉求"}],"ruleId":"R-QC-ESC-01"}],"summary":"客户情绪平静；命中 1 个标签：情绪升级（用户提出投诉/曝光/维权等升级诉求）。建议：客诉预警与安抚流程。","emotion":"calm","confidence":0.88,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null},{"conversation":{"id":"conv-1056","channel":"ticket","product":"云上大陆","agent":{"id":"A-1004","name":"何洋"},"customer":{"id":"C-7756","name":"用户8036"},"startedAt":"2026-11-02T17:06:00+08:00","durationSec":165,"messages":[{"seq":1,"role":"customer","text":"你们官方客服电话是多少？","atSec":0,"gapSec":null},{"seq":2,"role":"agent","text":"您好，官方客服热线是 400-****-1234，服务时间是每天 9 点到 21 点。","atSec":22,"gapSec":22},{"seq":3,"role":"customer","text":"好的，谢谢。","atSec":46,"gapSec":24},{"seq":4,"role":"agent","text":"不客气，有问题也可以随时在游戏内提交工单。","atSec":70,"gapSec":24}],"importedAt":"2026-11-03T10:00:00+08:00","batchId":"batch-20261103-01"},"qcResult":{"id":"qcr-1056","conversationId":"conv-1056","score":100,"verdict":"pass","tags":[],"summary":"客户情绪平静；未命中违规标签，坐席按流程回应。","emotion":"calm","confidence":0.88,"needsReview":false,"modelVersion":"rule-engine-v0.1.0","analyzedAt":"2026-11-03T10:00:00+08:00","latestReviewId":null},"review":null,"badcase":null}],"badcases":[{"id":"bc-0013","code":"BC-2026-0013","conversationId":"conv-1022","qcResultId":"qcr-1022","title":"知识错误问题 · 陈默 · 10-27","category":"knowledge","rootCause":"与知识库事实冲突的陈述（费率、返还比例、活动时间、退款规则、版本信息）。会话摘要：客户情绪平静；命中 1 个标签：知识错误（活动每日免费次数陈述与知识库（每天 1 次）冲突）。建议：知识库修订并复测。","owner":"顾清","creator":"沈言","severity":"high","slaHours":48,"dueAt":"2026-10-29T23:10:00+08:00","status":"open","recurrence":true,"recurrenceOf":"bc-0011","evidence":[{"seq":2,"quote":"活动期间每天 2 次免费抽卡，凌晨 5 点刷新。","note":"知识错误"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-27T23:10:00+08:00","by":"沈言","type":"created","note":"质检命中「知识错误」，自动创建 badcase 并路由给 顾清。","from":null,"to":"open"}],"createdAt":"2026-10-27T23:10:00+08:00","updatedAt":"2026-10-27T23:10:00+08:00"},{"id":"bc-0014","code":"BC-2026-0014","conversationId":"conv-1019","qcResultId":"qcr-1019","title":"知识错误问题 · 苏禾 · 10-24","category":"knowledge","rootCause":"与知识库事实冲突的陈述（费率、返还比例、活动时间、退款规则、版本信息）。会话摘要：客户情绪焦虑；命中 1 个标签：知识错误（返还比例/费率陈述与知识库冲突）。建议：知识库修订并复测。","owner":"顾清","creator":"沈言","severity":"high","slaHours":48,"dueAt":"2026-10-26T21:32:00+08:00","status":"in_progress","recurrence":true,"recurrenceOf":"bc-0011","evidence":[{"seq":2,"quote":"首充双倍返利是返 300% 的钻石，很划算。","note":"知识错误"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-24T21:32:00+08:00","by":"沈言","type":"created","note":"质检命中「知识错误」，自动创建 badcase 并路由给 顾清。","from":null,"to":"open"},{"at":"2026-10-24T22:02:00+08:00","by":"沈言","type":"assigned","note":"指派给 顾清 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-24T23:02:00+08:00","by":"顾清","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"}],"createdAt":"2026-10-24T21:32:00+08:00","updatedAt":"2026-10-24T23:02:00+08:00"},{"id":"bc-0012","code":"BC-2026-0012","conversationId":"conv-1032","qcResultId":"qcr-1032","title":"服务态度问题 · 何洋 · 10-23","category":"script","rootCause":"辱骂、指责、嘲讽反问、驱赶、明显不耐烦等态度问题。会话摘要：客户情绪平静；命中 2 个标签：服务态度、情绪升级（坐席使用驱赶/推脱类表达）。建议：话术培训与主管复盘；客诉预警与安抚流程。","owner":"唐沐","creator":"沈言","severity":"high","slaHours":48,"dueAt":"2026-10-25T19:06:00+08:00","status":"closed","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":4,"quote":"我就是人工，你爱信不信。","note":"服务态度"},{"seq":5,"quote":"行，我去 12315 投诉。","note":"情绪升级"}],"closedAt":"2026-10-23T23:06:00+08:00","proof":"已完成知识库更新与话术培训，抽检 5 通会话未再出现同类问题。","timeline":[{"at":"2026-10-23T19:06:00+08:00","by":"沈言","type":"created","note":"质检命中「服务态度」，自动创建 badcase 并路由给 唐沐。","from":null,"to":"open"},{"at":"2026-10-23T19:36:00+08:00","by":"沈言","type":"assigned","note":"指派给 唐沐 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-23T20:36:00+08:00","by":"唐沐","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"},{"at":"2026-10-23T21:36:00+08:00","by":"唐沐","type":"verified","note":"整改完成，提交主管验证。","from":"in_progress","to":"pending_verify"},{"at":"2026-10-23T23:06:00+08:00","by":"陆川","type":"closed","note":"验证通过，关闭 badcase（服务态度）。","from":"pending_verify","to":"closed"}],"createdAt":"2026-10-23T19:06:00+08:00","updatedAt":"2026-10-23T23:06:00+08:00"},{"id":"bc-0011","code":"BC-2026-0011","conversationId":"conv-1018","qcResultId":"qcr-1018","title":"知识错误问题 · 陈默 · 10-23","category":"knowledge","rootCause":"与知识库事实冲突的陈述（费率、返还比例、活动时间、退款规则、版本信息）。会话摘要：客户情绪平静；命中 1 个标签：知识错误（退款规则陈述与知识库冲突）。建议：知识库修订并复测。","owner":"顾清","creator":"沈言","severity":"high","slaHours":48,"dueAt":"2026-10-25T15:40:00+08:00","status":"closed","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":2,"quote":"退款手续费是 20%，这个是公司规定。","note":"知识错误"}],"closedAt":"2026-10-23T19:40:00+08:00","proof":"已完成知识库更新与话术培训，抽检 5 通会话未再出现同类问题。","timeline":[{"at":"2026-10-23T15:40:00+08:00","by":"沈言","type":"created","note":"质检命中「知识错误」，自动创建 badcase 并路由给 顾清。","from":null,"to":"open"},{"at":"2026-10-23T16:10:00+08:00","by":"沈言","type":"assigned","note":"指派给 顾清 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-23T17:10:00+08:00","by":"顾清","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"},{"at":"2026-10-23T18:10:00+08:00","by":"顾清","type":"verified","note":"整改完成，提交主管验证。","from":"in_progress","to":"pending_verify"},{"at":"2026-10-23T19:40:00+08:00","by":"陆川","type":"closed","note":"验证通过，关闭 badcase（知识错误）。","from":"pending_verify","to":"closed"}],"createdAt":"2026-10-23T15:40:00+08:00","updatedAt":"2026-10-23T19:40:00+08:00"},{"id":"bc-0010","code":"BC-2026-0010","conversationId":"conv-1004","qcResultId":"qcr-1004","title":"服务态度问题 · 何洋 · 10-23","category":"script","rootCause":"辱骂、指责、嘲讽反问、驱赶、明显不耐烦等态度问题。会话摘要：客户情绪平静；命中 1 个标签：服务态度（坐席使用嘲讽反问问句）。建议：话术培训与主管复盘。","owner":"唐沐","creator":"沈言","severity":"high","slaHours":48,"dueAt":"2026-10-25T12:05:00+08:00","status":"pending_verify","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":4,"quote":"说了多少遍了，不会自动扣，别问了。","note":"服务态度"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-23T12:05:00+08:00","by":"沈言","type":"created","note":"质检命中「服务态度」，自动创建 badcase 并路由给 唐沐。","from":null,"to":"open"},{"at":"2026-10-23T12:35:00+08:00","by":"沈言","type":"assigned","note":"指派给 唐沐 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-23T13:35:00+08:00","by":"唐沐","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"},{"at":"2026-10-23T14:35:00+08:00","by":"唐沐","type":"verified","note":"整改完成，提交主管验证。","from":"in_progress","to":"pending_verify"}],"createdAt":"2026-10-23T12:05:00+08:00","updatedAt":"2026-10-23T14:35:00+08:00"},{"id":"bc-0009","code":"BC-2026-0009","conversationId":"conv-1003","qcResultId":"qcr-1003","title":"服务态度问题 · 苏禾 · 10-22","category":"script","rootCause":"辱骂、指责、嘲讽反问、驱赶、明显不耐烦等态度问题。会话摘要：客户情绪平静；命中 1 个标签：服务态度（坐席使用驱赶/推脱类表达）。建议：话术培训与主管复盘。","owner":"唐沐","creator":"沈言","severity":"high","slaHours":48,"dueAt":"2026-10-24T21:32:00+08:00","status":"pending_verify","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":4,"quote":"那没办法，爱要不要，就这个方案。","note":"服务态度"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-22T21:32:00+08:00","by":"沈言","type":"created","note":"质检命中「服务态度」，自动创建 badcase 并路由给 唐沐。","from":null,"to":"open"},{"at":"2026-10-22T22:02:00+08:00","by":"沈言","type":"assigned","note":"指派给 唐沐 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-22T23:02:00+08:00","by":"唐沐","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"},{"at":"2026-10-23T00:02:00+08:00","by":"唐沐","type":"verified","note":"整改完成，提交主管验证。","from":"in_progress","to":"pending_verify"}],"createdAt":"2026-10-22T21:32:00+08:00","updatedAt":"2026-10-23T00:02:00+08:00"},{"id":"bc-0008","code":"BC-2026-0008","conversationId":"conv-1031","qcResultId":"qcr-1031","title":"服务态度问题 · 苏禾 · 10-22","category":"script","rootCause":"辱骂、指责、嘲讽反问、驱赶、明显不耐烦等态度问题。会话摘要：客户情绪平静；命中 2 个标签：服务态度、情绪升级（坐席使用嘲讽反问问句）。建议：话术培训与主管复盘；客诉预警与安抚流程。","owner":"唐沐","creator":"沈言","severity":"high","slaHours":48,"dueAt":"2026-10-24T13:24:00+08:00","status":"pending_verify","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":4,"quote":"您自己付款的时候不会看一下订单吗？","note":"服务态度"},{"seq":5,"quote":"你这是什么意思？我要投诉你！","note":"情绪升级"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-22T13:24:00+08:00","by":"沈言","type":"created","note":"质检命中「服务态度」，自动创建 badcase 并路由给 唐沐。","from":null,"to":"open"},{"at":"2026-10-22T13:54:00+08:00","by":"沈言","type":"assigned","note":"指派给 唐沐 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-22T14:54:00+08:00","by":"唐沐","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"},{"at":"2026-10-22T15:54:00+08:00","by":"唐沐","type":"verified","note":"整改完成，提交主管验证。","from":"in_progress","to":"pending_verify"}],"createdAt":"2026-10-22T13:24:00+08:00","updatedAt":"2026-10-22T15:54:00+08:00"},{"id":"bc-0007","code":"BC-2026-0007","conversationId":"conv-1017","qcResultId":"qcr-1017","title":"答非所问问题 · 林晓 · 10-22","category":"process","rootCause":"用户问题与坐席回答意图不匹配、模板回复、连续多轮未回应核心诉求。会话摘要：客户情绪平静；命中 1 个标签：答非所问（用户诉求主题与坐席回答主题不一致）。建议：知识库与流程对齐。","owner":"陆川","creator":"沈言","severity":"medium","slaHours":24,"dueAt":"2026-10-23T11:12:00+08:00","status":"in_progress","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":2,"quote":"您看一下首充礼包，充 6 元可以领限定时装。","note":"答非所问"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-22T11:12:00+08:00","by":"沈言","type":"created","note":"质检命中「答非所问」，自动创建 badcase 并路由给 陆川。","from":null,"to":"open"},{"at":"2026-10-22T11:42:00+08:00","by":"沈言","type":"assigned","note":"指派给 陆川 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-22T12:42:00+08:00","by":"陆川","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"}],"createdAt":"2026-10-22T11:12:00+08:00","updatedAt":"2026-10-22T12:42:00+08:00"},{"id":"bc-0006","code":"BC-2026-0006","conversationId":"conv-1030","qcResultId":"qcr-1030","title":"情绪升级问题 · 陈默 · 10-21","category":"system","rootCause":"用户从平静转为愤怒，或提出投诉/曝光/退款升级等诉求（会话风险标记）。会话摘要：客户情绪平静；命中 1 个标签：情绪升级（用户提出投诉/曝光/维权等升级诉求）。建议：客诉预警与安抚流程。","owner":"周野","creator":"沈言","severity":"medium","slaHours":72,"dueAt":"2026-10-24T23:10:00+08:00","status":"in_progress","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":3,"quote":"每次都这么说，不解决我就退游，还要去论坛曝光。","note":"情绪升级"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-21T23:10:00+08:00","by":"沈言","type":"created","note":"质检命中「情绪升级」，自动创建 badcase 并路由给 周野。","from":null,"to":"open"},{"at":"2026-10-21T23:40:00+08:00","by":"沈言","type":"assigned","note":"指派给 周野 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-22T00:40:00+08:00","by":"周野","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"}],"createdAt":"2026-10-21T23:10:00+08:00","updatedAt":"2026-10-22T00:40:00+08:00"},{"id":"bc-0005","code":"BC-2026-0005","conversationId":"conv-1016","qcResultId":"qcr-1016","title":"答非所问问题 · 何洋 · 10-21","category":"process","rootCause":"用户问题与坐席回答意图不匹配、模板回复、连续多轮未回应核心诉求。会话摘要：客户情绪平静；命中 1 个标签：答非所问（用户核心诉求未解决，坐席以结束语/公告模板回避）。建议：知识库与流程对齐。","owner":"陆川","creator":"沈言","severity":"medium","slaHours":24,"dueAt":"2026-10-22T19:06:00+08:00","status":"in_progress","recurrence":false,"recurrenceOf":null,"evidence":[{"seq":4,"quote":"感谢您的支持，祝您游戏愉快，再见。","note":"答非所问"}],"closedAt":null,"proof":null,"timeline":[{"at":"2026-10-21T19:06:00+08:00","by":"沈言","type":"created","note":"质检命中「答非所问」，自动创建 badcase 并路由给 陆川。","from":null,"to":"open"},{"at":"2026-10-21T19:36:00+08:00","by":"沈言","type":"assigned","note":"指派给 陆川 跟进。","from":"open","to":"in_progress"},{"at":"2026-10-21T20:36:00+08:00","by":"陆川","type":"progressed","note":"已定位根因，正在补充知识/话术。","from":"in_progress","to":"in_progress"}],"createdAt":"2026-10-21T19:06:00+08:00","updatedAt":"2026-10-21T20:36:00+08:00"}],"badcaseStats":{"total":14,"open":5,"inProgress":4,"pendingVerify":3,"closed":2,"overdue":12,"closeRate":0.143,"recurrenceRate":0.143,"byCategory":[{"category":"knowledge","count":3},{"category":"script","count":6},{"category":"process","count":3},{"category":"system","count":2}],"byOwner":[{"owner":"唐沐","count":6},{"owner":"陆川","count":3},{"owner":"顾清","count":3},{"owner":"周野","count":2}]},"comments":[{"id":"cmt-0111","source":"googleplay","brand":"云上大陆","author":"gp_1110","text":"充值记录页面加载有点慢，希望优化一下。","publishedAt":"2026-11-01T21:43:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["充值","Bug"],"primaryTopic":"充值","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-NEG","SEN-TOPIC:充值|Bug","SEN-LEVEL-P1","SEN-P1-SIGNAL:慢"]},{"id":"cmt-0103","source":"ticket","brand":"云上大陆","author":"用户_1102","text":"新充值活动的折扣力度比上个月小，有点失望。","publishedAt":"2026-11-01T16:07:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["充值","活动"],"primaryTopic":"充值","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-NEG","SEN-TOPIC:充值|活动","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0096","source":"ticket","brand":"机甲前线","author":"用户_1095","text":"新机甲技能释放卡顿严重，战斗根本没法正常进行。","publishedAt":"2026-10-31T19:11:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["Bug"],"primaryTopic":"Bug","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0018","engineRules":["SEN-LEX-NEG","SEN-TOPIC:Bug","SEN-LEVEL-P1","SEN-P1-SIGNAL:卡顿|没法"]},{"id":"cmt-0098","source":"taptap","brand":"机甲前线","author":"tap_1097","text":"这个 BUG 反馈很久了，优先级感觉很低。","publishedAt":"2026-10-31T16:07:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["客服"],"primaryTopic":"客服","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0017","engineRules":["SEN-LEX-NEG","SEN-TOPIC:客服","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0095","source":"community","brand":"机甲前线","author":"社区_1094","text":"跨服战一进入就掉线，重连好几次都不行。","publishedAt":"2026-10-31T11:46:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["Bug"],"primaryTopic":"Bug","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0018","engineRules":["SEN-LEX-NEG","SEN-TOPIC:Bug","SEN-LEVEL-P1","SEN-P1-SIGNAL:掉线"]},{"id":"cmt-0102","source":"steam","brand":"机甲前线","author":"steam_1101","text":"想问下下次版本更新和 BUG 修复是什么时候？","publishedAt":"2026-10-31T10:24:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["版本"],"primaryTopic":"版本","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0016","engineRules":["SEN-LEX-NEG","SEN-TOPIC:版本","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0074","source":"taptap","brand":"星海远征","author":"tap_1073","text":"外挂没处理，我正常上线却显示账号被封，客服说是封号误封还要等申诉，我们准备去 12315 投诉。","publishedAt":"2026-10-29T22:56:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂","客服","版本"],"primaryTopic":"外挂","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂|客服|版本","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:封号|误封|投诉|12315"]},{"id":"cmt-0081","source":"community","brand":"星海远征","author":"社区_1080","text":"外挂这么多，官方真的该好好管管了。","publishedAt":"2026-10-29T21:43:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0076","source":"community","brand":"星海远征","author":"社区_1075","text":"外挂不封，正常玩家被封，大面积误封，扣款不到账也没人管，这游戏还能玩吗？","publishedAt":"2026-10-29T20:28:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["充值","外挂"],"primaryTopic":"充值","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0012","engineRules":["SEN-LEX-NEG","SEN-TOPIC:充值|外挂","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:误封|扣款|不到账|大面积"]},{"id":"cmt-0078","source":"steam","brand":"星海远征","author":"steam_1077","text":"排行榜上的外挂号一直不处理，体验越来越差了。","publishedAt":"2026-10-29T17:35:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0119","source":"taptap","brand":"云上大陆","author":"tap_1118","text":"这次客服响应及时，体验不错。","publishedAt":"2026-11-02T11:46:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0021","engineRules":["SEN-LEX-POS","SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0108","source":"ticket","brand":"云上大陆","author":"用户_1107","text":"充值活动的赠送比例感觉变低了，不太满意。","publishedAt":"2026-11-01T17:35:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["充值","活动"],"primaryTopic":"充值","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-POS","SEN-TOPIC:充值|活动","SEN-LEVEL-NONE"]},{"id":"cmt-0107","source":"community","brand":"云上大陆","author":"社区_1106","text":"月卡价格涨了，但内容没变，感觉不太划算。","publishedAt":"2026-11-01T10:24:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["充值"],"primaryTopic":"充值","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-POS","SEN-TOPIC:充值","SEN-LEVEL-NONE"]},{"id":"cmt-0101","source":"ticket","brand":"机甲前线","author":"用户_1100","text":"这次 BUG 修复速度很快，给开发点赞。","publishedAt":"2026-10-31T20:28:00+08:00","sentiment":"positive","sentimentScore":0.33,"topics":["其他"],"primaryTopic":"其他","severity":"p2","confidence":0.72,"needsReview":true,"alertId":"alt-0019","engineRules":["SEN-LEX-POS","SEN-LEX-NEG","SEN-TOPIC-FALLBACK","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0097","source":"steam","brand":"机甲前线","author":"steam_1096","text":"机甲外观建模不太满意，BUG 修完希望能优化一下。","publishedAt":"2026-10-31T09:37:00+08:00","sentiment":"positive","sentimentScore":0.2,"topics":["Bug"],"primaryTopic":"Bug","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0018","engineRules":["SEN-LEX-POS","SEN-LEX-NEG","SEN-TOPIC:Bug","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0091","source":"ticket","brand":"星海远征","author":"用户_1090","text":"版本更新后画面更精致了，满意。","publishedAt":"2026-10-30T21:43:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["版本"],"primaryTopic":"版本","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0014","engineRules":["SEN-LEX-POS","SEN-TOPIC:版本","SEN-LEVEL-NONE"]},{"id":"cmt-0090","source":"community","brand":"星海远征","author":"社区_1089","text":"新版本体验不错，推荐。","publishedAt":"2026-10-30T14:52:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["版本"],"primaryTopic":"版本","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0014","engineRules":["SEN-LEX-POS","SEN-TOPIC:版本","SEN-LEVEL-NONE"]},{"id":"cmt-0089","source":"googleplay","brand":"星海远征","author":"gp_1088","text":"这次版本优化很到位，流畅了不少。","publishedAt":"2026-10-30T08:12:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["版本","Bug"],"primaryTopic":"版本","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0014","engineRules":["SEN-LEX-POS","SEN-TOPIC:版本|Bug","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0070","source":"googleplay","brand":"云上大陆","author":"gp_1069","text":"这次活动玩法有意思，点赞。","publishedAt":"2026-10-28T16:07:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["活动"],"primaryTopic":"活动","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0011","engineRules":["SEN-LEX-POS","SEN-TOPIC:活动","SEN-LEVEL-NONE"]},{"id":"cmt-0069","source":"taptap","brand":"云上大陆","author":"tap_1068","text":"活动奖励挺良心的，满意。","publishedAt":"2026-10-28T09:37:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["活动"],"primaryTopic":"活动","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0011","engineRules":["SEN-LEX-POS","SEN-TOPIC:活动","SEN-LEVEL-NONE"]},{"id":"cmt-0118","source":"steam","brand":"云上大陆","author":"steam_1117","text":"客服态度很好，问题解释得很清楚。","publishedAt":"2026-11-02T21:43:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0113","source":"steam","brand":"云上大陆","author":"steam_1112","text":"工单提交三天了还没人处理，进度一直停滞。","publishedAt":"2026-11-02T20:28:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0120","source":"googleplay","brand":"云上大陆","author":"gp_1119","text":"请问客服工单一般多久回复一次？","publishedAt":"2026-11-02T19:11:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0115","source":"googleplay","brand":"云上大陆","author":"gp_1114","text":"客服的话术太官方了，听着有点距离感。","publishedAt":"2026-11-02T17:35:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0117","source":"ticket","brand":"云上大陆","author":"用户_1116","text":"工单处理速度很快，当天就解决了。","publishedAt":"2026-11-02T14:52:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0114","source":"taptap","brand":"云上大陆","author":"tap_1113","text":"客服电话一直排队，等了二十分钟也没人接。","publishedAt":"2026-11-02T10:24:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0116","source":"community","brand":"云上大陆","author":"社区_1115","text":"希望客服能提供夜间服务，现在晚上找不到人。","publishedAt":"2026-11-02T08:12:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0104","source":"steam","brand":"云上大陆","author":"steam_1103","text":"充值界面改版后感觉不如以前顺手，希望优化。","publishedAt":"2026-11-01T22:56:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值","Bug"],"primaryTopic":"充值","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值|Bug","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0106","source":"googleplay","brand":"云上大陆","author":"gp_1105","text":"充值返利的规则写得太复杂，看不懂，体验一般。","publishedAt":"2026-11-01T20:28:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值"],"primaryTopic":"充值","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值","SEN-LEVEL-NONE"]},{"id":"cmt-0110","source":"taptap","brand":"云上大陆","author":"tap_1109","text":"充值到账的提示音太吵，建议加个开关。","publishedAt":"2026-11-01T14:52:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值"],"primaryTopic":"充值","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]}],"alerts":[{"alert":{"id":"alt-0012","level":"P0","topic":"充值","title":"充值 · 10-29 集中负面","summary":"2026-10-29 共 1 条评论，负面 1 条（来源：community 1），聚合等级 P0。主要信号：误封、扣款、不到账、大面积。","windowStart":"2026-10-29T00:00:00+08:00","windowEnd":"2026-10-29T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p0","description":"单条评论命中 P0 高危信号"},{"ruleId":"aggregate_escalation_p2","description":"同主题当日负面 1 条，聚合升级至 P2"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：充值 / 2026-10-29（共 1 条评论）"}],"commentIds":["cmt-0076"],"status":"escalated","owner":"江岚","slaMinutes":30,"slaDueAt":"2026-10-30T00:30:00+08:00","firstResponseAt":"2026-10-30T00:09:00+08:00","resolvedAt":null,"timeline":[{"at":"2026-10-30T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-10-30T00:09:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"},{"at":"2026-10-30T00:19:00+08:00","by":"陆川","type":"escalated","note":"升级至客服主管与品牌负责人协同处理。","from":"acknowledged","to":"escalated"}],"linkedClueIds":[],"createdAt":"2026-10-30T00:00:00+08:00"},"comments":[{"id":"cmt-0076","source":"community","brand":"星海远征","author":"社区_1075","text":"外挂不封，正常玩家被封，大面积误封，扣款不到账也没人管，这游戏还能玩吗？","publishedAt":"2026-10-29T20:28:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["充值","外挂"],"primaryTopic":"充值","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0012","engineRules":["SEN-LEX-NEG","SEN-TOPIC:充值|外挂","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:误封|扣款|不到账|大面积"]}],"linkedClues":[]},{"alert":{"id":"alt-0013","level":"P0","topic":"外挂","title":"外挂 · 10-29 集中负面","summary":"2026-10-29 共 9 条评论，负面 9 条（来源：steam 2 / taptap 2 / googleplay 2 / community 1 / ticket 2），聚合等级 P0。主要信号：封号、误封、大面积、集体。","windowStart":"2026-10-29T00:00:00+08:00","windowEnd":"2026-10-29T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p0","description":"单条评论命中 P0 高危信号"},{"ruleId":"aggregate_escalation_p0","description":"同主题当日负面 9 条，聚合升级至 P0"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：外挂 / 2026-10-29（共 9 条评论）"}],"commentIds":["cmt-0073","cmt-0074","cmt-0075","cmt-0077","cmt-0078","cmt-0079","cmt-0080","cmt-0081","cmt-0082"],"status":"new","owner":"江岚","slaMinutes":30,"slaDueAt":"2026-10-30T00:30:00+08:00","firstResponseAt":null,"resolvedAt":null,"timeline":[{"at":"2026-10-30T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"}],"linkedClueIds":[],"createdAt":"2026-10-30T00:00:00+08:00"},"comments":[{"id":"cmt-0073","source":"steam","brand":"星海远征","author":"steam_1072","text":"外挂脚本已经公开卖了，排行榜前十全是挂，官方大面积封号还误封正常玩家，再不处理我们就集体维权！","publishedAt":"2026-10-29T16:07:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:封号|误封|大面积|集体|维权"]},{"id":"cmt-0074","source":"taptap","brand":"星海远征","author":"tap_1073","text":"外挂没处理，我正常上线却显示账号被封，客服说是封号误封还要等申诉，我们准备去 12315 投诉。","publishedAt":"2026-10-29T22:56:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂","客服","版本"],"primaryTopic":"外挂","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂|客服|版本","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:封号|误封|投诉|12315"]},{"id":"cmt-0075","source":"googleplay","brand":"星海远征","author":"gp_1074","text":"外挂这么猖狂，官方还在装死，媒体曝光都出来了，大家一起去维权。","publishedAt":"2026-10-29T13:18:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:维权|曝光"]},{"id":"cmt-0077","source":"ticket","brand":"星海远征","author":"用户_1076","text":"外挂举报了三次都没有回应，有点失望。","publishedAt":"2026-10-29T10:24:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0078","source":"steam","brand":"星海远征","author":"steam_1077","text":"排行榜上的外挂号一直不处理，体验越来越差了。","publishedAt":"2026-10-29T17:35:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0079","source":"taptap","brand":"星海远征","author":"tap_1078","text":"外挂太多了，正常玩家根本没有游戏体验。","publishedAt":"2026-10-29T08:12:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0080","source":"googleplay","brand":"星海远征","author":"gp_1079","text":"举报外挂后只收到一条自动回复，感觉没人管。","publishedAt":"2026-10-29T14:52:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂","客服"],"primaryTopic":"外挂","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂|客服","SEN-LEVEL-P1","SEN-P1-SIGNAL:没人管"]},{"id":"cmt-0081","source":"community","brand":"星海远征","author":"社区_1080","text":"外挂这么多，官方真的该好好管管了。","publishedAt":"2026-10-29T21:43:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0082","source":"ticket","brand":"星海远征","author":"用户_1081","text":"每次举报外挂都没下文，对官方越来越失望了。","publishedAt":"2026-10-29T11:46:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["外挂"],"primaryTopic":"外挂","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0013","engineRules":["SEN-LEX-NEG","SEN-TOPIC:外挂","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]}],"linkedClues":[]},{"alert":{"id":"alt-0009","level":"P0","topic":"版本","title":"版本 · 10-26 集中负面","summary":"2026-10-26 共 10 条评论，负面 4 条（来源：steam 2 / taptap 2 / googleplay 2 / community 2 / ticket 2），聚合等级 P0。主要信号：回档、扣款、不到账、投诉。","windowStart":"2026-10-26T00:00:00+08:00","windowEnd":"2026-10-26T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p0","description":"单条评论命中 P0 高危信号"},{"ruleId":"aggregate_escalation_p1","description":"同主题当日负面 4 条，聚合升级至 P1"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：版本 / 2026-10-26（共 10 条评论）"}],"commentIds":["cmt-0049","cmt-0050","cmt-0051","cmt-0052","cmt-0053","cmt-0054","cmt-0055","cmt-0056","cmt-0057","cmt-0058"],"status":"new","owner":"江岚","slaMinutes":30,"slaDueAt":"2026-10-27T00:30:00+08:00","firstResponseAt":null,"resolvedAt":null,"timeline":[{"at":"2026-10-27T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"}],"linkedClueIds":[],"createdAt":"2026-10-27T00:00:00+08:00"},"comments":[{"id":"cmt-0049","source":"googleplay","brand":"星海远征","author":"gp_1048","text":"新版本一更新就回档，昨天肝了一晚上的进度全没了，氪的金也白花了！","publishedAt":"2026-10-26T20:28:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["版本","充值"],"primaryTopic":"版本","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0009","engineRules":["SEN-LEX-NEG","SEN-TOPIC:版本|充值","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:回档"]},{"id":"cmt-0050","source":"community","brand":"星海远征","author":"社区_1049","text":"回档之后充值档位也丢了，扣款不到账，新版本客服还不处理，大家一起投诉！","publishedAt":"2026-10-26T10:24:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["版本","充值","客服"],"primaryTopic":"版本","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0009","engineRules":["SEN-LEX-NEG","SEN-TOPIC:版本|充值|客服","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:回档|扣款|不到账|投诉"]},{"id":"cmt-0051","source":"ticket","brand":"星海远征","author":"用户_1050","text":"大面积回档，好几个区的新版本都出问题了，官方再不管我们就集体维权。","publishedAt":"2026-10-26T17:35:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["版本"],"primaryTopic":"版本","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0009","engineRules":["SEN-LEX-NEG","SEN-TOPIC:版本","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:回档|大面积|集体|维权"]},{"id":"cmt-0052","source":"steam","brand":"星海远征","author":"steam_1051","text":"版本更新后回档导致道具全部重置，这是数据丢失，媒体曝光一下才会有人管吧。","publishedAt":"2026-10-26T08:12:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["版本"],"primaryTopic":"版本","severity":"p0","confidence":0.9,"needsReview":false,"alertId":"alt-0009","engineRules":["SEN-LEX-NEG","SEN-TOPIC:版本","SEN-LEVEL-P0","SEN-P0-HIGH-RISK-TOPIC","SEN-P0-SIGNAL:回档|曝光|数据丢失"]},{"id":"cmt-0053","source":"taptap","brand":"星海远征","author":"tap_1052","text":"新版本界面改得有点复杂，希望官方再优化一下。","publishedAt":"2026-10-26T14:52:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["版本","Bug"],"primaryTopic":"版本","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0009","engineRules":["SEN-TOPIC:版本|Bug","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0054","source":"googleplay","brand":"星海远征","author":"gp_1053","text":"版本更新后字体太小了，看着有点累。","publishedAt":"2026-10-26T21:43:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["版本"],"primaryTopic":"版本","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0009","engineRules":["SEN-TOPIC:版本","SEN-LEVEL-NONE"]},{"id":"cmt-0055","source":"community","brand":"星海远征","author":"社区_1054","text":"这次更新的新玩法不太好玩，有点失望。","publishedAt":"2026-10-26T11:46:00+08:00","sentiment":"positive","sentimentScore":0.2,"topics":["版本"],"primaryTopic":"版本","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0009","engineRules":["SEN-LEX-POS","SEN-LEX-NEG","SEN-TOPIC:版本","SEN-LEVEL-NONE"]},{"id":"cmt-0056","source":"ticket","brand":"星海远征","author":"用户_1055","text":"版本更新的公告写得太长，没耐心看完。","publishedAt":"2026-10-26T19:11:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["版本"],"primaryTopic":"版本","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0009","engineRules":["SEN-TOPIC:版本","SEN-LEVEL-NONE"]},{"id":"cmt-0057","source":"steam","brand":"星海远征","author":"steam_1056","text":"新版本加载界面换了，感觉不如以前。","publishedAt":"2026-10-26T09:37:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["版本"],"primaryTopic":"版本","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0009","engineRules":["SEN-TOPIC:版本","SEN-LEVEL-NONE"]},{"id":"cmt-0058","source":"taptap","brand":"星海远征","author":"tap_1057","text":"更新后活动入口换了位置，不太习惯。","publishedAt":"2026-10-26T16:07:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["版本","活动"],"primaryTopic":"版本","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0009","engineRules":["SEN-TOPIC:版本|活动","SEN-LEVEL-NONE"]}],"linkedClues":[]},{"alert":{"id":"alt-0020","level":"P1","topic":"充值","title":"充值 · 11-01 集中负面","summary":"2026-11-01 共 10 条评论，负面 2 条（来源：steam 2 / taptap 2 / googleplay 2 / community 2 / ticket 2），聚合等级 P1。主要信号：慢。","windowStart":"2026-11-01T00:00:00+08:00","windowEnd":"2026-11-01T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p1","description":"单条评论命中 P1 高危信号"},{"ruleId":"aggregate_escalation_p2","description":"同主题当日负面 2 条，聚合升级至 P2"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：充值 / 2026-11-01（共 10 条评论）"}],"commentIds":["cmt-0103","cmt-0104","cmt-0105","cmt-0106","cmt-0107","cmt-0108","cmt-0109","cmt-0110","cmt-0111","cmt-0112"],"status":"escalated","owner":"江岚","slaMinutes":120,"slaDueAt":"2026-11-02T02:00:00+08:00","firstResponseAt":"2026-11-02T00:36:00+08:00","resolvedAt":null,"timeline":[{"at":"2026-11-02T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-11-02T00:36:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"},{"at":"2026-11-02T00:46:00+08:00","by":"陆川","type":"escalated","note":"升级至客服主管与品牌负责人协同处理。","from":"acknowledged","to":"escalated"}],"linkedClueIds":[],"createdAt":"2026-11-02T00:00:00+08:00"},"comments":[{"id":"cmt-0103","source":"ticket","brand":"云上大陆","author":"用户_1102","text":"新充值活动的折扣力度比上个月小，有点失望。","publishedAt":"2026-11-01T16:07:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["充值","活动"],"primaryTopic":"充值","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-NEG","SEN-TOPIC:充值|活动","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]},{"id":"cmt-0104","source":"steam","brand":"云上大陆","author":"steam_1103","text":"充值界面改版后感觉不如以前顺手，希望优化。","publishedAt":"2026-11-01T22:56:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值","Bug"],"primaryTopic":"充值","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值|Bug","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0105","source":"taptap","brand":"云上大陆","author":"tap_1104","text":"这次充值的档位设置不太合理，6 元档没有额外奖励。","publishedAt":"2026-11-01T13:18:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值","活动"],"primaryTopic":"充值","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值|活动","SEN-LEVEL-NONE"]},{"id":"cmt-0106","source":"googleplay","brand":"云上大陆","author":"gp_1105","text":"充值返利的规则写得太复杂，看不懂，体验一般。","publishedAt":"2026-11-01T20:28:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值"],"primaryTopic":"充值","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值","SEN-LEVEL-NONE"]},{"id":"cmt-0107","source":"community","brand":"云上大陆","author":"社区_1106","text":"月卡价格涨了，但内容没变，感觉不太划算。","publishedAt":"2026-11-01T10:24:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["充值"],"primaryTopic":"充值","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-POS","SEN-TOPIC:充值","SEN-LEVEL-NONE"]},{"id":"cmt-0108","source":"ticket","brand":"云上大陆","author":"用户_1107","text":"充值活动的赠送比例感觉变低了，不太满意。","publishedAt":"2026-11-01T17:35:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["充值","活动"],"primaryTopic":"充值","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-POS","SEN-TOPIC:充值|活动","SEN-LEVEL-NONE"]},{"id":"cmt-0109","source":"steam","brand":"云上大陆","author":"steam_1108","text":"希望充值能多几个档位选择，现在可选太少。","publishedAt":"2026-11-01T08:12:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值"],"primaryTopic":"充值","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0110","source":"taptap","brand":"云上大陆","author":"tap_1109","text":"充值到账的提示音太吵，建议加个开关。","publishedAt":"2026-11-01T14:52:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值"],"primaryTopic":"充值","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0111","source":"googleplay","brand":"云上大陆","author":"gp_1110","text":"充值记录页面加载有点慢，希望优化一下。","publishedAt":"2026-11-01T21:43:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["充值","Bug"],"primaryTopic":"充值","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0020","engineRules":["SEN-LEX-NEG","SEN-TOPIC:充值|Bug","SEN-LEVEL-P1","SEN-P1-SIGNAL:慢"]},{"id":"cmt-0112","source":"community","brand":"云上大陆","author":"社区_1111","text":"这次充值活动的时间安排不太合理，赶上工作日。","publishedAt":"2026-11-01T11:46:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["充值","活动"],"primaryTopic":"充值","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0020","engineRules":["SEN-TOPIC:充值|活动","SEN-LEVEL-NONE"]}],"linkedClues":[]},{"alert":{"id":"alt-0018","level":"P1","topic":"Bug","title":"Bug · 10-31 集中负面","summary":"2026-10-31 共 3 条评论，负面 2 条（来源：steam 1 / community 1 / ticket 1），聚合等级 P1。主要信号：掉线、卡顿、没法。","windowStart":"2026-10-31T00:00:00+08:00","windowEnd":"2026-10-31T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p1","description":"单条评论命中 P1 高危信号"},{"ruleId":"aggregate_escalation_p2","description":"同主题当日负面 2 条，聚合升级至 P2"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：Bug / 2026-10-31（共 3 条评论）"}],"commentIds":["cmt-0095","cmt-0096","cmt-0097"],"status":"resolved","owner":"周野","slaMinutes":120,"slaDueAt":"2026-11-01T02:00:00+08:00","firstResponseAt":"2026-11-01T00:36:00+08:00","resolvedAt":"2026-11-01T01:21:00+08:00","timeline":[{"at":"2026-11-01T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-11-01T00:36:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"},{"at":"2026-11-01T00:41:00+08:00","by":"陆川","type":"responded","note":"已进入响应流程，准备公告与补偿方案。","from":"acknowledged","to":"responding"},{"at":"2026-11-01T01:21:00+08:00","by":"陆川","type":"resolved","note":"问题已修复，负面评论回落，预警关闭。","from":"responding","to":"resolved"}],"linkedClueIds":[],"createdAt":"2026-11-01T00:00:00+08:00"},"comments":[{"id":"cmt-0095","source":"community","brand":"机甲前线","author":"社区_1094","text":"跨服战一进入就掉线，重连好几次都不行。","publishedAt":"2026-10-31T11:46:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["Bug"],"primaryTopic":"Bug","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0018","engineRules":["SEN-LEX-NEG","SEN-TOPIC:Bug","SEN-LEVEL-P1","SEN-P1-SIGNAL:掉线"]},{"id":"cmt-0096","source":"ticket","brand":"机甲前线","author":"用户_1095","text":"新机甲技能释放卡顿严重，战斗根本没法正常进行。","publishedAt":"2026-10-31T19:11:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["Bug"],"primaryTopic":"Bug","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0018","engineRules":["SEN-LEX-NEG","SEN-TOPIC:Bug","SEN-LEVEL-P1","SEN-P1-SIGNAL:卡顿|没法"]},{"id":"cmt-0097","source":"steam","brand":"机甲前线","author":"steam_1096","text":"机甲外观建模不太满意，BUG 修完希望能优化一下。","publishedAt":"2026-10-31T09:37:00+08:00","sentiment":"positive","sentimentScore":0.2,"topics":["Bug"],"primaryTopic":"Bug","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0018","engineRules":["SEN-LEX-POS","SEN-LEX-NEG","SEN-TOPIC:Bug","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]}],"linkedClues":[]},{"alert":{"id":"alt-0010","level":"P1","topic":"客服","title":"客服 · 10-26 集中负面","summary":"2026-10-26 共 8 条评论，负面 1 条（来源：steam 2 / taptap 1 / googleplay 1 / community 2 / ticket 2），聚合等级 P1。主要信号：敷衍、排队、等了。","windowStart":"2026-10-26T00:00:00+08:00","windowEnd":"2026-10-26T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p1","description":"单条评论命中 P1 高危信号"},{"ruleId":"aggregate_escalation_p2","description":"同主题当日负面 1 条，聚合升级至 P2"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：客服 / 2026-10-26（共 8 条评论）"}],"commentIds":["cmt-0059","cmt-0060","cmt-0061","cmt-0062","cmt-0063","cmt-0064","cmt-0065","cmt-0066"],"status":"responding","owner":"陆川","slaMinutes":120,"slaDueAt":"2026-10-27T02:00:00+08:00","firstResponseAt":"2026-10-27T00:36:00+08:00","resolvedAt":null,"timeline":[{"at":"2026-10-27T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-10-27T00:36:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"},{"at":"2026-10-27T00:41:00+08:00","by":"陆川","type":"responded","note":"已进入响应流程，准备公告与补偿方案。","from":"acknowledged","to":"responding"}],"linkedClueIds":[],"createdAt":"2026-10-27T00:00:00+08:00"},"comments":[{"id":"cmt-0059","source":"community","brand":"星海远征","author":"社区_1058","text":"客服回复太敷衍了，问了三遍都答非所问。","publishedAt":"2026-10-26T08:12:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["客服"],"primaryTopic":"客服","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0010","engineRules":["SEN-LEX-NEG","SEN-TOPIC:客服","SEN-LEVEL-P1","SEN-P1-SIGNAL:敷衍"]},{"id":"cmt-0060","source":"ticket","brand":"星海远征","author":"用户_1059","text":"排队等了四十分钟才轮到客服，效率太低了。","publishedAt":"2026-10-26T14:52:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0010","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0061","source":"steam","brand":"星海远征","author":"steam_1060","text":"客服的语气有点冷，希望热情一点。","publishedAt":"2026-10-26T21:43:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0010","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0062","source":"taptap","brand":"星海远征","author":"tap_1061","text":"客服回复模板化严重，感觉没认真看问题。","publishedAt":"2026-10-26T11:46:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0010","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0063","source":"googleplay","brand":"星海远征","author":"gp_1062","text":"客服很快就帮我解决了，态度很好。","publishedAt":"2026-10-26T19:11:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0010","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0064","source":"community","brand":"星海远征","author":"社区_1063","text":"这次的客服很专业，问题一次就处理好了。","publishedAt":"2026-10-26T09:37:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0010","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0065","source":"ticket","brand":"星海远征","author":"用户_1064","text":"客服响应速度不错，点赞。","publishedAt":"2026-10-26T16:07:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0010","engineRules":["SEN-LEX-POS","SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0066","source":"steam","brand":"星海远征","author":"steam_1065","text":"想咨询一下客服的服务时间是几点到几点？","publishedAt":"2026-10-26T22:56:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0010","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]}],"linkedClues":[]},{"alert":{"id":"alt-0008","level":"P1","topic":"活动","title":"活动 · 10-25 集中负面","summary":"2026-10-25 共 8 条评论，负面 1 条（来源：steam 1 / taptap 2 / googleplay 2 / community 2 / ticket 1），聚合等级 P1。主要信号：失败、没法。","windowStart":"2026-10-25T00:00:00+08:00","windowEnd":"2026-10-25T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p1","description":"单条评论命中 P1 高危信号"},{"ruleId":"aggregate_escalation_p2","description":"同主题当日负面 1 条，聚合升级至 P2"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：活动 / 2026-10-25（共 8 条评论）"}],"commentIds":["cmt-0041","cmt-0042","cmt-0043","cmt-0044","cmt-0045","cmt-0046","cmt-0047","cmt-0048"],"status":"acknowledged","owner":"陆川","slaMinutes":120,"slaDueAt":"2026-10-26T02:00:00+08:00","firstResponseAt":"2026-10-26T00:36:00+08:00","resolvedAt":null,"timeline":[{"at":"2026-10-26T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-10-26T00:36:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"}],"linkedClueIds":[],"createdAt":"2026-10-26T00:00:00+08:00"},"comments":[{"id":"cmt-0041","source":"taptap","brand":"云上大陆","author":"tap_1040","text":"活动奖励发放延迟三天了，到现在还没发。","publishedAt":"2026-10-25T16:07:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["活动","Bug"],"primaryTopic":"活动","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0008","engineRules":["SEN-TOPIC:活动|Bug","SEN-LEVEL-NONE"]},{"id":"cmt-0042","source":"googleplay","brand":"云上大陆","author":"gp_1041","text":"活动进度卡住不更新，奖励也领取失败，没法正常参与。","publishedAt":"2026-10-25T22:56:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["活动","版本"],"primaryTopic":"活动","severity":"p1","confidence":0.85,"needsReview":false,"alertId":"alt-0008","engineRules":["SEN-LEX-NEG","SEN-TOPIC:活动|版本","SEN-LEVEL-P1","SEN-P1-SIGNAL:失败|没法"]},{"id":"cmt-0043","source":"community","brand":"云上大陆","author":"社区_1042","text":"这次活动的奖励不太丰厚，吸引力一般。","publishedAt":"2026-10-25T13:18:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["活动"],"primaryTopic":"活动","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0008","engineRules":["SEN-TOPIC:活动","SEN-LEVEL-NONE"]},{"id":"cmt-0044","source":"ticket","brand":"云上大陆","author":"用户_1043","text":"活动规则写得太绕，看不懂怎么玩。","publishedAt":"2026-10-25T20:28:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["活动"],"primaryTopic":"活动","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0008","engineRules":["SEN-TOPIC:活动","SEN-LEVEL-NONE"]},{"id":"cmt-0045","source":"steam","brand":"云上大陆","author":"steam_1044","text":"这次活动福利挺多的，玩得很开心。","publishedAt":"2026-10-25T10:24:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["活动"],"primaryTopic":"活动","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0008","engineRules":["SEN-LEX-POS","SEN-TOPIC:活动","SEN-LEVEL-NONE"]},{"id":"cmt-0046","source":"taptap","brand":"云上大陆","author":"tap_1045","text":"活动奖励很给力，已经拿到限定时装了。","publishedAt":"2026-10-25T17:35:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["活动"],"primaryTopic":"活动","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0008","engineRules":["SEN-LEX-POS","SEN-TOPIC:活动","SEN-LEVEL-NONE"]},{"id":"cmt-0047","source":"googleplay","brand":"云上大陆","author":"gp_1046","text":"活动设计得不错，希望以后多来点。","publishedAt":"2026-10-25T08:12:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["活动"],"primaryTopic":"活动","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0008","engineRules":["SEN-LEX-POS","SEN-TOPIC:活动","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0048","source":"community","brand":"云上大陆","author":"社区_1047","text":"活动什么时候结束？想问问时间。","publishedAt":"2026-10-25T14:52:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["活动"],"primaryTopic":"活动","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0008","engineRules":["SEN-TOPIC:活动","SEN-LEVEL-NONE"]}],"linkedClues":[]},{"alert":{"id":"alt-0021","level":"P2","topic":"客服","title":"客服 · 11-02 集中负面","summary":"2026-11-02 共 8 条评论，负面 0 条（来源：steam 2 / taptap 2 / googleplay 2 / community 1 / ticket 1），聚合等级 P2。主要信号：排队、等了。","windowStart":"2026-11-02T00:00:00+08:00","windowEnd":"2026-11-02T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p2","description":"单条评论命中 P2 高危信号"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：客服 / 2026-11-02（共 8 条评论）"}],"commentIds":["cmt-0113","cmt-0114","cmt-0115","cmt-0116","cmt-0117","cmt-0118","cmt-0119","cmt-0120"],"status":"responding","owner":"陆川","slaMinutes":1440,"slaDueAt":"2026-11-04T00:00:00+08:00","firstResponseAt":"2026-11-03T07:12:00+08:00","resolvedAt":null,"timeline":[{"at":"2026-11-03T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-11-03T07:12:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"},{"at":"2026-11-03T07:17:00+08:00","by":"陆川","type":"responded","note":"已进入响应流程，准备公告与补偿方案。","from":"acknowledged","to":"responding"}],"linkedClueIds":[],"createdAt":"2026-11-03T00:00:00+08:00"},"comments":[{"id":"cmt-0113","source":"steam","brand":"云上大陆","author":"steam_1112","text":"工单提交三天了还没人处理，进度一直停滞。","publishedAt":"2026-11-02T20:28:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0114","source":"taptap","brand":"云上大陆","author":"tap_1113","text":"客服电话一直排队，等了二十分钟也没人接。","publishedAt":"2026-11-02T10:24:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0115","source":"googleplay","brand":"云上大陆","author":"gp_1114","text":"客服的话术太官方了，听着有点距离感。","publishedAt":"2026-11-02T17:35:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0116","source":"community","brand":"云上大陆","author":"社区_1115","text":"希望客服能提供夜间服务，现在晚上找不到人。","publishedAt":"2026-11-02T08:12:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"p2","confidence":0.78,"needsReview":false,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]},{"id":"cmt-0117","source":"ticket","brand":"云上大陆","author":"用户_1116","text":"工单处理速度很快，当天就解决了。","publishedAt":"2026-11-02T14:52:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0118","source":"steam","brand":"云上大陆","author":"steam_1117","text":"客服态度很好，问题解释得很清楚。","publishedAt":"2026-11-02T21:43:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0119","source":"taptap","brand":"云上大陆","author":"tap_1118","text":"这次客服响应及时，体验不错。","publishedAt":"2026-11-02T11:46:00+08:00","sentiment":"positive","sentimentScore":1,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.88,"needsReview":false,"alertId":"alt-0021","engineRules":["SEN-LEX-POS","SEN-TOPIC:客服","SEN-LEVEL-NONE"]},{"id":"cmt-0120","source":"googleplay","brand":"云上大陆","author":"gp_1119","text":"请问客服工单一般多久回复一次？","publishedAt":"2026-11-02T19:11:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["客服"],"primaryTopic":"客服","severity":"none","confidence":0.72,"needsReview":true,"alertId":"alt-0021","engineRules":["SEN-TOPIC:客服","SEN-LEVEL-NONE"]}],"linkedClues":[]},{"alert":{"id":"alt-0016","level":"P2","topic":"版本","title":"版本 · 10-31 集中负面","summary":"2026-10-31 共 2 条评论，负面 1 条（来源：steam 1 / googleplay 1），聚合等级 P2。主要信号：掉线。","windowStart":"2026-10-31T00:00:00+08:00","windowEnd":"2026-10-31T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p2","description":"单条评论命中 P2 高危信号"},{"ruleId":"aggregate_escalation_p2","description":"同主题当日负面 1 条，聚合升级至 P2"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：版本 / 2026-10-31（共 2 条评论）"}],"commentIds":["cmt-0099","cmt-0102"],"status":"new","owner":"周野","slaMinutes":1440,"slaDueAt":"2026-11-02T00:00:00+08:00","firstResponseAt":null,"resolvedAt":null,"timeline":[{"at":"2026-11-01T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"}],"linkedClueIds":[],"createdAt":"2026-11-01T00:00:00+08:00"},"comments":[{"id":"cmt-0099","source":"googleplay","brand":"机甲前线","author":"gp_1098","text":"昨天的热更新修复了掉线问题，现在稳定多了。","publishedAt":"2026-10-31T22:56:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["版本","Bug"],"primaryTopic":"版本","severity":"p2","confidence":0.76,"needsReview":false,"alertId":"alt-0016","engineRules":["SEN-LEX-POS","SEN-LEX-NEG","SEN-TOPIC:版本|Bug","SEN-LEVEL-P2","SEN-NEUTRAL-COMPLAINT"]},{"id":"cmt-0102","source":"steam","brand":"机甲前线","author":"steam_1101","text":"想问下下次版本更新和 BUG 修复是什么时候？","publishedAt":"2026-10-31T10:24:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["版本"],"primaryTopic":"版本","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0016","engineRules":["SEN-LEX-NEG","SEN-TOPIC:版本","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]}],"linkedClues":[]},{"alert":{"id":"alt-0017","level":"P2","topic":"客服","title":"客服 · 10-31 集中负面","summary":"2026-10-31 共 1 条评论，负面 1 条（来源：taptap 1），聚合等级 P2。未见明确高危信号词，按聚簇规模升级。","windowStart":"2026-10-31T00:00:00+08:00","windowEnd":"2026-10-31T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p2","description":"单条评论命中 P2 高危信号"},{"ruleId":"aggregate_escalation_p2","description":"同主题当日负面 1 条，聚合升级至 P2"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：客服 / 2026-10-31（共 1 条评论）"}],"commentIds":["cmt-0098"],"status":"resolved","owner":"陆川","slaMinutes":1440,"slaDueAt":"2026-11-02T00:00:00+08:00","firstResponseAt":"2026-11-01T07:12:00+08:00","resolvedAt":"2026-11-01T07:57:00+08:00","timeline":[{"at":"2026-11-01T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-11-01T07:12:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"},{"at":"2026-11-01T07:17:00+08:00","by":"陆川","type":"responded","note":"已进入响应流程，准备公告与补偿方案。","from":"acknowledged","to":"responding"},{"at":"2026-11-01T07:57:00+08:00","by":"陆川","type":"resolved","note":"问题已修复，负面评论回落，预警关闭。","from":"responding","to":"resolved"}],"linkedClueIds":[],"createdAt":"2026-11-01T00:00:00+08:00"},"comments":[{"id":"cmt-0098","source":"taptap","brand":"机甲前线","author":"tap_1097","text":"这个 BUG 反馈很久了，优先级感觉很低。","publishedAt":"2026-10-31T16:07:00+08:00","sentiment":"negative","sentimentScore":-1,"topics":["客服"],"primaryTopic":"客服","severity":"p2","confidence":0.8,"needsReview":false,"alertId":"alt-0017","engineRules":["SEN-LEX-NEG","SEN-TOPIC:客服","SEN-LEVEL-P2","SEN-NEGATIVE-NO-IMPACT"]}],"linkedClues":[]},{"alert":{"id":"alt-0019","level":"P2","topic":"其他","title":"其他 · 10-31 集中负面","summary":"2026-10-31 共 2 条评论，负面 0 条（来源：community 1 / ticket 1），聚合等级 P2。未见明确高危信号词，按聚簇规模升级。","windowStart":"2026-10-31T00:00:00+08:00","windowEnd":"2026-10-31T23:59:00+08:00","triggerRules":[{"ruleId":"single_comment_p2","description":"单条评论命中 P2 高危信号"},{"ruleId":"cluster_by_topic_day","description":"按 primaryTopic + 日期聚簇：其他 / 2026-10-31（共 2 条评论）"}],"commentIds":["cmt-0100","cmt-0101"],"status":"acknowledged","owner":"陆川","slaMinutes":1440,"slaDueAt":"2026-11-02T00:00:00+08:00","firstResponseAt":"2026-11-01T07:12:00+08:00","resolvedAt":null,"timeline":[{"at":"2026-11-01T00:00:00+08:00","by":"系统","type":"created","note":"聚合规则触发，自动生成舆情预警。","from":null,"to":"new"},{"at":"2026-11-01T07:12:00+08:00","by":"江岚","type":"acknowledged","note":"已确认预警，开始评估影响。","from":"new","to":"acknowledged"}],"linkedClueIds":[],"createdAt":"2026-11-01T00:00:00+08:00"},"comments":[{"id":"cmt-0100","source":"community","brand":"机甲前线","author":"社区_1099","text":"机甲平衡性调整后 BUG 少了很多，体验好多了，满意。","publishedAt":"2026-10-31T13:18:00+08:00","sentiment":"neutral","sentimentScore":0,"topics":["其他"],"primaryTopic":"其他","severity":"none","confidence":0.74,"needsReview":true,"alertId":"alt-0019","engineRules":["SEN-LEX-POS","SEN-LEX-NEG","SEN-TOPIC-FALLBACK","SEN-LEVEL-NONE"]},{"id":"cmt-0101","source":"ticket","brand":"机甲前线","author":"用户_1100","text":"这次 BUG 修复速度很快，给开发点赞。","publishedAt":"2026-10-31T20:28:00+08:00","sentiment":"positive","sentimentScore":0.33,"topics":["其他"],"primaryTopic":"其他","severity":"p2","confidence":0.72,"needsReview":true,"alertId":"alt-0019","engineRules":["SEN-LEX-POS","SEN-LEX-NEG","SEN-TOPIC-FALLBACK","SEN-LEVEL-P2","SEN-NEUTRAL-SUGGESTION"]}],"linkedClues":[]}],"clues":[{"id":"clue-0010","title":"运营线索：cs 侧体验优化建议 10","description":"由看板指标波动与人工洞察汇总生成的体验优化线索。","sourceType":"agent","sourceRef":{"type":"dashboard","id":"dashboard-summary","label":"运营看板"},"target":"cs","priority":"high","status":"draft","owner":"陆川","createdBy":"沈言","evidence":["运营看板"],"outcome":null,"timeline":[{"at":"2026-10-27T02:00:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"}],"createdAt":"2026-10-27T02:00:00+08:00","updatedAt":"2026-10-27T02:00:00+08:00","closedAt":null},{"id":"clue-0009","title":"运营线索：product 侧体验优化建议 09","description":"由看板指标波动与人工洞察汇总生成的体验优化线索。","sourceType":"dashboard","sourceRef":{"type":"dashboard","id":"dashboard-summary","label":"运营看板"},"target":"product","priority":"low","status":"draft","owner":"周野","createdBy":"沈言","evidence":["运营看板"],"outcome":null,"timeline":[{"at":"2026-10-27T01:50:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"}],"createdAt":"2026-10-27T01:50:00+08:00","updatedAt":"2026-10-27T01:50:00+08:00","closedAt":null},{"id":"clue-0008","title":"运营线索：market 侧体验优化建议 08","description":"由看板指标波动与人工洞察汇总生成的体验优化线索。","sourceType":"dashboard","sourceRef":{"type":"dashboard","id":"dashboard-summary","label":"运营看板"},"target":"market","priority":"medium","status":"rejected","owner":"程雨","createdBy":"沈言","evidence":["运营看板"],"outcome":null,"timeline":[{"at":"2026-10-26T01:40:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-26T02:05:00+08:00","by":"沈言","type":"routed","note":"已分派给 程雨 跟进。","from":"draft","to":"routed"},{"at":"2026-10-26T02:30:00+08:00","by":"程雨","type":"rejected","note":"评估后判定为已有覆盖，暂不立项。","from":"routed","to":"rejected"}],"createdAt":"2026-10-26T01:40:00+08:00","updatedAt":"2026-10-26T02:30:00+08:00","closedAt":null},{"id":"clue-0007","title":"舆情线索：充值 · 10-24 集中负面","description":"根据 P2 预警「充值 · 10-24 集中负面」沉淀，建议 brand 团队跟进。2026-10-24 共 6 条评论，负面 1 条（来源：steam 2 / taptap 1 / googleplay 1 / community 1 / ticket 1），聚合等级 P2。未见明确高危信号词，按聚簇规模升级。","sourceType":"sentiment","sourceRef":{"type":"alert","id":"alt-0007","label":"充值 · 10-24 集中负面"},"target":"brand","priority":"high","status":"rejected","owner":"江岚","createdBy":"沈言","evidence":["充值 · 10-24 集中负面"],"outcome":null,"timeline":[{"at":"2026-10-25T01:30:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-25T01:55:00+08:00","by":"沈言","type":"routed","note":"已分派给 江岚 跟进。","from":"draft","to":"routed"},{"at":"2026-10-25T02:20:00+08:00","by":"江岚","type":"rejected","note":"评估后判定为已有覆盖，暂不立项。","from":"routed","to":"rejected"}],"createdAt":"2026-10-25T01:30:00+08:00","updatedAt":"2026-10-25T02:20:00+08:00","closedAt":null},{"id":"clue-0006","title":"质检线索：情绪升级问题 · 陈默 · 10-21","description":"由 badcase BC-2026-0006 沉淀，建议 cs 团队评估根因整改。用户从平静转为愤怒，或提出投诉/曝光/退款升级等诉求（会话风险标记）。会话摘要：客户情绪平静；命中 1 个标签：情绪升级（用户提出投诉/曝光/维权等升级诉求）。建议：客诉预警与安抚流程。","sourceType":"qc","sourceRef":{"type":"badcase","id":"bc-0006","label":"BC-2026-0006"},"target":"cs","priority":"low","status":"routed","owner":"陆川","createdBy":"沈言","evidence":["BC-2026-0006"],"outcome":null,"timeline":[{"at":"2026-10-24T01:20:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-24T01:45:00+08:00","by":"沈言","type":"routed","note":"已分派给 陆川 跟进。","from":"draft","to":"routed"}],"createdAt":"2026-10-24T01:20:00+08:00","updatedAt":"2026-10-24T01:45:00+08:00","closedAt":null},{"id":"clue-0005","title":"质检线索：答非所问问题 · 何洋 · 10-21","description":"由 badcase BC-2026-0005 沉淀，建议 product 团队评估根因整改。用户问题与坐席回答意图不匹配、模板回复、连续多轮未回应核心诉求。会话摘要：客户情绪平静；命中 1 个标签：答非所问（用户核心诉求未解决，坐席以结束语/公告模板回避）。建议：知识库与流程对齐。","sourceType":"qc","sourceRef":{"type":"badcase","id":"bc-0005","label":"BC-2026-0005"},"target":"product","priority":"medium","status":"routed","owner":"周野","createdBy":"沈言","evidence":["BC-2026-0005"],"outcome":null,"timeline":[{"at":"2026-10-24T01:10:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-24T01:35:00+08:00","by":"沈言","type":"routed","note":"已分派给 周野 跟进。","from":"draft","to":"routed"}],"createdAt":"2026-10-24T01:10:00+08:00","updatedAt":"2026-10-24T01:35:00+08:00","closedAt":null},{"id":"clue-0004","title":"舆情线索：客服 · 10-23 集中负面","description":"根据 P2 预警「客服 · 10-23 集中负面」沉淀，建议 market 团队跟进。2026-10-23 共 3 条评论，负面 2 条（来源：taptap 2 / community 1），聚合等级 P2。未见明确高危信号词，按聚簇规模升级。","sourceType":"sentiment","sourceRef":{"type":"alert","id":"alt-0004","label":"客服 · 10-23 集中负面"},"target":"market","priority":"high","status":"accepted","owner":"程雨","createdBy":"沈言","evidence":["客服 · 10-23 集中负面"],"outcome":null,"timeline":[{"at":"2026-10-24T01:00:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-24T01:25:00+08:00","by":"沈言","type":"routed","note":"已分派给 程雨 跟进。","from":"draft","to":"routed"},{"at":"2026-10-24T01:50:00+08:00","by":"程雨","type":"accepted","note":"接收方已确认，纳入迭代计划。","from":"routed","to":"accepted"}],"createdAt":"2026-10-24T01:00:00+08:00","updatedAt":"2026-10-24T01:50:00+08:00","closedAt":null},{"id":"clue-0003","title":"舆情线索：Bug · 10-22 集中负面","description":"根据 P1 预警「Bug · 10-22 集中负面」沉淀，建议 cs 团队跟进。2026-10-22 共 1 条评论，负面 1 条（来源：ticket 1），聚合等级 P1。主要信号：进不去、影响。","sourceType":"sentiment","sourceRef":{"type":"alert","id":"alt-0003","label":"Bug · 10-22 集中负面"},"target":"cs","priority":"low","status":"accepted","owner":"陆川","createdBy":"沈言","evidence":["Bug · 10-22 集中负面"],"outcome":null,"timeline":[{"at":"2026-10-23T00:50:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-23T01:15:00+08:00","by":"沈言","type":"routed","note":"已分派给 陆川 跟进。","from":"draft","to":"routed"},{"at":"2026-10-23T01:40:00+08:00","by":"陆川","type":"accepted","note":"接收方已确认，纳入迭代计划。","from":"routed","to":"accepted"}],"createdAt":"2026-10-23T00:50:00+08:00","updatedAt":"2026-10-23T01:40:00+08:00","closedAt":null},{"id":"clue-0002","title":"舆情线索：版本 · 10-22 集中负面","description":"根据 P1 预警「版本 · 10-22 集中负面」沉淀，建议 product 团队跟进。2026-10-22 共 7 条评论，负面 1 条（来源：steam 2 / taptap 1 / googleplay 1 / community 2 / ticket 1），聚合等级 P1。主要信号：闪退、没法。","sourceType":"sentiment","sourceRef":{"type":"alert","id":"alt-0002","label":"版本 · 10-22 集中负面"},"target":"product","priority":"medium","status":"closed","owner":"周野","createdBy":"沈言","evidence":["版本 · 10-22 集中负面"],"outcome":"已纳入版本迭代并完成验收。","timeline":[{"at":"2026-10-23T00:40:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-23T01:05:00+08:00","by":"沈言","type":"routed","note":"已分派给 周野 跟进。","from":"draft","to":"routed"},{"at":"2026-10-23T01:30:00+08:00","by":"周野","type":"accepted","note":"接收方已确认，纳入迭代计划。","from":"routed","to":"accepted"},{"at":"2026-10-23T01:55:00+08:00","by":"周野","type":"closed","note":"已交付完成，线索关闭归档。","from":"accepted","to":"closed"}],"createdAt":"2026-10-23T00:40:00+08:00","updatedAt":"2026-10-23T01:55:00+08:00","closedAt":"2026-10-23T01:55:00+08:00"},{"id":"clue-0001","title":"舆情线索：版本 · 10-20 集中负面","description":"根据 P2 预警「版本 · 10-20 集中负面」沉淀，建议 brand 团队跟进。2026-10-20 共 6 条评论，负面 1 条（来源：steam 2 / taptap 1 / googleplay 1 / community 1 / ticket 1），聚合等级 P2。未见明确高危信号词，按聚簇规模升级。","sourceType":"sentiment","sourceRef":{"type":"alert","id":"alt-0001","label":"版本 · 10-20 集中负面"},"target":"brand","priority":"high","status":"closed","owner":"江岚","createdBy":"沈言","evidence":["版本 · 10-20 集中负面"],"outcome":"已纳入版本迭代并完成验收。","timeline":[{"at":"2026-10-21T00:30:00+08:00","by":"系统","type":"created","note":"由预警/质检结果沉淀为线索。","from":null,"to":"draft"},{"at":"2026-10-21T00:55:00+08:00","by":"沈言","type":"routed","note":"已分派给 江岚 跟进。","from":"draft","to":"routed"},{"at":"2026-10-21T01:20:00+08:00","by":"江岚","type":"accepted","note":"接收方已确认，纳入迭代计划。","from":"routed","to":"accepted"},{"at":"2026-10-21T01:45:00+08:00","by":"江岚","type":"closed","note":"已交付完成，线索关闭归档。","from":"accepted","to":"closed"}],"createdAt":"2026-10-21T00:30:00+08:00","updatedAt":"2026-10-21T01:45:00+08:00","closedAt":"2026-10-21T01:45:00+08:00"}],"datasets":[{"dataset":"qc","datasetId":"qc-eval-v0.1","version":"0.1.0","itemCount":60,"description":"客服质检评测集：60 条对话（40 条违规 + 20 条正常），覆盖 attitude/forbidden/off_topic/wrong_knowledge/timeout/escalation 六类标签、多标签组合、隐式边界样本与正常样本，用于规则引擎判定评测与演示。","lastRunAt":"2026-11-03T10:00:00+08:00"},{"dataset":"sentiment","datasetId":"sentiment-eval-v0.1","version":"0.1.0","itemCount":120,"description":"舆情评测集：120 条评论，按「主题×日期」聚为 16 簇（P0 3 簇、P1 6 簇、P2 4 簇、none 3 簇），覆盖单条分级、聚合升级、噪声与五类来源，用于告警聚类与级别回放评测。","lastRunAt":"2026-11-03T10:00:00+08:00"}],"runDetails":[{"id":"eval-0002","dataset":"sentiment","datasetId":"sentiment-eval-v0.1","datasetVersion":"0.1.0","runAt":"2026-11-03T10:00:00+08:00","durationMs":1,"modelVersion":"rule-engine-v0.1.0","metrics":{"sentimentAccuracy":0.625,"topicAccuracy":0.8667,"alertPrecision":0.4762,"alertRecall":0.7692,"p0Recall":0.6667,"reviewRatio":0.475,"avgLatencyMs":0.02},"confusion":{"tp":29,"fp":2,"tn":56,"fn":33,"alertTp":10,"alertFp":11,"alertFn":3},"mismatches":[{"itemId":"cm-0002","expected":"negative","predicted":"positive","reason":"情感不一致：金标 negative，引擎 positive（依据：SEN-LEX-POS、SEN-TOPIC:版本）"},{"itemId":"cm-0004","expected":"positive","predicted":"neutral","reason":"情感不一致：金标 positive，引擎 neutral（依据：SEN-TOPIC:版本、SEN-LEVEL-NONE）"},{"itemId":"cm-0014","expected":"positive","predicted":"neutral","reason":"情感不一致：金标 positive，引擎 neutral（依据：SEN-TOPIC:活动、SEN-LEVEL-NONE）"},{"itemId":"cm-0020","expected":"版本（版本/Bug）","predicted":"Bug","reason":"主题不一致：金标主主题 版本，引擎主主题 Bug"},{"itemId":"cm-0021","expected":"negative","predicted":"positive","reason":"情感不一致：金标 negative，引擎 positive（依据：SEN-LEX-POS、SEN-TOPIC:版本）"},{"itemId":"cm-0022","expected":"negative","predicted":"neutral","reason":"情感不一致：金标 negative，引擎 neutral（依据：SEN-TOPIC:版本、SEN-LEVEL-NONE）"},{"itemId":"cm-0024","expected":"none","predicted":"p2","reason":"单条级别不一致：金标 none，引擎 p2"},{"itemId":"cm-0027","expected":"Bug（Bug）","predicted":"活动","reason":"主题不一致：金标主主题 Bug，引擎主主题 活动"},{"itemId":"cm-0028","expected":"Bug（Bug）","predicted":"其他","reason":"主题不一致：金标主主题 Bug，引擎主主题 其他"},{"itemId":"cm-0029","expected":"Bug（Bug）","predicted":"客服","reason":"主题不一致：金标主主题 Bug，引擎主主题 客服"},{"itemId":"cm-0030","expected":"Bug（Bug）","predicted":"其他","reason":"主题不一致：金标主主题 Bug，引擎主主题 其他"},{"itemId":"cm-0031","expected":"positive","predicted":"neutral","reason":"情感不一致：金标 positive，引擎 neutral（依据：SEN-LEX-POS、SEN-LEX-NEG）"},{"itemId":"cm-0032","expected":"Bug（Bug）","predicted":"其他","reason":"主题不一致：金标主主题 Bug，引擎主主题 其他"},{"itemId":"cm-0033","expected":"positive","predicted":"neutral","reason":"情感不一致：金标 positive，引擎 neutral（依据：SEN-LEX-POS、SEN-LEX-NEG）"},{"itemId":"cm-0034","expected":"neutral","predicted":"negative","reason":"情感不一致：金标 neutral，引擎 negative（依据：SEN-LEX-NEG、SEN-TOPIC:客服）"},{"itemId":"cm-0036","expected":"negative","predicted":"neutral","reason":"情感不一致：金标 negative，引擎 neutral（依据：SEN-TOPIC:充值|活动、SEN-LEVEL-NONE）"},{"itemId":"cm-0041","expected":"negative","predicted":"neutral","reason":"情感不一致：金标 negative，引擎 neutral（依据：SEN-TOPIC:活动|Bug、SEN-LEVEL-NONE）"},{"itemId":"cm-0043","expected":"negative","predicted":"neutral","reason":"情感不一致：金标 negative，引擎 neutral（依据：SEN-TOPIC:活动、SEN-LEVEL-NONE）"},{"itemId":"cm-0044","expected":"negative","predicted":"neutral","reason":"情感不一致：金标 negative，引擎 neutral（依据：SEN-TOPIC:活动、SEN-LEVEL-NONE）"},{"itemId":"cm-0047","expected":"none","predicted":"p2","reason":"单条级别不一致：金标 none，引擎 p2"}],"thresholdsMet":{"sentimentAccuracy":false,"topicAccuracy":true,"alertPrecision":false,"alertRecall":false},"summary":"舆情评测：共 120 条，情感准确率 62.5%（阈值 ≥80%）。主题准确率 86.7%（阈值 ≥75%）；预警 precision 47.6%（阈值 ≥80%）。预警 recall 76.9%（展示），P0 recall 66.7%（展示），复核占比 47.5%。平均耗时 0.02ms/条；门禁 G-EVAL-2 未通过。"},{"id":"eval-0001","dataset":"qc","datasetId":"qc-eval-v0.1","datasetVersion":"0.1.0","runAt":"2026-11-03T10:00:00+08:00","durationMs":1,"modelVersion":"rule-engine-v0.1.0","metrics":{"coverage":1,"accuracy":0.9833,"verdictAccuracy":1,"falsePositiveRate":0,"falseNegativeRate":0,"reviewRatio":0.1167,"avgLatencyMs":0.02,"tagPrecisionMacro":0.9375,"tagPrecision":{"attitude":1,"escalation":1,"forbidden":1,"off_topic":0.75,"timeout":1,"wrong_knowledge":0.875}},"confusion":{"tp":40,"fp":0,"tn":20,"fn":0},"mismatches":[{"itemId":"qc-0011","expected":"violation:forbidden","predicted":"violation:forbidden","reason":"标签集合不一致：金标 [forbidden]，引擎 [forbidden, wrong_knowledge]（主标签一致，判定一致）"},{"itemId":"qc-0029","expected":"violation:escalation","predicted":"violation:escalation","reason":"标签集合不一致：金标 [escalation]，引擎 [escalation, off_topic]（主标签一致，判定一致）"},{"itemId":"qc-0037","expected":"violation:off_topic","predicted":"violation:timeout","reason":"主标签不一致：金标 off_topic，引擎 timeout；金标标签 [off_topic, timeout]，引擎标签 [timeout]"},{"itemId":"qc-0039","expected":"violation:wrong_knowledge","predicted":"violation:wrong_knowledge","reason":"标签集合不一致：金标 [escalation, wrong_knowledge]，引擎 [escalation, off_topic, wrong_knowledge]（主标签一致，判定一致）"},{"itemId":"qc-0040","expected":"violation:wrong_knowledge","predicted":"violation:wrong_knowledge","reason":"标签集合不一致：金标 [off_topic, wrong_knowledge]，引擎 [wrong_knowledge]（主标签一致，判定一致）"}],"thresholdsMet":{"accuracy":true,"falsePositiveRate":true,"falseNegativeRate":true,"reviewRatio":true},"summary":"质检评测：共 60 条，覆盖 60 条（覆盖率 100.0%）。判定一致率 98.3%（阈值 ≥80%），verdict 一致率 100.0%。误报率 0.0%（阈值 ≤15%），漏报率 0.0%（阈值 ≤20%），复核占比 11.7%。平均耗时 0.02ms/条；门禁 G-EVAL-1 通过。","tagPrecision":{"attitude":1,"escalation":1,"forbidden":1,"off_topic":0.75,"timeout":1,"wrong_knowledge":0.875}}]};
+
+/* ===== 小工具 ===== */
+const $ = (sel, root = document) => root.querySelector(sel);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pct = (v, digits = 0) => `${(Number(v) * 100).toFixed(digits)}%`;
+const num = (v) => Number(v ?? 0).toLocaleString("zh-CN");
+const dateTime = (iso) => iso ? new Date(iso).toLocaleString("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }) : "—";
+const dateOnly = (iso) => iso ? iso.slice(5, 10) : "—";
+const money = (v) => (Number(v) ? Number(v).toFixed(2) : "—");
+const clone = (v) => JSON.parse(JSON.stringify(v));
+
+const LABELS = {
+  verdict: { pass: "通过", violation: "违规" },
+  sentiment: { positive: "正面", neutral: "中性", negative: "负面" },
+  status: { open: "待处理", in_progress: "处理中", pending_verify: "待验证", closed: "已关闭" },
+  badcaseStatus: { open: "待处理", in_progress: "处理中", pending_verify: "待验证", closed: "已关闭" },
+  clueStatus: { draft: "草稿", routed: "已分派", accepted: "已接收", rejected: "已拒绝", closed: "已关闭" },
+  alertStatus: { new: "待确认", acknowledged: "已确认", responding: "响应中", escalated: "已升级", resolved: "已解决" },
+  category: { knowledge: "知识", script: "话术", process: "流程", system: "系统" },
+  target: { product: "产研", brand: "品牌", market: "市场", cs: "客服" },
+  channel: { online: "在线", ticket: "工单", phone: "电话" },
+  source: { steam: "Steam", taptap: "TapTap", googleplay: "GooglePlay", community: "社群", ticket: "工单" },
+  level: { P0: "P0", P1: "P1", P2: "P2", none: "—" },
+  severity: { high: "高", medium: "中", low: "低" },
+};
+const toneOf = {
+  ok: "ok", warn: "warn", bad: "danger", danger: "danger", info: "info", muted: "muted",
+  pass: "ok", violation: "danger", positive: "ok", neutral: "muted", negative: "danger",
+  open: "warn", in_progress: "info", pending_verify: "warn", closed: "ok",
+  draft: "muted", routed: "info", accepted: "ok", rejected: "danger",
+  new: "danger", acknowledged: "warn", responding: "info", escalated: "danger", resolved: "ok",
+  P0: "danger", P1: "warn", P2: "info",
+};
+const badge = (text, tone = "muted") => `<span class="badge badge--${toneOf[tone] ?? tone}">${esc(text)}</span>`;
+const isOverdue = (b) => b.status !== "closed" && Date.parse(b.dueAt) < Date.parse(DATA.meta.generatedAt);
+
+/* ===== 本地状态（刷新即复位，不写任何存储） ===== */
+const state = {
+  route: "dashboard",
+  range: "7d",
+  qc: { q: "", verdict: "", tag: "" },
+  badcaseStatus: "",
+  sentimentTab: "comments",
+  commentSentiment: "",
+  reviews: {},                 // conversationId -> { decision, finalTags, at }
+  badcases: clone(DATA.badcases),
+  alerts: clone(DATA.alerts),
+  clues: clone(DATA.clues),
+  evalRuns: clone(DATA.runDetails),
+  evalRunning: false,
+  drawer: null,                // { type, id }
+};
+
+/* ===== 路由 ===== */
+const ROUTES = {
+  dashboard: { title: "运营总览", crumb: ["运营总览"], render: renderDashboard },
+  qc: { title: "质检", crumb: ["运营总览", "质检"], render: renderQc },
+  badcases: { title: "badcase", crumb: ["运营总览", "badcase"], render: renderBadcases },
+  sentiment: { title: "舆情", crumb: ["运营总览", "舆情"], render: renderSentiment },
+  clues: { title: "线索", crumb: ["运营总览", "线索"], render: renderClues },
+  eval: { title: "评测", crumb: ["运营总览", "评测"], render: renderEval },
+  about: { title: "关于", crumb: ["运营总览", "关于"], render: renderAbout },
+};
+
+function parseHash() {
+  const raw = (location.hash || "#/dashboard").replace(/^#\/?/, "");
+  const [name, query] = raw.split("?");
+  state.route = ROUTES[name] ? name : "dashboard";
+  if (query) {
+    const params = new URLSearchParams(query);
+    if (params.get("tab") === "alerts") state.sentimentTab = "alerts";
+    if (params.get("status")) state.badcaseStatus = params.get("status");
+  }
+}
+function go(route, query = "") {
+  location.hash = `#/${route}${query}`;
+}
+function render() {
+  const route = ROUTES[state.route];
+  document.title = `QCC Workbench · ${route.title}`;
+  $("#crumbs").innerHTML = route.crumb.map((item, i) => `${i ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 18 6-6-6-6"/></svg>' : ""}${i === route.crumb.length - 1 ? `<b>${esc(item)}</b>` : `<span>${esc(item)}</span>`}`).join("");
+  $("#view").innerHTML = route.render();
+  document.querySelectorAll(".nav__item").forEach((btn) => btn.classList.toggle("is-active", btn.dataset.route === state.route));
+  document.querySelectorAll("#range-switch button").forEach((btn) => btn.classList.toggle("is-active", btn.dataset.range === state.range));
+}
+
+/* ===== 总览 ===== */
+function renderDashboard() {
+  const summary = DATA.summary[state.range];
+  const trends = DATA.trends[state.range].rows;
+  const s = summary;
+  const fmt = (v, unit) => unit === "percent" ? pct(v, v < 0.1 ? 1 : 0) : (unit === "minutes" || unit === "min") ? `${v} 分` : unit === "score" ? Number(v).toFixed(1) : num(v);
+  const fmtDelta = (delta, unit) => {
+    if (!delta) return "持平";
+    const arrow = delta > 0 ? "↑" : "↓";
+    if (unit === "percent") return `${arrow} ${(Math.abs(delta) * 100).toFixed(1)}pp`;
+    if (unit === "minutes" || unit === "min") return `${arrow} ${Math.abs(delta)} 分`;
+    return `${arrow} ${Math.abs(delta).toFixed(unit === "score" ? 1 : 2)}`;
+  };
+  const kpis = s.kpis.map((k) => {
+    const tone = k.status === "ok" ? "ok" : k.status === "warn" ? "warn" : "bad";
+    const value = fmt(k.value, k.unit);
+    return `<div class="kpi ${tone}">
+      <div class="kpi__label">${esc(k.label)}${badge(k.status === "ok" ? "达标" : "待改善", tone)}</div>
+      <div class="kpi__value">${esc(value)}</div>
+      <div class="kpi__meta"><span>目标 ${esc(k.op)} ${esc(fmt(k.target, k.unit))}</span><span class="kpi__delta ${k.delta >= 0 ? "up" : "down"}">${esc(fmtDelta(k.delta, k.unit))}</span></div>
+    </div>`;
+  }).join("");
+
+  const series = [
+    { key: "qcAccuracy", label: "质检准确率", color: "var(--primary)" },
+    { key: "alertPrecision", label: "预警准确率", color: "var(--info)" },
+    { key: "badcaseCloseRate", label: "badcase 关闭率", color: "var(--warn)" },
+  ];
+  const labels = trends.map((r) => dateOnly(r.date));
+  const chart = lineChart(trends, labels, series);
+
+  const tagBars = barList(s.distribution.tags.map((t) => ({ label: t.name, value: t.count })), "primary");
+  const channelBars = barList(s.distribution.channels.map((c) => ({ label: LABELS.channel[c.channel] ?? c.channel, value: c.count })), "info");
+  const levelBars = barList(s.distribution.alertLevels.map((l) => ({ label: l.level, value: l.count, tone: l.level === "P0" ? "danger" : l.level === "P1" ? "warn" : "info" })), "warn");
+  const anomalyCards = DATA.anomalies.map((a) => `
+    <div class="anomaly" data-action="drill" data-drill="${esc(a.drillType)}" data-filter="${esc(JSON.stringify(a.drillFilter))}">
+      <span class="anomaly__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+      <div><div class="anomaly__title">${esc(a.metricLabel)} · ${badge(a.severity === "bad" ? "异常" : "关注", a.severity === "bad" ? "danger" : "warn")}</div>
+      <div class="anomaly__desc">当前 ${pct(a.current)}，目标 ${pct(a.target)}，偏差 ${(a.deviation * 100).toFixed(1)}pp · 责任人 ${esc(a.owner)}</div>
+      <div class="hint" style="margin-top:4px">${esc(a.suggestion)}</div></div>
+    </div>`).join("");
+
+  return `
+    ${pageHead("运营总览", "用 AI 把质量管控和舆情响应，从「抽检 + 人工盯」变成「全量检测 + 分级响应 + 闭环复盘 + 线索传递」。", "")}
+    <div class="kpi-grid">${kpis}</div>
+    <div class="grid-2" style="margin-top:16px">
+      <section class="card"><div class="card__head"><div><h3>核心指标趋势</h3><div class="section-sub">近 ${state.range.replace("d", "")} 天 · 数据截至演示时刻</div></div><span class="spacer"></span></div>
+        <div class="card__body">${chart}<div class="legend" style="margin-top:10px">${series.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join("")}</div></div></section>
+      <section class="card"><div class="card__head"><div><h3>异常与待办</h3><div class="section-sub">点击异常卡下钻到对应列表</div></div></div>
+        <div class="card__body stack">
+          <div class="stats-strip" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+            <div class="stat"><div class="stat__label">待复核</div><div class="stat__value">${s.volume.reviewPending}</div><div class="stat__hint">低置信度会话</div></div>
+            <div class="stat"><div class="stat__label">未关闭 badcase</div><div class="stat__value">${s.volume.badcasesOpen}</div><div class="stat__hint">含超期 ${DATA.badcaseStats.overdue} 条</div></div>
+            <div class="stat"><div class="stat__label">未处置预警</div><div class="stat__value">${s.volume.alertsOpen}</div><div class="stat__hint">P0 / P1 优先</div></div>
+            <div class="stat"><div class="stat__label">推进中线索</div><div class="stat__value">${s.volume.cluesOpen}</div><div class="stat__hint">产品 / 品牌 / 市场</div></div>
+          </div>
+          ${anomalyCards}
+        </div></section>
+    </div>
+    <div class="grid-3" style="margin-top:16px">
+      <section class="card"><div class="card__head"><h3>质检标签分布</h3></div><div class="card__body">${tagBars}</div></section>
+      <section class="card"><div class="card__head"><h3>渠道分布</h3></div><div class="card__body">${channelBars}</div></section>
+      <section class="card"><div class="card__head"><h3>预警级别</h3></div><div class="card__body">${levelBars}</div></section>
+    </div>`;
+}
+
+/* ===== 质检 ===== */
+function renderQc() {
+  const list = DATA.conversations.filter((item) => {
+    const c = item.conversation, q = item.qcResult;
+    if (state.qc.verdict && q.verdict !== state.qc.verdict) return false;
+    if (state.qc.tag && !q.tags.some((t) => t.code === state.qc.tag)) return false;
+    if (state.qc.q) {
+      const hay = `${c.id} ${c.agent.name} ${c.customer.name} ${c.product} ${q.summary}`.toLowerCase();
+      if (!hay.includes(state.qc.q.toLowerCase())) return false;
+    }
+    return true;
+  });
+  const st = DATA.qcStats;
+  const rows = list.map((item) => {
+    const c = item.conversation, q = item.qcResult;
+    const review = state.reviews[c.id];
+    const verdict = review?.decision === "overturn" ? "pass" : q.verdict;
+    const needs = review ? false : q.needsReview;
+    return `<tr data-click data-action="open-conv" data-id="${esc(c.id)}">
+      <td><div class="cell-title mono">${esc(c.id)}</div><div class="cell-sub">${esc(c.product)} · ${esc(LABELS.channel[c.channel] ?? c.channel)}</div></td>
+      <td><div>${esc(c.agent.name)}</div><div class="cell-sub">${esc(c.customer.name)}</div></td>
+      <td>${badge(LABELS.verdict[verdict] ?? verdict, verdict)}</td>
+      <td>${q.tags.length ? q.tags.map((t) => badge(t.name, "muted")).join(" ") : '<span class="faint">—</span>'}</td>
+      <td class="num">${q.score}</td>
+      <td>${review ? badge(review.decision === "overturn" ? "已改判" : "已复核", "ok") : needs ? badge("待复核", "warn") : '<span class="faint">—</span>'}</td>
+    </tr>`;
+  }).join("");
+
+  return `
+    ${pageHead("质检", "全量检测 → 评分/标签/证据 → 低置信度人工复核 → badcase 归因分派。当前演示内置 18 条代表性会话。", "")}
+    <div class="stats-strip">
+      ${statItem("已分析", num(st.analyzed), `覆盖率 ${pct(st.analyzed / st.total)}`)}
+      ${statItem("违规会话", num(st.violation), `通过 ${st.pass} 条`)}
+      ${statItem("待复核", num(st.needsReview), "置信度 < 0.75")}
+      ${statItem("平均分", st.avgScore.toFixed(1), `复核占比 ${pct(st.reviewRatio)}`)}
+    </div>
+    <section class="card" style="margin-top:16px">
+      <div class="card__head"><div><h3>会话列表</h3><div class="section-sub">点击行查看消息与证据回看</div></div></div>
+      <div class="card__body card__body--flush">
+        <div class="toolbar" style="padding:14px 16px 0">
+          <input class="input" id="qc-q" placeholder="搜索会话 / 坐席 / 客户" value="${esc(state.qc.q)}" />
+          <select class="select" id="qc-verdict">
+            <option value="">全部判定</option>
+            <option value="violation" ${state.qc.verdict === "violation" ? "selected" : ""}>违规</option>
+            <option value="pass" ${state.qc.verdict === "pass" ? "selected" : ""}>通过</option>
+          </select>
+          <select class="select" id="qc-tag">
+            <option value="">全部标签</option>
+            ${st.tagDistribution.map((t) => `<option value="${esc(t.code)}" ${state.qc.tag === t.code ? "selected" : ""}>${esc(t.name)}</option>`).join("")}
+          </select>
+          <span class="spacer"></span><span class="hint">${list.length} 条</span>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>会话</th><th>坐席 / 客户</th><th>判定</th><th>标签</th><th>评分</th><th>复核</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="6" class="empty">没有匹配的会话</td></tr>'}</tbody></table></div>
+      </div>
+    </section>`;
+}
+
+/* ===== badcase ===== */
+function renderBadcases() {
+  const list = state.badcases.filter((b) => !state.badcaseStatus || b.status === state.badcaseStatus);
+  const rows = list.map((b) => `
+    <tr data-click data-action="open-badcase" data-id="${esc(b.id)}">
+      <td><div class="cell-title mono">${esc(b.code)}</div><div class="cell-sub">${esc(b.id)}</div></td>
+      <td><div>${esc(b.title)}</div><div class="cell-sub">${esc(LABELS.category[b.category] ?? b.category)} · ${b.recurrence ? '<span style="color:var(--danger)">复发</span>' : "首次"}</div></td>
+      <td>${badge(LABELS.badcaseStatus[b.status] ?? b.status, b.status)}</td>
+      <td>${badge(LABELS.severity[b.severity] ?? b.severity, b.severity === "high" ? "danger" : b.severity === "medium" ? "warn" : "muted")}</td>
+      <td>${esc(b.owner)}</td>
+      <td class="num">${dateTime(b.dueAt)}${isOverdue(b) ? " " + badge("超期", "danger") : ""}</td>
+    </tr>`).join("");
+  const counts = state.badcases.reduce((acc, b) => ((acc[b.status] = (acc[b.status] || 0) + 1), acc), {});
+  const overdue = state.badcases.filter((b) => b.status !== "closed" && Date.parse(b.dueAt) < Date.parse(DATA.meta.generatedAt)).length;
+  return `
+    ${pageHead("badcase 闭环", "违规对话一键转 badcase，按根因路由责任人并设置 SLA；关闭必须填写整改证明，同坐席同标签 14 天内复发明示。", "")}
+    <div class="stats-strip">
+      ${statItem("总数", num(state.badcases.length), "演示样本")}
+      ${statItem("待处理 / 处理中", `${counts.open || 0} / ${counts.in_progress || 0}`, "SLA 倒计时中")}
+      ${statItem("待验证", num(counts.pending_verify || 0), "需提交整改证明")}
+      ${statItem("已超期", num(overdue), "按演示时刻计算")}
+    </div>
+    <section class="card" style="margin-top:16px">
+      <div class="card__head"><div><h3>列表</h3><div class="section-sub">点击行查看根因、证据与处理时间线</div></div><span class="spacer"></span>
+        <select class="select" id="badcase-status">
+          <option value="">全部状态</option>
+          ${["open", "in_progress", "pending_verify", "closed"].map((s) => `<option value="${s}" ${state.badcaseStatus === s ? "selected" : ""}>${LABELS.badcaseStatus[s]}</option>`).join("")}
+        </select>
+      </div>
+      <div class="card__body card__body--flush"><div class="table-wrap"><table>
+        <thead><tr><th>编号</th><th>问题</th><th>状态</th><th>严重度</th><th>责任人</th><th>SLA 截止</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="6" class="empty">没有匹配的 badcase</td></tr>'}</tbody></table></div></div>
+    </section>`;
+}
+
+/* ===== 舆情 ===== */
+function renderSentiment() {
+  const comments = DATA.comments.filter((c) => !state.commentSentiment || c.sentiment === state.commentSentiment);
+  const counts = DATA.comments.reduce((acc, c) => ((acc[c.sentiment] = (acc[c.sentiment] || 0) + 1), acc), {});
+  const commentRows = comments.slice(0, 18).map((c) => `
+    <tr>
+      <td><div class="cell-title">${esc(c.author)}</div><div class="cell-sub">${esc(LABELS.source[c.source] ?? c.source)} · ${esc(c.brand)}</div></td>
+      <td style="max-width:520px"><div style="line-height:20px">${esc(c.text)}</div><div class="cell-sub">${esc(c.primaryTopic)} · 置信度 ${pct(c.confidence)}</div></td>
+      <td>${badge(LABELS.sentiment[c.sentiment], c.sentiment)}</td>
+      <td>${c.alertId ? badge("已入库", "info") : '<span class="faint">—</span>'}</td>
+    </tr>`).join("");
+  const alertRows = state.alerts.map((wrap) => {
+    const a = wrap.alert;
+    return `<div class="anomaly" style="border-left-color:${a.level === "P0" ? "var(--danger)" : a.level === "P1" ? "var(--warn)" : "var(--info)"}" data-action="open-alert" data-id="${esc(a.id)}">
+      <span class="anomaly__icon" style="background:${a.level === "P0" ? "var(--danger-wash)" : a.level === "P1" ? "var(--warn-wash)" : "var(--info-wash)"};color:${a.level === "P0" ? "var(--danger-ink)" : a.level === "P1" ? "var(--warn-ink)" : "var(--info-ink)"}">${esc(a.level)}</span>
+      <div style="min-width:0;flex:1"><div class="anomaly__title">${esc(a.title)} ${badge(LABELS.alertStatus[a.status] ?? a.status, a.status)}</div>
+      <div class="anomaly__desc">${esc(a.summary)}</div>
+      <div class="hint" style="margin-top:4px">主题 ${esc(a.topic)} · 关联 ${a.commentIds.length} 条评论 · 责任人 ${esc(a.owner)} · SLA ${a.slaMinutes} 分钟</div></div>
+    </div>`;
+  }).join("");
+  const tab = state.sentimentTab;
+  return `
+    ${pageHead("舆情预警", "公开评论/工单导入 → 情感与主题 → 单条分级 + 聚簇升级（P0/P1/P2）→ 预警 SOP 处置 → 转线索。", "")}
+    <div class="stats-strip">
+      ${statItem("评论样本", num(DATA.comments.length), "覆盖五类来源")}
+      ${statItem("负面", num(counts.negative || 0), `占比 ${pct((counts.negative || 0) / DATA.comments.length)}`)}
+      ${statItem("P0 预警", num(state.alerts.filter((x) => x.alert.level === "P0").length), "30 分钟 SLA")}
+      ${statItem("未处置预警", num(state.alerts.filter((x) => x.alert.status !== "resolved").length), "演示样本")}
+    </div>
+    <div class="tabs" style="margin-top:16px">
+      <button class="${tab === "comments" ? "is-active" : ""}" data-action="sentiment-tab" data-tab="comments">评论</button>
+      <button class="${tab === "alerts" ? "is-active" : ""}" data-action="sentiment-tab" data-tab="alerts">预警</button>
+    </div>
+    ${tab === "comments" ? `<section class="card"><div class="card__head"><div><h3>评论流</h3><div class="section-sub">按情感筛选，展示主题与置信度</div></div><span class="spacer"></span>
+      <select class="select" id="comment-sentiment"><option value="">全部情感</option>${["negative","neutral","positive"].map((s) => `<option value="${s}" ${state.commentSentiment === s ? "selected" : ""}>${LABELS.sentiment[s]}</option>`).join("")}</select></div>
+      <div class="card__body card__body--flush"><div class="table-wrap"><table><thead><tr><th>来源</th><th>内容</th><th>情感</th><th>预警</th></tr></thead>
+      <tbody>${commentRows || '<tr><td colspan="4" class="empty">没有匹配的评论</td></tr>'}</tbody></table></div></div></section>`
+    : `<div class="stack">${alertRows}</div>`}`;
+}
+
+/* ===== 线索 ===== */
+function renderClues() {
+  const rows = state.clues.map((c) => `
+    <tr data-click data-action="open-clue" data-id="${esc(c.id)}">
+      <td><div class="cell-title">${esc(c.title)}</div><div class="cell-sub">${esc(c.sourceType === "sentiment" ? "舆情沉淀" : "质检沉淀")} · ${esc(c.sourceRef?.label ?? "")}</div></td>
+      <td>${badge(LABELS.target[c.target] ?? c.target, "info")}</td>
+      <td>${badge(c.priority === "high" ? "高" : c.priority === "medium" ? "中" : "低", c.priority === "high" ? "danger" : c.priority === "medium" ? "warn" : "muted")}</td>
+      <td>${badge(LABELS.clueStatus[c.status] ?? c.status, c.status)}</td>
+      <td>${esc(c.owner ?? "—")}</td>
+      <td class="num">${dateTime(c.createdAt)}</td>
+    </tr>`).join("");
+  const counts = state.clues.reduce((acc, c) => ((acc[c.status] = (acc[c.status] || 0) + 1), acc), {});
+  return `
+    ${pageHead("线索传递", "把质检/舆情沉淀为产品、品牌、市场线索，跟踪「草稿 → 分派 → 接收/拒绝 → 关闭」闭环。", "")}
+    <div class="stats-strip">
+      ${statItem("线索总数", num(state.clues.length), "演示样本")}
+      ${statItem("待分派", num(counts.draft || 0), "草稿态")}
+      ${statItem("推进中", num((counts.routed || 0) + (counts.accepted || 0)), "已分派 / 已接收")}
+      ${statItem("已关闭", num(counts.closed || 0), "需填写结果")}
+    </div>
+    <section class="card" style="margin-top:16px"><div class="card__head"><div><h3>线索列表</h3><div class="section-sub">点击行查看来源、证据与流转记录</div></div></div>
+      <div class="card__body card__body--flush"><div class="table-wrap"><table><thead><tr><th>线索</th><th>目标</th><th>优先级</th><th>状态</th><th>负责人</th><th>创建</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" class="empty">暂无线索</td></tr>'}</tbody></table></div></div></section>`;
+}
+
+/* ===== 评测 ===== */
+function renderEval() {
+  const cards = DATA.datasets.map((d) => `
+    <div class="card"><div class="card__head"><div><h3>${d.dataset === "qc" ? "质检评测集" : "舆情评测集"}</h3><div class="section-sub">${esc(d.datasetId)} · v${esc(d.version)} · ${d.itemCount} 条</div></div>
+      <span class="spacer"></span><button class="btn btn--primary btn--sm" data-action="run-eval" data-dataset="${d.dataset}" ${state.evalRunning ? "disabled" : ""}>${state.evalRunning ? "运行中…" : "运行评测"}</button></div>
+      <div class="card__body"><p class="hint">${esc(d.description)}</p></div></div>`).join("");
+
+  const metricLabel = {
+    accuracy: "准确率", coverage: "覆盖率", verdictAccuracy: "判定一致率", falsePositiveRate: "误报率", falseNegativeRate: "漏报率",
+    reviewRatio: "复核占比", avgLatencyMs: "平均耗时", tagPrecisionMacro: "标签 precision(macro)",
+    sentimentAccuracy: "情感准确率", topicAccuracy: "主题准确率", alertPrecision: "预警 precision", alertRecall: "预警 recall",
+    p0Recall: "P0 recall",
+  };
+  const runs = state.evalRuns.slice(0, 2).map((run) => {
+    const metricRows = Object.entries(run.metrics ?? {}).filter(([, v]) => typeof v === "number").map(([k, v]) => {
+      const met = run.thresholdsMet?.[k];
+      const shown = k === "avgLatencyMs" ? `${Number(v).toFixed(2)} ms` : (Number(v) <= 1 ? pct(v, 1) : num(v));
+      return `<tr><td>${esc(metricLabel[k] ?? k)}</td><td class="num">${esc(shown)}</td><td>${met === undefined ? '<span class="faint">展示</span>' : met ? badge("通过", "ok") : badge("未通过", "danger")}</td></tr>`;
+    }).join("");
+    const mismatches = (run.mismatches ?? []).slice(0, 5).map((m) => `<li class="hint" style="padding:8px 0;border-bottom:1px solid var(--line)"><span class="mono">${esc(m.itemId)}</span> · ${esc(m.reason)}</li>`).join("");
+    const gateOk = run.thresholdsMet && Object.values(run.thresholdsMet).every(Boolean);
+    return `<section class="card" style="margin-top:16px"><div class="card__head"><div><h3>${run.dataset === "sentiment" ? "舆情评测" : "质检评测"} · ${esc(run.id)}</h3><div class="section-sub">${dateTime(run.runAt)} · ${esc(run.modelVersion)} · 数据集 v${esc(run.datasetVersion)}</div></div>
+      <span class="spacer"></span>${gateOk ? badge("门禁通过", "ok") : badge("门禁未通过", "danger")}</div>
+      <div class="card__body"><div class="grid-2"><div class="table-wrap"><table><thead><tr><th>指标</th><th>值</th><th>门禁</th></tr></thead><tbody>${metricRows}</tbody></table></div>
+      <div><div class="section-title" style="font-size:13px;margin-bottom:8px">错例（最多 5 条）</div><ul>${mismatches || '<li class="hint">无错例</li>'}</ul>
+      <div class="hint" style="margin-top:12px">${esc(run.summary ?? "")}</div></div></div></div></section>`;
+  }).join("");
+  return `
+    ${pageHead("评测中心", "用带人工金标的评测集回放质检与舆情引擎，直接给出准确率、误报/漏报、预警准确率与发布门禁结论。", "")}
+    <div class="grid-2">${cards}</div>
+    ${runs || '<p class="hint">暂无评测记录，点击上方「运行评测」。</p>'}`;
+}
+
+/* ===== 关于 ===== */
+function renderAbout() {
+  const meta = DATA.meta;
+  return `
+    ${pageHead("关于", "单文件 HTML 演示版：所有数据内嵌，交互在浏览器内存中完成，不依赖 API 或构建工具。", "")}
+    <div class="grid-2">
+      <section class="card"><div class="card__head"><h3>系统信息</h3></div><div class="card__body stack">
+        ${kv("产品", meta.product)}${kv("前端版本", `v${meta.version}`)}${kv("规则引擎", meta.modelVersion)}${kv("数据生成时间", dateTime(meta.generatedAt))}${kv("演示时刻", dateTime(meta.demo?.now ?? meta.generatedAt))}
+      </div></section>
+      <section class="card"><div class="card__head"><h3>演示数据</h3></div><div class="card__body stack">
+        ${kv("数据版本", meta.demo?.datasetVersion ?? "—")}${kv("质检会话", `${meta.demo?.itemCounts?.qc ?? 60} 条（演示内嵌 18 条）`)}${kv("舆情评论", `${meta.demo?.itemCounts?.sentiment ?? 120} 条（演示内嵌 30 条）`)}
+        <div style="margin-top:6px"><button class="btn btn--danger" data-action="reset-demo">重置演示数据</button></div>
+        <p class="hint">重置会丢弃本次演示中的所有状态变更（复核、badcase 流转、预警 SOP、线索状态），并重新加载页面。</p>
+      </div></section>
+      <section class="card"><div class="card__head"><h3>角色与责任人</h3></div><div class="card__body stack">
+        ${(meta.owners ?? []).map((o) => `<div class="row">${badge(o.role, "info")}<span>${esc(o.name)}</span></div>`).join("")}
+      </div></section>
+      <section class="card"><div class="card__head"><h3>质检标签体系</h3></div><div class="card__body stack">
+        ${(meta.tagTaxonomy ?? []).map((t) => `<div class="row" style="align-items:flex-start">${badge(t.code, t.severity === "high" ? "danger" : t.severity === "medium" ? "warn" : "muted")}<div><div>${esc(t.name)}</div><div class="hint">${esc(t.description ?? "")}</div></div></div>`).join("")}
+      </div></section>
+    </div>`;
+}
+
+/* ===== 抽屉 ===== */
+function openConv(id) {
+  const item = DATA.conversations.find((x) => x.conversation.id === id);
+  if (!item) return;
+  const { conversation: c, qcResult: q } = item;
+  const review = state.reviews[id];
+  const effectiveTags = review?.decision === "overturn" ? [] : (review?.finalTags?.length ? review.finalTags : q.tags.map((t) => t.code));
+  const tagCards = q.tags.map((t) => {
+    const active = effectiveTags.includes(t.code);
+    return `<div class="tagchip" style="${active ? "" : "opacity:.45"}"><div><b>${esc(t.name)}</b> ${badge(`置信 ${pct(t.confidence)}`, t.confidence < 0.75 ? "warn" : "ok")}<span class="mono">${esc(t.ruleId)}</span>
+      ${active && t.evidence?.length ? t.evidence.map((e) => `<span class="tagchip__evidence">seq ${e.seq}：「${esc(e.quote)}」${e.note ? ` · ${esc(e.note)}` : ""}</span>`).join("") : ""}</div></div>`;
+  }).join("");
+  const hits = new Set(q.tags.flatMap((t) => (t.evidence ?? []).map((e) => e.seq)));
+  const messages = c.messages.map((m) => `<div class="msg ${m.role === "agent" ? "msg--agent" : ""} ${hits.has(m.seq) ? "msg--hit" : ""}">
+    <div class="msg__meta"><span>${m.role === "agent" ? "坐席" : "客户"} · seq ${m.seq}</span><span>+${m.atSec}s</span>${m.gapSec ? `<span>间隔 ${m.gapSec}s</span>` : ""}</div>
+    <div>${esc(m.text)}</div></div>`).join("");
+  const reviewActions = review ? `<div class="row">${badge("已复核", "ok")} <span class="hint">${esc(review.decision === "confirm" ? "确认 AI 判定" : review.decision === "overturn" ? "推翻 AI 判定" : "修正标签")}</span></div>`
+    : `<div class="stack"><div class="hint">复核动作会更新演示内的判定与标签（不写服务端）。</div>
+       <div class="row"><button class="btn btn--primary btn--sm" data-action="review" data-id="${esc(id)}" data-decision="confirm">确认 AI 判定</button>
+       <button class="btn btn--sm" data-action="review" data-id="${esc(id)}" data-decision="overturn">推翻（改判通过）</button>
+       <button class="btn btn--sm" data-action="review" data-id="${esc(id)}" data-decision="amend" data-tags="wrong_knowledge">修正为「知识错误」</button></div></div>`;
+  const drawer = `
+    <div class="drawer__head"><div style="flex:1"><h2>${esc(c.id)} · ${esc(c.product)}</h2><p>${esc(c.agent.name)} 服务 ${esc(c.customer.name)} · ${esc(LABELS.channel[c.channel] ?? c.channel)} · ${dateTime(c.startedAt)}</p></div>
+      <button class="icon-btn" data-action="close-drawer" aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="drawer__body">
+      <div class="row" style="gap:8px;margin-bottom:12px">${badge(LABELS.verdict[review?.decision === "overturn" ? "pass" : q.verdict], review?.decision === "overturn" ? "pass" : q.verdict)}${badge(`评分 ${q.score}`, "muted")}${q.needsReview ? badge("低置信度待复核", "warn") : ""}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">AI 结论</div>
+      <p class="hint" style="margin-bottom:14px">${esc(q.summary)}</p>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">命中标签与证据</div>
+      <div class="stack" style="margin-bottom:16px">${tagCards || '<p class="hint">未命中标签。</p>'}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">会话回放</div>
+      <div class="stack" style="margin-bottom:16px">${messages}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">人工复核</div>
+      ${reviewActions}
+    </div>`;
+  showDrawer(drawer);
+}
+
+function openBadcase(id) {
+  const b = state.badcases.find((x) => x.id === id);
+  if (!b) return;
+  // 详情接口不含 overdue，按演示时刻与 SLA 截止时间在前端计算。
+  const overdue = isOverdue(b);
+  const next = { open: ["in_progress", "开始处理"], in_progress: ["pending_verify", "提交验证"], pending_verify: ["closed", "确认关闭（需整改证明）"] }[b.status];
+  const proofInput = b.status === "pending_verify" ? `<textarea id="badcase-proof" class="input" style="width:100%;height:70px;padding:8px 10px" placeholder="填写整改证明（关闭必填）"></textarea>` : "";
+  const actions = next ? `${proofInput}<div class="row" style="margin-top:8px"><button class="btn btn--primary btn--sm" data-action="badcase-next" data-id="${esc(b.id)}">${next[1]}</button>${badge(overdue ? "已超期" : "SLA 内", overdue ? "danger" : "ok")}</div>` : `<div class="row">${badge("已关闭", "ok")}<span class="hint">整改证明：${esc(b.proof ?? "—")}</span></div>`;
+  const timeline = (b.timeline ?? []).map((t) => `<div class="tl-item"><span class="tl-dot"></span><div><div class="tl-title">${esc(t.type)} ${t.from ? `<span class="faint">${esc(t.from)} → ${esc(t.to)}</span>` : ""}<span class="tl-by">${esc(t.by)}</span></div><div class="tl-note">${esc(t.note)}</div><div class="tl-time num">${dateTime(t.at)}</div></div></div>`).join("");
+  showDrawer(`
+    <div class="drawer__head"><div style="flex:1"><h2>${esc(b.code)} · ${esc(b.title)}</h2><p>来源 ${esc(b.conversationId)} · ${esc(LABELS.category[b.category] ?? b.category)} · 责任人 ${esc(b.owner)} · SLA ${b.slaHours}h</p></div>
+      <button class="icon-btn" data-action="close-drawer" aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="drawer__body">
+      <div class="row" style="margin-bottom:12px">${badge(LABELS.badcaseStatus[b.status], b.status)}${badge(LABELS.severity[b.severity], b.severity === "high" ? "danger" : "warn")}${b.recurrence ? badge("复发", "danger") : ""}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">根因</div><p class="hint" style="margin-bottom:14px">${esc(b.rootCause || "—")}</p>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">证据</div>
+      <div class="stack" style="margin-bottom:14px">${(b.evidence ?? []).map((e) => `<div class="msg">seq ${e.seq}：「${esc(e.quote)}」</div>`).join("") || '<p class="hint">无</p>'}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">处理动作</div><div style="margin-bottom:16px">${actions}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">时间线</div><div class="timeline">${timeline}</div>
+    </div>`);
+}
+
+function openAlert(id) {
+  const wrap = state.alerts.find((x) => x.alert.id === id);
+  if (!wrap) return;
+  const a = wrap.alert;
+  const comments = (wrap.comments ?? []).slice(0, 6);
+  const next = { new: ["acknowledged", "确认预警"], acknowledged: ["responding", "开始响应"], responding: ["escalated", "升级处置"], escalated: ["resolved", "标记已解决"] }[a.status];
+  const action = next ? `<div class="row" style="margin-bottom:16px"><button class="btn btn--primary btn--sm" data-action="alert-next" data-id="${esc(a.id)}">${next[1]}</button>${badge(`SLA ${a.slaMinutes} 分钟`, a.slaMinutes <= 30 ? "danger" : "warn")}</div>` : `<div class="row" style="margin-bottom:16px">${badge("已解决", "ok")}</div>`;
+  showDrawer(`
+    <div class="drawer__head"><div style="flex:1"><h2>${esc(a.level)} · ${esc(a.title)}</h2><p>主题 ${esc(a.topic)} · 责任人 ${esc(a.owner)} · ${dateTime(a.windowStart)} 至 ${dateTime(a.windowEnd)}</p></div>
+      <button class="icon-btn" data-action="close-drawer" aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="drawer__body">
+      <div class="row" style="margin-bottom:12px">${badge(LABELS.alertStatus[a.status], a.status)}${badge(`${a.commentIds.length} 条关联评论`, "muted")}</div>
+      <p class="hint" style="margin-bottom:14px">${esc(a.summary)}</p>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">SOP 处置</div>${action}
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">触发规则</div>
+      <div class="stack" style="margin-bottom:14px">${a.triggerRules.map((r) => `<div class="msg"><div class="mono" style="font-size:11px;color:var(--ink-faint)">${esc(r.ruleId)}</div>${esc(r.description)}</div>`).join("")}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">关联评论</div>
+      <div class="stack" style="margin-bottom:14px">${comments.map((c) => `<div class="msg"><div class="msg__meta">${esc(c.author)} · ${esc(LABELS.source[c.source] ?? c.source)} · ${esc(LABELS.sentiment[c.sentiment])}</div>${esc(c.text)}</div>`).join("") || '<p class="hint">无</p>'}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">时间线</div>
+      <div class="timeline">${(a.timeline ?? []).map((t) => `<div class="tl-item"><span class="tl-dot"></span><div><div class="tl-title">${esc(t.type)} ${t.from ? `<span class="faint">${esc(t.from)} → ${esc(t.to)}</span>` : ""}<span class="tl-by">${esc(t.by)}</span></div><div class="tl-note">${esc(t.note)}</div><div class="tl-time num">${dateTime(t.at)}</div></div></div>`).join("")}</div>
+    </div>`);
+}
+
+function openClue(id) {
+  const c = state.clues.find((x) => x.id === id);
+  if (!c) return;
+  const next = { draft: ["routed", "分派给负责人"], routed: ["accepted", "接收方确认"], accepted: ["closed", "关闭（需结果）"], rejected: ["closed", "关闭"] }[c.status];
+  const closeInput = c.status === "accepted" ? `<textarea id="clue-outcome" class="input" style="width:100%;height:70px;padding:8px 10px" placeholder="填写关闭结果（必填）"></textarea>` : "";
+  const action = next ? `${closeInput}<div class="row" style="margin-top:8px"><button class="btn btn--primary btn--sm" data-action="clue-next" data-id="${esc(c.id)}">${next[1]}</button>
+    ${c.status === "routed" ? `<button class="btn btn--sm" data-action="clue-reject" data-id="${esc(c.id)}">拒绝</button>` : ""}</div>` : `<div class="row">${badge("已关闭", "ok")}<span class="hint">${esc(c.outcome || "—")}</span></div>`;
+  showDrawer(`
+    <div class="drawer__head"><div style="flex:1"><h2>${esc(c.title)}</h2><p>${esc(LABELS.target[c.target] ?? c.target)} · 优先级 ${esc(c.priority)} · 负责人 ${esc(c.owner ?? "—")}</p></div>
+      <button class="icon-btn" data-action="close-drawer" aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="drawer__body">
+      <div class="row" style="margin-bottom:12px">${badge(LABELS.clueStatus[c.status], c.status)}${badge(LABELS.target[c.target] ?? c.target, "info")}</div>
+      <p class="hint" style="margin-bottom:14px">${esc(c.description)}</p>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">证据</div>
+      <div class="stack" style="margin-bottom:14px">${(c.evidence ?? []).map((e) => `<div class="msg">${esc(e)}</div>`).join("") || '<p class="hint">无</p>'}</div>
+      <div class="section-title" style="font-size:13px;margin-bottom:8px">流转</div>${action}
+      <div class="section-title" style="font-size:13px;margin:16px 0 8px">时间线</div>
+      <div class="timeline">${(c.timeline ?? []).map((t) => `<div class="tl-item"><span class="tl-dot"></span><div><div class="tl-title">${esc(t.type)} ${t.from ? `<span class="faint">${esc(t.from)} → ${esc(t.to)}</span>` : ""}<span class="tl-by">${esc(t.by)}</span></div><div class="tl-note">${esc(t.note)}</div><div class="tl-time num">${dateTime(t.at)}</div></div></div>`).join("")}</div>
+    </div>`);
+}
+
+function showDrawer(html) {
+  $("#drawer").innerHTML = html;
+  $("#drawer").classList.add("is-open");
+  $("#drawer-mask").classList.add("is-open");
+  state.drawer = { open: true };
+}
+function closeDrawer() {
+  $("#drawer").classList.remove("is-open");
+  $("#drawer-mask").classList.remove("is-open");
+  state.drawer = null;
+}
+
+/* ===== 图表 ===== */
+function lineChart(rows, labels, series) {
+  const W = 640, H = 220, padL = 38, padR = 14, padT = 16, padB = 26;
+  const values = rows.flatMap((r) => series.map((s) => Number(r[s.key])));
+  const min = Math.min(...values), max = Math.max(...values);
+  const lo = Math.max(0, min - (max - min) * 0.25 - 0.02);
+  const hi = max + (max - min) * 0.25 + 0.02;
+  const x = (i) => padL + (i * (W - padL - padR)) / Math.max(1, rows.length - 1);
+  const y = (v) => padT + ((hi - v) / (hi - lo)) * (H - padT - padB);
+  const grid = [0, 0.25, 0.5, 0.75, 1].map((t) => {
+    const gy = padT + t * (H - padT - padB);
+    const val = hi - t * (hi - lo);
+    return `<line class="grid-line" x1="${padL}" y1="${gy}" x2="${W - padR}" y2="${gy}"/><text x="${padL - 6}" y="${gy + 3}" text-anchor="end">${(val * 100).toFixed(0)}%</text>`;
+  }).join("");
+  const paths = series.map((s) => {
+    const d = rows.map((r, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(Number(r[s.key])).toFixed(1)}`).join(" ");
+    const dots = rows.map((r, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(Number(r[s.key])).toFixed(1)}" r="2.3" fill="${s.color}"/>`).join("");
+    return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
+  }).join("");
+  const xLabels = rows.map((r, i) => (i % Math.ceil(rows.length / 6) === 0 || i === rows.length - 1) ? `<text x="${x(i)}" y="${H - 6}" text-anchor="middle">${labels[i]}</text>` : "").join("");
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="核心指标趋势">${grid}<line class="axis" x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}"/>${paths}${xLabels}</svg>`;
+}
+function barList(items, tone) {
+  const max = Math.max(1, ...items.map((i) => i.value));
+  return `<div class="bar-list">${items.map((i) => `<div class="bar-row"><span class="truncate">${esc(i.label)}</span><div class="bar-track"><div class="bar-fill ${i.tone ?? tone}" style="width:${(i.value / max) * 100}%"></div></div><span class="bar-value">${num(i.value)}</span></div>`).join("")}</div>`;
+}
+
+/* ===== 通用片段 ===== */
+function pageHead(title, desc, extra) {
+  return `<div class="page-head"><div><h1>${esc(title)}</h1><p>${esc(desc)}</p></div><span class="spacer"></span>${extra}</div>`;
+}
+function statItem(label, value, hint) {
+  return `<div class="stat"><div class="stat__label">${esc(label)}</div><div class="stat__value">${esc(value)}</div><div class="stat__hint">${esc(hint)}</div></div>`;
+}
+function kv(label, value) {
+  return `<div><div class="hint">${esc(label)}</div><div style="margin-top:2px">${esc(value)}</div></div>`;
+}
+
+/* ===== 交互 ===== */
+let toastTimer = null;
+function toast(title, desc = "") {
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.innerHTML = `<b>${esc(title)}</b>${desc ? `<span>${esc(desc)}</span>` : ""}`;
+  $("#toast").appendChild(el);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.remove(), 3200);
+}
+
+function nowIso() { return new Date().toISOString(); }
+
+document.addEventListener("click", (event) => {
+  const target = event.target.closest("[data-action],[data-route],[data-range],[data-tab]");
+  if (!target) return;
+  if (target.dataset.route) { go(target.dataset.route); closeDrawer(); return; }
+  if (target.dataset.range) { state.range = target.dataset.range; render(); return; }
+  const action = target.dataset.action;
+  if (!action) return;
+  const id = target.dataset.id;
+
+  switch (action) {
+    case "close-drawer": closeDrawer(); break;
+    case "open-conv": openConv(id); break;
+    case "open-badcase": openBadcase(id); break;
+    case "open-alert": openAlert(id); break;
+    case "open-clue": openClue(id); break;
+    case "sentiment-tab":
+      state.sentimentTab = target.dataset.tab;
+      render();
+      break;
+    case "drill": {
+      const route = target.dataset.drill === "sentiment" ? "sentiment" : target.dataset.drill;
+      if (route === "sentiment") state.sentimentTab = "alerts";
+      if (target.dataset.filter) {
+        try {
+          const f = JSON.parse(target.dataset.filter);
+          if (f.status) state.badcaseStatus = f.status;
+        } catch { /* 忽略非法筛选 */ }
+      }
+      go(route); closeDrawer();
+      break;
+    }
+    case "review": {
+      const decision = target.dataset.decision;
+      const tags = target.dataset.tags ? target.dataset.tags.split(",") : [];
+      state.reviews[id] = { decision, finalTags: tags, at: nowIso() };
+      toast("复核已提交", decision === "confirm" ? "已确认 AI 判定" : decision === "overturn" ? "已推翻，改判为通过" : `已修正为 ${tags.join("、")}`);
+      openConv(id); render();
+      break;
+    }
+    case "badcase-next": {
+      const b = state.badcases.find((x) => x.id === id);
+      if (!b) break;
+      if (b.status === "pending_verify") {
+        const proof = ($("#badcase-proof")?.value || "").trim();
+        if (!proof) { toast("请填写整改证明", "关闭 badcase 必须提供整改证明"); break; }
+        b.status = "closed"; b.proof = proof; b.closedAt = nowIso();
+        b.timeline.push({ at: nowIso(), by: "沈言", type: "closed", note: `提交整改证明并关闭：${proof}`, from: "pending_verify", to: "closed" });
+      } else {
+        const next = { open: "in_progress", in_progress: "pending_verify" }[b.status];
+        if (!next) break;
+        const from = b.status;
+        b.status = next;
+        b.timeline.push({ at: nowIso(), by: "负责人", type: next === "in_progress" ? "started" : "submitted", note: next === "in_progress" ? "开始处理 badcase。" : "已提交整改，等待验证。", from, to: next });
+      }
+      toast("badcase 已更新", `${b.code} → ${LABELS.badcaseStatus[b.status]}`);
+      render(); openBadcase(id);
+      break;
+    }
+    case "alert-next": {
+      const wrap = state.alerts.find((x) => x.alert.id === id);
+      if (!wrap) break;
+      const a = wrap.alert;
+      const next = { new: "acknowledged", acknowledged: "responding", responding: "escalated", escalated: "resolved" }[a.status];
+      if (!next) break;
+      const from = a.status; a.status = next;
+      a.timeline = a.timeline ?? [];
+      a.timeline.push({ at: nowIso(), by: "江岚", type: next, note: "演示操作：SOP 状态推进。", from, to: next });
+      if (next === "resolved") a.resolvedAt = nowIso();
+      toast("预警状态已更新", `${a.title} → ${LABELS.alertStatus[next]}`);
+      render(); openAlert(id);
+      break;
+    }
+    case "clue-next": {
+      const c = state.clues.find((x) => x.id === id);
+      if (!c) break;
+      if (c.status === "accepted") {
+        const outcome = ($("#clue-outcome")?.value || "").trim();
+        if (!outcome) { toast("请填写关闭结果", "线索关闭必须记录结果"); break; }
+        c.outcome = outcome;
+      }
+      const next = { draft: "routed", routed: "accepted", accepted: "closed" }[c.status];
+      if (!next) break;
+      const from = c.status; c.status = next;
+      c.timeline = c.timeline ?? [];
+      c.timeline.push({ at: nowIso(), by: "沈言", type: next, note: "演示操作：线索状态推进。", from, to: next });
+      toast("线索已更新", `${c.title} → ${LABELS.clueStatus[next]}`);
+      render(); openClue(id);
+      break;
+    }
+    case "clue-reject": {
+      const c = state.clues.find((x) => x.id === id);
+      if (!c) break;
+      const from = c.status; c.status = "rejected";
+      c.timeline = c.timeline ?? [];
+      c.timeline.push({ at: nowIso(), by: "接收方", type: "rejected", note: "演示操作：接收方拒绝线索。", from, to: "rejected" });
+      toast("线索已拒绝"); render(); openClue(id);
+      break;
+    }
+    case "run-eval": {
+      const dataset = target.dataset.dataset;
+      state.evalRunning = true;
+      render();
+      setTimeout(() => {
+        const existing = state.evalRuns.find((r) => r.dataset === dataset) ?? state.evalRuns[0];
+        if (existing) {
+          const copy = clone(existing);
+          copy.id = `local-${Date.now()}`;
+          copy.runAt = nowIso();
+          state.evalRuns = [copy, ...state.evalRuns].slice(0, 3);
+        }
+        state.evalRunning = false;
+        toast("评测完成", "演示模式：复用最近一次评测结果，门禁结论不变。");
+        render();
+      }, 900);
+      break;
+    }
+    case "reset-demo": {
+      if (!confirm("重置演示数据？本次演示中的所有状态变更都会丢失。")) break;
+      location.reload();
+      break;
+    }
+  }
+});
+
+document.addEventListener("input", (event) => {
+  const t = event.target;
+  if (t.id === "qc-q") { state.qc.q = t.value; render(); const input = $("#qc-q"); input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+});
+
+document.addEventListener("change", (event) => {
+  const t = event.target;
+  if (t.id === "qc-verdict") { state.qc.verdict = t.value; render(); }
+  if (t.id === "qc-tag") { state.qc.tag = t.value; render(); }
+  if (t.id === "badcase-status") { state.badcaseStatus = t.value; render(); }
+  if (t.id === "comment-sentiment") { state.commentSentiment = t.value; render(); }
+});
+
+document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDrawer(); });
+window.addEventListener("hashchange", () => { parseHash(); render(); });
+$("#drawer-mask").addEventListener("click", closeDrawer);
+
+parseHash();
+render();
+</script>
+</body>
+</html>

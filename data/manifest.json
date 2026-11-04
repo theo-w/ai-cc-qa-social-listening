@@ -1,0 +1,491 @@
+{
+  "version": "0.1.0",
+  "datasetVersion": "2026.11.03",
+  "generatedAt": "2026-11-03T10:00:00+08:00",
+  "description": "QCC Workbench MVP 评测数据清单：客服质检评测集（60 条对话）+ 舆情评测集（120 条评论），供规则引擎评测、告警聚类回放与演示使用。",
+  "generator": {
+    "name": "qcc-data-generator",
+    "version": "0.1.0",
+    "deterministic": true,
+    "specVersion": "0.1.0"
+  },
+  "datasets": {
+    "qc": {
+      "datasetId": "qc-eval-v0.1",
+      "version": "0.1.0",
+      "datasetVersion": "2026.11.03",
+      "file": "qc/dataset.json",
+      "itemCount": 60,
+      "counts": {
+        "total": 60,
+        "violation": 40,
+        "pass": 20,
+        "needsReview": 13,
+        "implicit": 13,
+        "channels": {
+          "online": 20,
+          "phone": 20,
+          "ticket": 20
+        },
+        "agents": {
+          "何洋": 15,
+          "林晓": 15,
+          "苏禾": 15,
+          "陈默": 15
+        },
+        "products": {
+          "云上大陆": 20,
+          "星海远征": 20,
+          "机甲前线": 20
+        },
+        "tags": {
+          "attitude": 9,
+          "escalation": 11,
+          "forbidden": 8,
+          "off_topic": 8,
+          "timeout": 7,
+          "wrong_knowledge": 7
+        },
+        "primaryTags": {
+          "attitude": 9,
+          "escalation": 5,
+          "forbidden": 8,
+          "off_topic": 7,
+          "timeout": 4,
+          "wrong_knowledge": 7
+        },
+        "avgMessages": 4.65,
+        "dateRange": {
+          "from": "2026-10-20",
+          "to": "2026-11-02",
+          "distinctDays": 14
+        }
+      }
+    },
+    "sentiment": {
+      "datasetId": "sentiment-eval-v0.1",
+      "version": "0.1.0",
+      "datasetVersion": "2026.11.03",
+      "file": "sentiment/dataset.json",
+      "itemCount": 120,
+      "counts": {
+        "total": 120,
+        "sentiment": {
+          "negative": 62,
+          "neutral": 28,
+          "positive": 30
+        },
+        "noise": 9,
+        "sources": {
+          "community": 23,
+          "googleplay": 23,
+          "steam": 26,
+          "taptap": 24,
+          "ticket": 24
+        },
+        "topics": {
+          "Bug": 16,
+          "充值": 16,
+          "其他": 12,
+          "外挂": 10,
+          "客服": 16,
+          "活动": 20,
+          "版本": 30
+        },
+        "levels": {
+          "P0": 8,
+          "P1": 12,
+          "P2": 42,
+          "none": 58
+        },
+        "clusters": {
+          "total": 16,
+          "levels": {
+            "P0": 3,
+            "P1": 6,
+            "P2": 4,
+            "none": 3
+          },
+          "sizes": [
+            6,
+            6,
+            6,
+            8,
+            8,
+            6,
+            8,
+            10,
+            8,
+            6,
+            10,
+            6,
+            6,
+            8,
+            10,
+            8
+          ],
+          "aggregateUpgradedP0": 1
+        },
+        "dateRange": {
+          "from": "2026-10-20",
+          "to": "2026-11-02",
+          "distinctDays": 13
+        }
+      }
+    }
+  },
+  "counts": {
+    "total": 180,
+    "qc": {
+      "total": 60,
+      "violation": 40,
+      "pass": 20,
+      "needsReview": 13,
+      "implicit": 13,
+      "channels": {
+        "online": 20,
+        "phone": 20,
+        "ticket": 20
+      },
+      "agents": {
+        "何洋": 15,
+        "林晓": 15,
+        "苏禾": 15,
+        "陈默": 15
+      },
+      "products": {
+        "云上大陆": 20,
+        "星海远征": 20,
+        "机甲前线": 20
+      },
+      "tags": {
+        "attitude": 9,
+        "escalation": 11,
+        "forbidden": 8,
+        "off_topic": 8,
+        "timeout": 7,
+        "wrong_knowledge": 7
+      },
+      "primaryTags": {
+        "attitude": 9,
+        "escalation": 5,
+        "forbidden": 8,
+        "off_topic": 7,
+        "timeout": 4,
+        "wrong_knowledge": 7
+      },
+      "avgMessages": 4.65,
+      "dateRange": {
+        "from": "2026-10-20",
+        "to": "2026-11-02",
+        "distinctDays": 14
+      }
+    },
+    "sentiment": {
+      "total": 120,
+      "sentiment": {
+        "negative": 62,
+        "neutral": 28,
+        "positive": 30
+      },
+      "noise": 9,
+      "sources": {
+        "community": 23,
+        "googleplay": 23,
+        "steam": 26,
+        "taptap": 24,
+        "ticket": 24
+      },
+      "topics": {
+        "Bug": 16,
+        "充值": 16,
+        "其他": 12,
+        "外挂": 10,
+        "客服": 16,
+        "活动": 20,
+        "版本": 30
+      },
+      "levels": {
+        "P0": 8,
+        "P1": 12,
+        "P2": 42,
+        "none": 58
+      },
+      "clusters": {
+        "total": 16,
+        "levels": {
+          "P0": 3,
+          "P1": 6,
+          "P2": 4,
+          "none": 3
+        },
+        "sizes": [
+          6,
+          6,
+          6,
+          8,
+          8,
+          6,
+          8,
+          10,
+          8,
+          6,
+          10,
+          6,
+          6,
+          8,
+          10,
+          8
+        ],
+        "aggregateUpgradedP0": 1
+      },
+      "dateRange": {
+        "from": "2026-10-20",
+        "to": "2026-11-02",
+        "distinctDays": 13
+      }
+    }
+  },
+  "checks": {
+    "passed": true,
+    "total": 44,
+    "passedCount": 44,
+    "failed": [],
+    "items": [
+      {
+        "id": "QC-01",
+        "title": "QC 数据集顶层结构（datasetId/version/datasetVersion/description/generatedAt/items）",
+        "ok": true
+      },
+      {
+        "id": "QC-02",
+        "title": "QC 条目数 = 60",
+        "ok": true
+      },
+      {
+        "id": "QC-03",
+        "title": "QC 条目 id 唯一且按 qc-0001..qc-0060 连续编号",
+        "ok": true
+      },
+      {
+        "id": "QC-04",
+        "title": "QC 条目必填字段齐全（含 agent/customer/messages/labels）",
+        "ok": true
+      },
+      {
+        "id": "QC-05",
+        "title": "QC 渠道枚举合法且 online/ticket/phone 三渠道全覆盖",
+        "ok": true,
+        "detail": "{\"online\":20,\"phone\":20,\"ticket\":20}"
+      },
+      {
+        "id": "QC-06",
+        "title": "QC 对话结构合法（4-14 条、seq 连续、role 枚举、atSec 严格递增）",
+        "ok": true
+      },
+      {
+        "id": "QC-07",
+        "title": "QC gapSec 与相邻 atSec 差值一致",
+        "ok": true
+      },
+      {
+        "id": "QC-08",
+        "title": "QC 对话内无未打码手机号/邮箱/订单号（隐私脱敏约束）",
+        "ok": true
+      },
+      {
+        "id": "QC-09",
+        "title": "QC verdict 与 tags 一致（tags 非空 = violation，空 = pass）",
+        "ok": true
+      },
+      {
+        "id": "QC-10",
+        "title": "QC tags 枚举合法、无重复、且仅使用 004 §4.1 六类标签",
+        "ok": true
+      },
+      {
+        "id": "QC-11",
+        "title": "QC primaryTag 唯一、属于 tags、按 004 §4.1 权重规则选取",
+        "ok": true
+      },
+      {
+        "id": "QC-12",
+        "title": "QC 配额：违规 40 条 / 正常 20 条",
+        "ok": true,
+        "detail": "违规 40 / 正常 20"
+      },
+      {
+        "id": "QC-13",
+        "title": "QC 各标签命中数达到 004 §7.3 / 007 §2.1 下限",
+        "ok": true,
+        "detail": "{\"attitude\":9,\"escalation\":11,\"forbidden\":8,\"off_topic\":8,\"timeout\":7,\"wrong_knowledge\":7}"
+      },
+      {
+        "id": "QC-14",
+        "title": "QC 标签证据句可定位（seq 有效、quote 一致、非 timeout 标签命中信号词、timeout 为 >180s 坐席回复）",
+        "ok": true
+      },
+      {
+        "id": "QC-15",
+        "title": "QC 非该标签样本（含正常样本）不得误埋其他标签信号词",
+        "ok": true
+      },
+      {
+        "id": "QC-16",
+        "title": "QC timeout 标签与坐席回复间隔 >180s 双向一致（007 §3）",
+        "ok": true
+      },
+      {
+        "id": "QC-17",
+        "title": "QC 边界样本：needsReview = implicit 且数量 >=10，confidence 落在对应区间（implicit <=0.75 / explicit >=0.80）",
+        "ok": true,
+        "detail": "needsReview 13 / implicit 13 / 不一致 0 / confidence 越界 0"
+      },
+      {
+        "id": "QC-18",
+        "title": "QC 时间字段合法（startedAt 在 2026-10-20~2026-11-02、importedAt 晚于开始、durationSec 覆盖末条）",
+        "ok": true
+      },
+      {
+        "id": "QC-19",
+        "title": "QC 日期覆盖 >=10 天且 4 名坐席全部覆盖",
+        "ok": true,
+        "detail": "日期 2026-10-20~2026-11-02 共 14 天；坐席 4 人"
+      },
+      {
+        "id": "QC-20",
+        "title": "QC 金标主字段（verdict/tags/primaryTag/note）类型正确且非空",
+        "ok": true
+      },
+      {
+        "id": "SE-01",
+        "title": "舆情数据集顶层结构（datasetId/version/datasetVersion/description/generatedAt/items）",
+        "ok": true
+      },
+      {
+        "id": "SE-02",
+        "title": "舆情条目数 = 120 且 id 唯一连续（cm-0001..cm-0120）",
+        "ok": true,
+        "detail": "条数 120"
+      },
+      {
+        "id": "SE-03",
+        "title": "舆情条目必填字段与 labels 主字段齐全（sentiment/topics/primaryTopic/expectedLevel/noise/note）",
+        "ok": true
+      },
+      {
+        "id": "SE-04",
+        "title": "舆情来源枚举合法且 steam/taptap/googleplay/community/ticket 五类全覆盖",
+        "ok": true,
+        "detail": "{\"community\":23,\"googleplay\":23,\"steam\":26,\"taptap\":24,\"ticket\":24}"
+      },
+      {
+        "id": "SE-05",
+        "title": "舆情发布时间合法且在 2026-10-20~2026-11-02 范围内",
+        "ok": true
+      },
+      {
+        "id": "SE-06",
+        "title": "舆情文本长度 8-120 字（便于规则与模型处理）",
+        "ok": true
+      },
+      {
+        "id": "SE-07",
+        "title": "舆情 topics 为 1-3 个合法主题且包含 primaryTopic",
+        "ok": true
+      },
+      {
+        "id": "SE-08",
+        "title": "舆情按 (primaryTopic, date) 聚为 16 簇且每簇 4-12 条（004 §7.4）",
+        "ok": true,
+        "detail": "簇 16 个；尺寸 6,6,6,8,8,6,8,10,8,6,10,6,6,8,10,8"
+      },
+      {
+        "id": "SE-09",
+        "title": "簇级别 = max(单条最大级别, 负面聚合级别)（007 §5），且分布为 P0 3 / P1 6 / P2 4 / none 3",
+        "ok": true,
+        "detail": "{\"P0\":3,\"P1\":6,\"P2\":4,\"none\":3}"
+      },
+      {
+        "id": "SE-10",
+        "title": "簇配额与尺寸：P0 >=2(5-10)、P1 >=3(4-8)、P2 >=3(3-6)、none >=3(3-6)（007 §2.3）",
+        "ok": true
+      },
+      {
+        "id": "SE-11",
+        "title": "至少 1 个 P0 簇由聚合升级产生（簇内无单条 P0，验证告警升级链路）",
+        "ok": true,
+        "detail": "充值|2026-11-01"
+      },
+      {
+        "id": "SE-12",
+        "title": "单条级别判定符合 007 §6.1（P0/P1/P2/none 信号规则）",
+        "ok": true
+      },
+      {
+        "id": "SE-13",
+        "title": "全局配额：负面 >=60、正面 >=25、中性 >=15、噪声 >=8",
+        "ok": true,
+        "detail": "{\"negative\":62,\"neutral\":28,\"positive\":30}，噪声 9"
+      },
+      {
+        "id": "SE-14",
+        "title": "信号词约束：非 P0 单条文本不含高危词、P1 负评必含明确影响词",
+        "ok": true
+      },
+      {
+        "id": "SE-15",
+        "title": "同簇内 primaryTopic/日期/品牌一致（聚合键可复算）",
+        "ok": true
+      },
+      {
+        "id": "SE-16",
+        "title": "噪声标记一致（noise=true => 中性情绪 + 单条 none）",
+        "ok": true
+      },
+      {
+        "id": "SE-17",
+        "title": "非噪声评论文本包含其主题关键词（「其他」除外，保证簇内围绕同一事件）",
+        "ok": true
+      },
+      {
+        "id": "SE-18",
+        "title": "日期覆盖 2026-10-20~2026-11-02 且 7 个主题全部出现",
+        "ok": true,
+        "detail": "日期 2026-10-20~2026-11-02；主题 Bug、充值、其他、外挂、客服、活动、版本"
+      },
+      {
+        "id": "SE-19",
+        "title": "舆情金标主字段非空且扩展字段 severity 与 expectedLevel 对应（小写）",
+        "ok": true
+      },
+      {
+        "id": "SE-20",
+        "title": "簇级别分布与主题×日期聚合统计一致（manifest 可复算）",
+        "ok": true,
+        "detail": "{\"P0\":3,\"P1\":6,\"P2\":4,\"none\":3}"
+      },
+      {
+        "id": "MF-01",
+        "title": "manifest 含 004 §7.2 必填字段（version/generatedAt/description/datasets）",
+        "ok": true
+      },
+      {
+        "id": "MF-02",
+        "title": "manifest.datasets 为对象映射（qc/sentiment 两键）且 file/itemCount 与数据集一致",
+        "ok": true,
+        "detail": "qc 60 / sentiment 120"
+      },
+      {
+        "id": "MF-03",
+        "title": "manifest.counts 与数据集实际统计一致",
+        "ok": true
+      },
+      {
+        "id": "MF-04",
+        "title": "manifest.checks 自洽（passed/total/passedCount/failed 与 items 一致）",
+        "ok": true
+      }
+    ]
+  }
+}

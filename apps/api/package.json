@@ -1,0 +1,27 @@
+{
+  "name": "@qcc/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "QCC Workbench API —— 客服运营质量管控工作台（规则引擎 + JSON 持久化）",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "eval": "tsx src/cli/eval.ts",
+    "reset": "tsx src/cli/reset.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  }
+}

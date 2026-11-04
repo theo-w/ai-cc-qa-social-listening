@@ -1,0 +1,13 @@
+{
+  "total": 60, "analyzed": 60, "pass": 22, "violation": 38,
+  "needsReview": 12, "reviewed": 3, "avgScore": 71.4, "reviewRatio": 0.2,
+  "tagDistribution": [
+    { "code": "attitude", "name": "服务态度", "count": 9 },
+    { "code": "forbidden", "name": "违规话术", "count": 8 }
+  ],
+  "channelDistribution": [
+    { "channel": "online", "count": 30 },
+    { "channel": "ticket", "count": 18 },
+    { "channel": "phone", "count": 12 }
+  ]
+}

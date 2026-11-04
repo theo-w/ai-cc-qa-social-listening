@@ -1,0 +1,20 @@
+{
+  "name": "qcc-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI 客服运营质量管控工作台 MVP — 全量质检 · badcase 闭环 · 舆情分级预警 · 运营看板 · 线索传递",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter \"@qcc/api\" --filter \"@qcc/web\" dev",
+    "build": "pnpm -r build",
+    "start": "pnpm --filter @qcc/api start",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:api": "pnpm --filter @qcc/api test",
+    "eval": "pnpm --filter @qcc/api eval",
+    "reset": "pnpm --filter @qcc/api reset"
+  }
+}

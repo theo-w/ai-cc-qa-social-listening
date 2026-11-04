@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+coverage/
+.vite/
+.pnpm-store/
+
+# 运行时数据（种子数据在 data/，这里只落运行时状态）
+apps/api/.data/
+
+# 本地测试产物
+test-results/
+playwright-report/
+screenshots/
+.tmp/

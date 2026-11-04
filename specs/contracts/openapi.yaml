@@ -1,0 +1,1850 @@
+openapi: 3.0.3
+info:
+  title: QCC Workbench API
+  version: 0.1.0
+  description: |
+    AI 客服运营质量管控工作台 MVP 接口契约。
+    本文件是前后端唯一事实来源；人读说明见 specs/005-api-contract.md。
+    演示态无鉴权；所有写操作成功后已持久化。
+servers:
+  - url: http://127.0.0.1:8787
+    description: 本地演示环境
+tags:
+  - name: meta
+  - name: dashboard
+  - name: qc
+  - name: knowledge
+  - name: badcase
+  - name: sentiment
+  - name: clue
+  - name: eval
+
+paths:
+  /api/health:
+    get:
+      tags: [meta]
+      operationId: getHealth
+      summary: 健康检查
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+  /api/meta:
+    get:
+      tags: [meta]
+      operationId: getMeta
+      summary: 字典、角色、标签体系、演示信息
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meta"
+  /api/admin/reset:
+    post:
+      tags: [meta]
+      operationId: resetDemoData
+      summary: 重置演示数据（清空运行态并按 data/ 重新种子）
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResetResult"
+        "500": { $ref: "#/components/responses/Internal" }
+
+  /api/dashboard/summary:
+    get:
+      tags: [dashboard]
+      operationId: getDashboardSummary
+      parameters:
+        - $ref: "#/components/parameters/Range"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /api/dashboard/trends:
+    get:
+      tags: [dashboard]
+      operationId: getDashboardTrends
+      parameters:
+        - $ref: "#/components/parameters/Range"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [range, rows]
+                properties:
+                  range: { type: string }
+                  rows:
+                    type: array
+                    items: { $ref: "#/components/schemas/TrendRow" }
+  /api/dashboard/anomalies:
+    get:
+      tags: [dashboard]
+      operationId: getDashboardAnomalies
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/DashboardAnomaly" }
+
+  /api/qc/stats:
+    get:
+      tags: [qc]
+      operationId: getQcStats
+      parameters:
+        - $ref: "#/components/parameters/Range"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/QcStats" }
+  /api/qc/conversations:
+    get:
+      tags: [qc]
+      operationId: listQcConversations
+      parameters:
+        - $ref: "#/components/parameters/Query"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: verdict
+          in: query
+          schema: { type: string, enum: [pass, violation] }
+        - name: tag
+          in: query
+          schema: { type: string, enum: [attitude, forbidden, off_topic, wrong_knowledge, timeout, escalation] }
+        - name: review
+          in: query
+          schema: { type: string, enum: [pending, done, none] }
+        - name: channel
+          in: query
+          schema: { type: string, enum: [online, ticket, phone] }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [score_asc, score_desc, time_desc, time_asc], default: time_desc }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ConversationList" }
+  /api/qc/conversations/{id}:
+    get:
+      tags: [qc]
+      operationId: getQcConversation
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ConversationDetail" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/qc/conversations/{id}/reviews:
+    post:
+      tags: [qc]
+      operationId: submitQcReview
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReviewRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReviewResult" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Validation" }
+  /api/qc/conversations/{id}/badcases:
+    post:
+      tags: [qc]
+      operationId: createBadcaseFromConversation
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/BadcaseCreateRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Badcase" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Validation" }
+
+  /api/badcases:
+    get:
+      tags: [badcase]
+      operationId: listBadcases
+      parameters:
+        - $ref: "#/components/parameters/Query"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: status
+          in: query
+          schema: { type: string, enum: [open, in_progress, pending_verify, closed] }
+        - name: category
+          in: query
+          schema: { type: string, enum: [knowledge, script, process, system] }
+        - name: owner
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BadcaseList" }
+  /api/badcases/stats:
+    get:
+      tags: [badcase]
+      operationId: getBadcaseStats
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BadcaseStats" }
+  /api/badcases/{id}:
+    get:
+      tags: [badcase]
+      operationId: getBadcase
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Badcase" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/badcases/{id}/actions:
+    post:
+      tags: [badcase]
+      operationId: actOnBadcase
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/BadcaseActionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Badcase" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Validation" }
+
+  /api/sentiment/stats:
+    get:
+      tags: [sentiment]
+      operationId: getSentimentStats
+      parameters:
+        - $ref: "#/components/parameters/Range"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SentimentStats" }
+  /api/sentiment/comments:
+    get:
+      tags: [sentiment]
+      operationId: listSentimentComments
+      parameters:
+        - $ref: "#/components/parameters/Query"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: source
+          in: query
+          schema: { type: string, enum: [steam, taptap, googleplay, community, ticket] }
+        - name: sentiment
+          in: query
+          schema: { type: string, enum: [positive, neutral, negative] }
+        - name: topic
+          in: query
+          schema: { type: string }
+        - name: severity
+          in: query
+          schema: { type: string, enum: [p0, p1, p2, none] }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CommentList" }
+  /api/sentiment/alerts:
+    get:
+      tags: [sentiment]
+      operationId: listSentimentAlerts
+      parameters:
+        - $ref: "#/components/parameters/Query"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: level
+          in: query
+          schema: { type: string, enum: [P0, P1, P2] }
+        - name: status
+          in: query
+          schema: { type: string, enum: [new, acknowledged, responding, escalated, resolved] }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AlertList" }
+  /api/sentiment/alerts/{id}:
+    get:
+      tags: [sentiment]
+      operationId: getSentimentAlert
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AlertDetail" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/sentiment/alerts/{id}/actions:
+    post:
+      tags: [sentiment]
+      operationId: actOnSentimentAlert
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AlertActionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SentimentAlert" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Validation" }
+
+  /api/clues:
+    get:
+      tags: [clue]
+      operationId: listClues
+      parameters:
+        - $ref: "#/components/parameters/Query"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: status
+          in: query
+          schema: { type: string, enum: [draft, routed, accepted, rejected, closed] }
+        - name: target
+          in: query
+          schema: { type: string, enum: [product, brand, market, cs] }
+        - name: sourceType
+          in: query
+          schema: { type: string, enum: [qc, sentiment, dashboard, agent] }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ClueList" }
+    post:
+      tags: [clue]
+      operationId: createClue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClueCreateRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Clue" }
+        "422": { $ref: "#/components/responses/Validation" }
+  /api/clues/{id}:
+    get:
+      tags: [clue]
+      operationId: getClue
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Clue" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/clues/{id}/actions:
+    post:
+      tags: [clue]
+      operationId: actOnClue
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClueActionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Clue" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Validation" }
+
+  /api/eval/datasets:
+    get:
+      tags: [eval]
+      operationId: listEvalDatasets
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/EvalDataset" }
+  /api/eval/runs:
+    get:
+      tags: [eval]
+      operationId: listEvalRuns
+      parameters:
+        - name: dataset
+          in: query
+          schema: { type: string, enum: [qc, sentiment] }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/EvalRunSummary" }
+    post:
+      tags: [eval]
+      operationId: runEvaluation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/EvalRunRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/EvalRun" }
+        "422": { $ref: "#/components/responses/Validation" }
+  /api/eval/runs/{id}:
+    get:
+      tags: [eval]
+      operationId: getEvalRun
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/EvalRun" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /api/knowledge:
+    get:
+      tags: [knowledge]
+      operationId: listKnowledge
+      summary: 知识条目列表（筛选/搜索/分页）
+      parameters:
+        - $ref: "#/components/parameters/Query"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: status
+          in: query
+          schema: { type: string, enum: [draft, published, offline] }
+        - name: category
+          in: query
+          schema: { type: string, enum: [refund, recharge, activity, version, account, other] }
+        - name: source
+          in: query
+          schema: { type: string, enum: [official, qc_badcase, manual] }
+        - name: badcaseId
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeList" }
+        "422": { $ref: "#/components/responses/Validation" }
+    post:
+      tags: [knowledge]
+      operationId: createKnowledge
+      summary: 新建知识草稿
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/KnowledgeCreateRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeEntry" }
+        "422": { $ref: "#/components/responses/Validation" }
+  /api/knowledge/stats:
+    get:
+      tags: [knowledge]
+      operationId: getKnowledgeStats
+      summary: 知识库统计与关联率
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeStats" }
+  /api/knowledge/gaps:
+    get:
+      tags: [knowledge]
+      operationId: listKnowledgeGaps
+      summary: 知识缺口（未覆盖的质检命中 / 未关联的知识类 badcase）
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, total]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/KnowledgeGap" }
+                  total: { type: integer }
+  /api/knowledge/suggestions:
+    post:
+      tags: [knowledge]
+      operationId: createKnowledgeSuggestion
+      summary: 从质检会话或知识类 badcase 生成草稿（幂等）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/KnowledgeSuggestionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeEntry" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
+  /api/knowledge/{id}:
+    get:
+      tags: [knowledge]
+      operationId: getKnowledgeEntry
+      summary: 知识条目详情（事实/证据/版本/badcase）
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeDetail" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/knowledge/{id}/revisions:
+    post:
+      tags: [knowledge]
+      operationId: reviseKnowledge
+      summary: 新建修订（已发布条目回到 draft）
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/KnowledgeRevisionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeEntry" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Validation" }
+  /api/knowledge/{id}/publish:
+    post:
+      tags: [knowledge]
+      operationId: publishKnowledge
+      summary: 发布并自动复测
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/KnowledgeActionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeMutationResult" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+  /api/knowledge/{id}/offline:
+    post:
+      tags: [knowledge]
+      operationId: offlineKnowledge
+      summary: 下线并自动复测
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/KnowledgeActionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeMutationResult" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+  /api/knowledge/{id}/recheck:
+    post:
+      tags: [knowledge]
+      operationId: recheckKnowledge
+      summary: 手动复测
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/KnowledgeRecheck" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+components:
+  parameters:
+    Range:
+      name: range
+      in: query
+      schema: { type: string, enum: [7d, 14d, 30d], default: 7d }
+    Query:
+      name: q
+      in: query
+      schema: { type: string }
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    PageSize:
+      name: pageSize
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    PathId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+  responses:
+    NotFound:
+      description: 实体不存在
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Conflict:
+      description: 状态冲突（非法状态转移 / 重复操作）
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Validation:
+      description: 请求参数不符合契约
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Internal:
+      description: 服务端错误
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, enum: [BAD_REQUEST, NOT_FOUND, CONFLICT, VALIDATION_ERROR, INTERNAL] }
+            message: { type: string }
+            details: { type: object, nullable: true, additionalProperties: true }
+
+    Health:
+      type: object
+      required: [status, version, uptimeSec]
+      properties:
+        status: { type: string, enum: [ok] }
+        version: { type: string }
+        uptimeSec: { type: number }
+
+    Meta:
+      type: object
+      required: [product, version, generatedAt, modelVersion, roles, owners, tagTaxonomy, topics, sources, clueTargets, statusLabels, demo]
+      properties:
+        product: { type: string }
+        version: { type: string }
+        generatedAt: { type: string, format: date-time }
+        modelVersion: { type: string }
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              label: { type: string }
+        owners:
+          type: array
+          items:
+            type: object
+            properties:
+              role: { type: string }
+              name: { type: string }
+        tagTaxonomy:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              name: { type: string }
+              description: { type: string }
+              severity: { type: string, enum: [low, medium, high] }
+              weight: { type: integer }
+        topics:
+          type: array
+          items: { type: string }
+        sources:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              label: { type: string }
+        clueTargets:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              label: { type: string }
+        statusLabels:
+          type: object
+          description: 状态中文文案，按实体分组的嵌套对象（v0.1.1 冻结，共 14 个状态键）
+          required: [badcase, alert, clue]
+          additionalProperties: false
+          properties:
+            badcase:
+              type: object
+              required: [open, in_progress, pending_verify, closed]
+              additionalProperties: { type: string }
+            alert:
+              type: object
+              required: [new, acknowledged, responding, escalated, resolved]
+              additionalProperties: { type: string }
+            clue:
+              type: object
+              required: [draft, routed, accepted, rejected, closed]
+              additionalProperties: { type: string }
+        demo:
+          type: object
+          properties:
+            datasetVersion: { type: string }
+            resetAvailable: { type: boolean }
+            itemCounts:
+              type: object
+              properties:
+                qc: { type: integer }
+                sentiment: { type: integer }
+
+    ResetResult:
+      type: object
+      required: [ok, seeded, resetAt]
+      properties:
+        ok: { type: boolean }
+        resetAt: { type: string, format: date-time }
+        seeded:
+          type: object
+          properties:
+            conversations: { type: integer }
+            qcResults: { type: integer }
+            comments: { type: integer }
+            badcases: { type: integer }
+            alerts: { type: integer }
+            clues: { type: integer }
+            metricSnapshots: { type: integer }
+
+    Message:
+      type: object
+      required: [seq, role, text, atSec]
+      properties:
+        seq: { type: integer }
+        role: { type: string, enum: [customer, agent, system] }
+        text: { type: string }
+        atSec: { type: integer }
+        gapSec: { type: integer, nullable: true }
+
+    Evidence:
+      type: object
+      required: [seq, quote]
+      properties:
+        seq: { type: integer }
+        quote: { type: string }
+        note: { type: string, nullable: true }
+
+    QcTag:
+      type: object
+      required: [code, name, severity, confidence, evidence, ruleId]
+      properties:
+        code: { type: string, enum: [attitude, forbidden, off_topic, wrong_knowledge, timeout, escalation] }
+        name: { type: string }
+        severity: { type: string, enum: [low, medium, high] }
+        confidence: { type: number, minimum: 0, maximum: 1 }
+        evidence:
+          type: array
+          items: { $ref: "#/components/schemas/Evidence" }
+        ruleId: { type: string }
+        knowledge:
+          allOf:
+            - $ref: "#/components/schemas/KnowledgeRef"
+          nullable: true
+
+    QcResult:
+      type: object
+      required: [id, conversationId, score, verdict, tags, summary, emotion, confidence, needsReview, modelVersion, analyzedAt]
+      properties:
+        id: { type: string }
+        conversationId: { type: string }
+        score: { type: integer, minimum: 0, maximum: 100 }
+        verdict: { type: string, enum: [pass, violation] }
+        tags:
+          type: array
+          items: { $ref: "#/components/schemas/QcTag" }
+        summary: { type: string }
+        emotion: { type: string, enum: [calm, anxious, angry] }
+        confidence: { type: number, minimum: 0, maximum: 1 }
+        needsReview: { type: boolean }
+        modelVersion: { type: string }
+        analyzedAt: { type: string, format: date-time }
+        latestReviewId: { type: string, nullable: true }
+
+    Conversation:
+      type: object
+      required: [id, channel, product, agent, customer, startedAt, durationSec, messages, importedAt, batchId]
+      properties:
+        id: { type: string }
+        channel: { type: string, enum: [online, ticket, phone] }
+        product: { type: string }
+        agent:
+          type: object
+          properties:
+            id: { type: string }
+            name: { type: string }
+        customer:
+          type: object
+          properties:
+            id: { type: string }
+            name: { type: string }
+        startedAt: { type: string, format: date-time }
+        durationSec: { type: integer }
+        messages:
+          type: array
+          items: { $ref: "#/components/schemas/Message" }
+        importedAt: { type: string, format: date-time }
+        batchId: { type: string }
+
+    ReviewTask:
+      type: object
+      required: [id, qcResultId, conversationId, status, assignee, finalTags, createdAt]
+      properties:
+        id: { type: string }
+        qcResultId: { type: string }
+        conversationId: { type: string }
+        status: { type: string, enum: [pending, done] }
+        assignee: { type: string }
+        decision: { type: string, enum: [confirm, overturn, amend], nullable: true }
+        finalVerdict: { type: string, enum: [pass, violation], nullable: true }
+        finalTags:
+          type: array
+          items: { type: string }
+        note: { type: string }
+        createdAt: { type: string, format: date-time }
+        reviewedAt: { type: string, format: date-time, nullable: true }
+
+    BadcaseAction:
+      type: object
+      required: [at, by, type]
+      properties:
+        at: { type: string, format: date-time }
+        by: { type: string }
+        type: { type: string, enum: [created, assigned, progressed, verified, closed, reopened, commented] }
+        note: { type: string, nullable: true }
+        from: { type: string, nullable: true }
+        to: { type: string, nullable: true }
+
+    Badcase:
+      type: object
+      required: [id, code, conversationId, qcResultId, title, category, rootCause, owner, creator, severity, slaHours, dueAt, status, recurrence, evidence, timeline, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        code: { type: string }
+        conversationId: { type: string }
+        qcResultId: { type: string }
+        title: { type: string }
+        category: { type: string, enum: [knowledge, script, process, system] }
+        rootCause: { type: string }
+        owner: { type: string }
+        creator: { type: string }
+        severity: { type: string, enum: [low, medium, high] }
+        slaHours: { type: integer }
+        dueAt: { type: string, format: date-time }
+        status: { type: string, enum: [open, in_progress, pending_verify, closed] }
+        recurrence: { type: boolean }
+        recurrenceOf: { type: string, nullable: true }
+        evidence:
+          type: array
+          items: { $ref: "#/components/schemas/Evidence" }
+        closedAt: { type: string, format: date-time, nullable: true }
+        proof: { type: string, nullable: true }
+        timeline:
+          type: array
+          items: { $ref: "#/components/schemas/BadcaseAction" }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    ConversationListItem:
+      type: object
+      required: [id, channel, product, agentName, customerName, startedAt, durationSec, messageCount, score, verdict, needsReview, emotion, summary, tags]
+      properties:
+        id: { type: string }
+        channel: { type: string, enum: [online, ticket, phone] }
+        product: { type: string }
+        agentName: { type: string }
+        customerName: { type: string }
+        startedAt: { type: string, format: date-time }
+        durationSec: { type: integer }
+        messageCount: { type: integer }
+        score: { type: integer }
+        verdict: { type: string, enum: [pass, violation] }
+        needsReview: { type: boolean }
+        emotion: { type: string, enum: [calm, anxious, angry] }
+        summary: { type: string }
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              name: { type: string }
+              severity: { type: string }
+
+    ConversationList:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/ConversationListItem" }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+
+    ConversationDetail:
+      type: object
+      required: [conversation, qcResult]
+      properties:
+        conversation: { $ref: "#/components/schemas/Conversation" }
+        qcResult: { $ref: "#/components/schemas/QcResult" }
+        review:
+          allOf: [{ $ref: "#/components/schemas/ReviewTask" }]
+          nullable: true
+        badcase:
+          allOf: [{ $ref: "#/components/schemas/Badcase" }]
+          nullable: true
+
+    ReviewRequest:
+      type: object
+      required: [decision]
+      properties:
+        decision: { type: string, enum: [confirm, overturn, amend] }
+        finalTags:
+          type: array
+          items: { type: string, enum: [attitude, forbidden, off_topic, wrong_knowledge, timeout, escalation] }
+        note: { type: string }
+        reviewer: { type: string }
+
+    ReviewResult:
+      type: object
+      required: [review, qcResult]
+      properties:
+        review: { $ref: "#/components/schemas/ReviewTask" }
+        qcResult: { $ref: "#/components/schemas/QcResult" }
+
+    BadcaseCreateRequest:
+      type: object
+      required: [category]
+      properties:
+        category: { type: string, enum: [knowledge, script, process, system] }
+        owner: { type: string }
+        slaHours:
+          type: integer
+          enum: [24, 48, 72]
+          description: 缺省按 category：knowledge=48、script=48、process=24、system=72（不按 severity 推导）
+        title:
+          type: string
+          description: 可省略；省略时后端自动生成「{对话id} · {主标签中文名}」
+        rootCause: { type: string }
+
+    BadcaseActionRequest:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [assign, progress, verify, close, reopen, comment] }
+        owner: { type: string }
+        note: { type: string }
+        proof: { type: string }
+        by: { type: string }
+
+    BadcaseList:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/BadcaseListItem" }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+
+    BadcaseListItem:
+      type: object
+      required: [id, code, title, category, owner, status, severity, dueAt, overdue, recurrence, conversationId, agentName, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        code: { type: string }
+        title: { type: string }
+        category: { type: string, enum: [knowledge, script, process, system] }
+        owner: { type: string }
+        status: { type: string, enum: [open, in_progress, pending_verify, closed] }
+        severity: { type: string, enum: [low, medium, high] }
+        dueAt: { type: string, format: date-time }
+        overdue: { type: boolean }
+        recurrence: { type: boolean }
+        conversationId: { type: string }
+        agentName: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    BadcaseStats:
+      type: object
+      required: [total, open, inProgress, pendingVerify, closed, overdue, closeRate, recurrenceRate, byCategory, byOwner]
+      properties:
+        total: { type: integer }
+        open: { type: integer }
+        inProgress: { type: integer }
+        pendingVerify: { type: integer }
+        closed: { type: integer }
+        overdue: { type: integer }
+        closeRate: { type: number }
+        recurrenceRate: { type: number }
+        byCategory:
+          type: array
+          items:
+            type: object
+            properties:
+              category: { type: string }
+              count: { type: integer }
+        byOwner:
+          type: array
+          items:
+            type: object
+            properties:
+              owner: { type: string }
+              count: { type: integer }
+
+    SentimentComment:
+      type: object
+      required: [id, source, brand, author, text, publishedAt, sentiment, sentimentScore, topics, primaryTopic, severity, confidence, needsReview, engineRules]
+      properties:
+        id: { type: string }
+        source: { type: string, enum: [steam, taptap, googleplay, community, ticket] }
+        brand: { type: string }
+        author: { type: string }
+        text: { type: string }
+        publishedAt: { type: string, format: date-time }
+        sentiment: { type: string, enum: [positive, neutral, negative] }
+        sentimentScore: { type: number, minimum: -1, maximum: 1 }
+        topics:
+          type: array
+          items: { type: string }
+        primaryTopic: { type: string }
+        severity: { type: string, enum: [p0, p1, p2, none] }
+        confidence: { type: number, minimum: 0, maximum: 1 }
+        needsReview: { type: boolean }
+        alertId: { type: string, nullable: true }
+        engineRules:
+          type: array
+          items: { type: string }
+
+    AlertAction:
+      type: object
+      required: [at, by, type]
+      properties:
+        at: { type: string, format: date-time }
+        by: { type: string }
+        type: { type: string, enum: [created, acknowledged, responded, escalated, resolved, commented] }
+        note: { type: string, nullable: true }
+        from: { type: string, nullable: true }
+        to: { type: string, nullable: true }
+
+    SentimentAlert:
+      type: object
+      required: [id, level, topic, title, summary, windowStart, windowEnd, triggerRules, commentIds, status, owner, slaMinutes, slaDueAt, timeline, linkedClueIds, createdAt]
+      properties:
+        id: { type: string }
+        level: { type: string, enum: [P0, P1, P2] }
+        topic: { type: string }
+        title: { type: string }
+        summary: { type: string }
+        windowStart: { type: string, format: date-time }
+        windowEnd: { type: string, format: date-time }
+        triggerRules:
+          type: array
+          items:
+            type: object
+            properties:
+              ruleId: { type: string }
+              description: { type: string }
+        commentIds:
+          type: array
+          items: { type: string }
+        status: { type: string, enum: [new, acknowledged, responding, escalated, resolved] }
+        owner: { type: string }
+        slaMinutes: { type: integer }
+        slaDueAt: { type: string, format: date-time }
+        firstResponseAt: { type: string, format: date-time, nullable: true }
+        resolvedAt: { type: string, format: date-time, nullable: true }
+        timeline:
+          type: array
+          items: { $ref: "#/components/schemas/AlertAction" }
+        linkedClueIds:
+          type: array
+          items: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    AlertListItem:
+      type: object
+      required: [id, level, topic, title, status, owner, createdAt, slaDueAt, overdue, commentCount]
+      properties:
+        id: { type: string }
+        level: { type: string, enum: [P0, P1, P2] }
+        topic: { type: string }
+        title: { type: string }
+        status: { type: string, enum: [new, acknowledged, responding, escalated, resolved] }
+        owner: { type: string }
+        createdAt: { type: string, format: date-time }
+        firstResponseAt: { type: string, format: date-time, nullable: true }
+        slaDueAt: { type: string, format: date-time }
+        overdue: { type: boolean }
+        commentCount: { type: integer }
+
+    AlertDetail:
+      type: object
+      required: [alert, comments, linkedClues]
+      properties:
+        alert: { $ref: "#/components/schemas/SentimentAlert" }
+        comments:
+          type: array
+          items: { $ref: "#/components/schemas/SentimentComment" }
+        linkedClues:
+          type: array
+          items: { $ref: "#/components/schemas/Clue" }
+
+    AlertActionRequest:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [acknowledge, respond, escalate, resolve, comment] }
+        note: { type: string }
+        by: { type: string }
+
+    CommentList:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/SentimentComment" }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+
+    AlertList:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/AlertListItem" }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+
+    SentimentStats:
+      type: object
+      required: [comments, analyzed, negativeRatio, needsReview, alertsTotal, alertsOpen, p0, p1, p2, topicDistribution, sourceDistribution, sentimentDistribution]
+      properties:
+        comments: { type: integer }
+        analyzed: { type: integer }
+        negativeRatio: { type: number }
+        needsReview: { type: integer }
+        alertsTotal: { type: integer }
+        alertsOpen: { type: integer }
+        p0: { type: integer }
+        p1: { type: integer }
+        p2: { type: integer }
+        avgFirstResponseMin: { type: number, nullable: true }
+        p0ResponseMin: { type: number, nullable: true }
+        p1ResponseMin: { type: number, nullable: true }
+        topicDistribution:
+          type: array
+          items:
+            type: object
+            properties:
+              topic: { type: string }
+              count: { type: integer }
+        sourceDistribution:
+          type: array
+          items:
+            type: object
+            properties:
+              source: { type: string }
+              count: { type: integer }
+        sentimentDistribution:
+          type: array
+          items:
+            type: object
+            properties:
+              sentiment: { type: string }
+              count: { type: integer }
+
+    ClueAction:
+      type: object
+      required: [at, by, type]
+      properties:
+        at: { type: string, format: date-time }
+        by: { type: string }
+        type: { type: string, enum: [created, routed, accepted, rejected, closed, commented] }
+        note: { type: string, nullable: true }
+        from: { type: string, nullable: true }
+        to: { type: string, nullable: true }
+
+    Clue:
+      type: object
+      required: [id, title, description, sourceType, sourceRef, target, priority, status, owner, createdBy, evidence, timeline, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: string }
+        sourceType: { type: string, enum: [qc, sentiment, dashboard, agent] }
+        sourceRef:
+          type: object
+          properties:
+            type: { type: string }
+            id: { type: string }
+            label: { type: string }
+        target: { type: string, enum: [product, brand, market, cs] }
+        priority: { type: string, enum: [high, medium, low] }
+        status: { type: string, enum: [draft, routed, accepted, rejected, closed] }
+        owner: { type: string }
+        createdBy: { type: string }
+        evidence:
+          type: array
+          items: { type: string }
+        outcome: { type: string, nullable: true }
+        timeline:
+          type: array
+          items: { $ref: "#/components/schemas/ClueAction" }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        closedAt: { type: string, format: date-time, nullable: true }
+
+    ClueList:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Clue" }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+
+    ClueCreateRequest:
+      type: object
+      required: [title, description, sourceType, sourceRef, target, priority]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        sourceType: { type: string, enum: [qc, sentiment, dashboard, agent] }
+        sourceRef:
+          type: object
+          properties:
+            type: { type: string }
+            id: { type: string }
+            label: { type: string }
+        target: { type: string, enum: [product, brand, market, cs] }
+        priority: { type: string, enum: [high, medium, low] }
+        evidence:
+          type: array
+          items: { type: string }
+        createdBy: { type: string }
+
+    ClueActionRequest:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [route, accept, reject, close, comment] }
+        owner: { type: string }
+        note: { type: string }
+        outcome: { type: string }
+        by: { type: string }
+
+    EvalMismatch:
+      type: object
+      required: [itemId, expected, predicted, reason]
+      properties:
+        itemId: { type: string }
+        expected: { type: string }
+        predicted: { type: string }
+        reason: { type: string }
+
+    EvalRun:
+      type: object
+      required: [id, dataset, datasetId, datasetVersion, runAt, durationMs, modelVersion, metrics, confusion, mismatches, thresholdsMet, summary]
+      properties:
+        id: { type: string }
+        dataset: { type: string, enum: [qc, sentiment] }
+        datasetId: { type: string }
+        datasetVersion: { type: string }
+        runAt: { type: string, format: date-time }
+        durationMs: { type: integer }
+        modelVersion: { type: string }
+        metrics:
+          type: object
+          additionalProperties: { type: number }
+        confusion:
+          type: object
+          additionalProperties: { type: integer }
+        mismatches:
+          type: array
+          items: { $ref: "#/components/schemas/EvalMismatch" }
+        thresholdsMet:
+          type: object
+          additionalProperties: { type: boolean }
+        summary: { type: string }
+
+    EvalRunSummary:
+      type: object
+      required: [id, dataset, datasetId, datasetVersion, runAt, durationMs, modelVersion, metrics, thresholdsMet, summary]
+      properties:
+        id: { type: string }
+        dataset: { type: string, enum: [qc, sentiment] }
+        datasetId: { type: string }
+        datasetVersion: { type: string }
+        runAt: { type: string, format: date-time }
+        durationMs: { type: integer }
+        modelVersion: { type: string }
+        metrics:
+          type: object
+          additionalProperties: { type: number }
+        thresholdsMet:
+          type: object
+          additionalProperties: { type: boolean }
+        summary: { type: string }
+
+    EvalDataset:
+      type: object
+      required: [dataset, datasetId, version, itemCount, description]
+      properties:
+        dataset: { type: string, enum: [qc, sentiment] }
+        datasetId: { type: string }
+        version: { type: string }
+        itemCount: { type: integer }
+        description: { type: string }
+        lastRunAt: { type: string, format: date-time, nullable: true }
+
+    EvalRunRequest:
+      type: object
+      required: [dataset]
+      properties:
+        dataset: { type: string, enum: [qc, sentiment] }
+
+    DashboardKpi:
+      type: object
+      required: [id, label, value, target, op, status, delta, unit]
+      properties:
+        id: { type: string }
+        label: { type: string }
+        value: { type: number }
+        target: { type: number }
+        op: { type: string, enum: [">=", "<="] }
+        status: { type: string, enum: [ok, warn, bad] }
+        delta: { type: number }
+        unit: { type: string, enum: [percent, min, count, score, sec] }
+        hint: { type: string, nullable: true }
+
+    DashboardSummary:
+      type: object
+      required: [range, generatedAt, kpis, volume, quality, distribution]
+      properties:
+        range: { type: string }
+        generatedAt: { type: string, format: date-time }
+        kpis:
+          type: array
+          items: { $ref: "#/components/schemas/DashboardKpi" }
+        volume:
+          type: object
+          properties:
+            conversations: { type: integer }
+            reviewPending: { type: integer }
+            badcasesOpen: { type: integer }
+            alertsOpen: { type: integer }
+            cluesOpen: { type: integer }
+        quality:
+          type: object
+          properties:
+            avgScore: { type: number }
+            violationRate: { type: number }
+        distribution:
+          type: object
+          properties:
+            tags:
+              type: array
+              items:
+                type: object
+                properties:
+                  code: { type: string }
+                  name: { type: string }
+                  count: { type: integer }
+            channels:
+              type: array
+              items:
+                type: object
+                properties:
+                  channel: { type: string }
+                  count: { type: integer }
+            alertLevels:
+              type: array
+              items:
+                type: object
+                properties:
+                  level: { type: string }
+                  count: { type: integer }
+            clueTargets:
+              type: array
+              items:
+                type: object
+                properties:
+                  target: { type: string }
+                  count: { type: integer }
+
+    TrendRow:
+      type: object
+      required: [date]
+      additionalProperties: true
+      properties:
+        date: { type: string }
+        qcCoverage: { type: number }
+        qcAccuracy: { type: number }
+        badcaseCloseRate: { type: number }
+        p0ResponseMin: { type: number }
+        alertPrecision: { type: number }
+        clueCloseRate: { type: number }
+        csat: { type: number }
+
+    DashboardAnomaly:
+      type: object
+      required: [id, metric, metricLabel, current, target, deviation, severity, drillType, drillFilter, owner, suggestion]
+      properties:
+        id: { type: string }
+        metric: { type: string }
+        metricLabel: { type: string }
+        current: { type: number }
+        target: { type: number }
+        deviation: { type: number }
+        severity: { type: string, enum: [warn, bad] }
+        drillType: { type: string, enum: [qc, sentiment, badcase, clue] }
+        drillFilter:
+          type: object
+          additionalProperties: { type: string }
+        owner: { type: string }
+        suggestion: { type: string }
+
+    QcStats:
+      type: object
+      required: [total, analyzed, pass, violation, needsReview, reviewed, avgScore, reviewRatio, tagDistribution, channelDistribution]
+      properties:
+        total: { type: integer }
+        analyzed: { type: integer }
+        pass: { type: integer }
+        violation: { type: integer }
+        needsReview: { type: integer }
+        reviewed: { type: integer }
+        avgScore: { type: number }
+        reviewRatio: { type: number }
+        tagDistribution:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              name: { type: string }
+              count: { type: integer }
+        channelDistribution:
+          type: array
+          items:
+            type: object
+            properties:
+              channel: { type: string }
+              count: { type: integer }
+
+    KnowledgeFact:
+      type: object
+      required: [key, label, expected, compare, claimPatterns, violationPatterns]
+      properties:
+        key: { type: string }
+        label: { type: string }
+        expected: { type: string }
+        compare: { type: string, enum: [number, duration_minutes, date, text] }
+        expectedNumber: { type: number, nullable: true }
+        expectedMinutes: { type: number, nullable: true }
+        expectedMonth: { type: integer, nullable: true }
+        expectedDay: { type: integer, nullable: true }
+        unit: { type: string, nullable: true }
+        claimPatterns:
+          type: array
+          items: { type: string }
+        violationPatterns:
+          type: array
+          items: { type: string }
+        note: { type: string, nullable: true }
+
+    KnowledgeRevision:
+      type: object
+      required: [version, status, content, facts, note, by, at]
+      properties:
+        version: { type: integer, minimum: 1 }
+        status: { type: string, enum: [draft, published, offline] }
+        content: { type: string }
+        facts:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeFact" }
+        note: { type: string }
+        by: { type: string }
+        at: { type: string, format: date-time }
+
+    KnowledgeRef:
+      type: object
+      required: [entryId, code, title, factKey, factLabel, expected, actual, ruleId]
+      properties:
+        entryId: { type: string }
+        code: { type: string }
+        title: { type: string }
+        factKey: { type: string }
+        factLabel: { type: string }
+        expected: { type: string }
+        actual: { type: string }
+        ruleId: { type: string }
+
+    KnowledgeSourceRef:
+      type: object
+      required: [type, id, label]
+      properties:
+        type: { type: string, enum: [conversation, badcase, manual] }
+        id: { type: string }
+        label: { type: string }
+
+    KnowledgeEntry:
+      type: object
+      required: [id, code, title, category, status, version, content, facts, keywords, owner, source, sourceRef, linkedBadcaseIds, revisions, createdAt, updatedAt, publishedAt]
+      properties:
+        id: { type: string }
+        code: { type: string }
+        title: { type: string }
+        category: { type: string, enum: [refund, recharge, activity, version, account, other] }
+        status: { type: string, enum: [draft, published, offline] }
+        version: { type: integer, minimum: 1 }
+        content: { type: string }
+        facts:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeFact" }
+        keywords:
+          type: array
+          items: { type: string }
+        owner: { type: string }
+        source: { type: string, enum: [official, qc_badcase, manual] }
+        sourceRef:
+          allOf:
+            - $ref: "#/components/schemas/KnowledgeSourceRef"
+          nullable: true
+        linkedBadcaseIds:
+          type: array
+          items: { type: string }
+        revisions:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeRevision" }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        publishedAt: { type: string, format: date-time, nullable: true }
+
+    KnowledgeListItem:
+      type: object
+      required: [id, code, title, category, status, version, owner, source, knowledgeHits, linkedHits, linkedBadcases, updatedAt]
+      properties:
+        id: { type: string }
+        code: { type: string }
+        title: { type: string }
+        category: { type: string, enum: [refund, recharge, activity, version, account, other] }
+        status: { type: string, enum: [draft, published, offline] }
+        version: { type: integer }
+        owner: { type: string }
+        source: { type: string, enum: [official, qc_badcase, manual] }
+        knowledgeHits: { type: integer }
+        linkedHits: { type: integer }
+        linkedBadcases: { type: integer }
+        updatedAt: { type: string, format: date-time }
+
+    KnowledgeList:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeListItem" }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+
+    KnowledgeHit:
+      type: object
+      required: [conversationId, seq, quote, expected, actual]
+      properties:
+        conversationId: { type: string }
+        agentName: { type: string }
+        seq: { type: integer }
+        quote: { type: string }
+        expected: { type: string }
+        actual: { type: string }
+
+    KnowledgeDetail:
+      type: object
+      required: [entry, hits, badcases]
+      properties:
+        entry: { $ref: "#/components/schemas/KnowledgeEntry" }
+        hits:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeHit" }
+        badcases:
+          type: array
+          items: { $ref: "#/components/schemas/Badcase" }
+
+    KnowledgeStats:
+      type: object
+      required: [total, published, draft, offline, byCategory, hits, gaps, knowledgeBadcases]
+      properties:
+        total: { type: integer }
+        published: { type: integer }
+        draft: { type: integer }
+        offline: { type: integer }
+        byCategory:
+          type: array
+          items:
+            type: object
+            properties:
+              category: { type: string }
+              count: { type: integer }
+        hits:
+          type: object
+          required: [knowledgeTags, linked, unlinked, conversations]
+          properties:
+            knowledgeTags: { type: integer }
+            linked: { type: integer }
+            unlinked: { type: integer }
+            conversations: { type: integer }
+            linkRate: { type: number }
+        gaps: { type: integer }
+        knowledgeBadcases: { type: integer }
+        linkedKnowledgeBadcases: { type: integer }
+
+    KnowledgeGap:
+      type: object
+      required: [id, type, title, count, owner]
+      properties:
+        id: { type: string }
+        type: { type: string, enum: [unlinked_qc_hit, unlinked_badcase] }
+        ruleId: { type: string, nullable: true }
+        badcaseId: { type: string, nullable: true }
+        title: { type: string }
+        count: { type: integer }
+        category: { type: string, enum: [refund, recharge, activity, version, account, other] }
+        owner: { type: string }
+        sample:
+          type: object
+          properties:
+            conversationId: { type: string }
+            seq: { type: integer }
+            quote: { type: string }
+            note: { type: string }
+
+    KnowledgeRecheck:
+      type: object
+      required: [rechecked, changed, before, after, changes]
+      properties:
+        rechecked: { type: integer }
+        changed: { type: integer }
+        before: { $ref: "#/components/schemas/KnowledgeRecheckStats" }
+        after: { $ref: "#/components/schemas/KnowledgeRecheckStats" }
+        changes:
+          type: array
+          items:
+            type: object
+            properties:
+              conversationId: { type: string }
+              beforeTags:
+                type: array
+                items: { type: string }
+              afterTags:
+                type: array
+                items: { type: string }
+
+    KnowledgeRecheckStats:
+      type: object
+      required: [knowledgeTags, linkedKnowledgeTags, unlinkedKnowledgeTags, gaps]
+      properties:
+        knowledgeTags: { type: integer }
+        linkedKnowledgeTags: { type: integer }
+        unlinkedKnowledgeTags: { type: integer }
+        gaps: { type: integer }
+
+    KnowledgeMutationResult:
+      type: object
+      required: [entry, recheck]
+      properties:
+        entry: { $ref: "#/components/schemas/KnowledgeEntry" }
+        recheck: { $ref: "#/components/schemas/KnowledgeRecheck" }
+
+    KnowledgeActionRequest:
+      type: object
+      properties:
+        by: { type: string }
+        note: { type: string }
+
+    KnowledgeCreateRequest:
+      type: object
+      required: [title, category, content]
+      properties:
+        title: { type: string }
+        category: { type: string, enum: [refund, recharge, activity, version, account, other] }
+        content: { type: string }
+        facts:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeFact" }
+        keywords:
+          type: array
+          items: { type: string }
+        owner: { type: string }
+        source: { type: string, enum: [official, qc_badcase, manual] }
+        sourceRef:
+          allOf:
+            - $ref: "#/components/schemas/KnowledgeSourceRef"
+          nullable: true
+        linkedBadcaseIds:
+          type: array
+          items: { type: string }
+
+    KnowledgeRevisionRequest:
+      type: object
+      required: [content]
+      properties:
+        content: { type: string }
+        facts:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeFact" }
+        keywords:
+          type: array
+          items: { type: string }
+        note: { type: string }
+        by: { type: string }
+
+    KnowledgeSuggestionRequest:
+      type: object
+      properties:
+        conversationId: { type: string }
+        badcaseId: { type: string }

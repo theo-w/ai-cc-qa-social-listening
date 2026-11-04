@@ -1,0 +1,385 @@
+{
+  "datasetId": "knowledge-seed-v0.1",
+  "version": "0.1.0",
+  "datasetVersion": "2026.11.03",
+  "description": "客服知识库种子数据：结构化标准口径 + 事实校验规则 + 版本历史。质检引擎用它判定 wrong_knowledge，质检结果与 badcase 反向驱动条目修订（知识完善闭环）。数据为确定性合成内容，不含真实用户信息。",
+  "generatedAt": "2026-11-03T10:00:00+08:00",
+  "entries": [
+    {
+      "key": "refund-policy",
+      "code": "KB-1001",
+      "title": "退款规则与手续费",
+      "category": "refund",
+      "keywords": ["退款", "手续费", "原路退回", "扣费"],
+      "owner": "顾清",
+      "source": "official",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "published",
+          "content": "退款需扣除 20% 手续费，3 个工作日内原路退回。",
+          "facts": [
+            {
+              "key": "refund_fee",
+              "label": "退款手续费",
+              "expected": "20%（旧版口径）",
+              "compare": "number",
+              "expectedNumber": 20,
+              "unit": "%",
+              "claimPatterns": [
+                "退款[^。！？]{0,10}?手续费[^。！？]{0,10}?(\\d{1,3})\\s*%",
+                "(\\d{1,3})\\s*%[^。！？]{0,8}?(?:的)?退款手续费"
+              ],
+              "violationPatterns": [],
+              "note": "旧版口径：退款手续费 20%。已被 v2 取代。"
+            },
+            {
+              "key": "refund_supported",
+              "label": "退款受理",
+              "expected": "未消耗部分支持退款",
+              "compare": "text",
+              "claimPatterns": [],
+              "violationPatterns": ["(?:不能|不支持|无法|不可以|概不|一律不)(?:退款|退)"],
+              "note": "未消耗的钻石可申请退款。"
+            }
+          ],
+          "note": "初始版本（已过期）",
+          "by": "顾清",
+          "at": "2026-10-12T09:00:00+08:00"
+        },
+        {
+          "version": 2,
+          "status": "published",
+          "content": "未消耗的钻石可申请退款并原路退回，退款不收取任何手续费；已消耗部分不支持退款。到账时效见 KB-1002。",
+          "facts": [
+            {
+              "key": "refund_fee",
+              "label": "退款手续费",
+              "expected": "0%（不收取手续费）",
+              "compare": "number",
+              "expectedNumber": 0,
+              "unit": "%",
+              "claimPatterns": [
+                "退款[^。！？]{0,10}?手续费[^。！？]{0,10}?(\\d{1,3})\\s*%",
+                "(\\d{1,3})\\s*%[^。！？]{0,8}?(?:的)?退款手续费"
+              ],
+              "violationPatterns": [],
+              "note": "官方口径：退款手续费为 0，不允许向用户收取。"
+            },
+            {
+              "key": "refund_supported",
+              "label": "退款受理",
+              "expected": "未消耗部分支持退款",
+              "compare": "text",
+              "claimPatterns": [],
+              "violationPatterns": ["(?:不能|不支持|无法|不可以|概不|一律不)(?:退款|退)"],
+              "note": "未消耗的钻石可申请退款；已消耗部分不支持退款。"
+            }
+          ],
+          "note": "根据知识错误 badcase 与官方公告修订：手续费 0%，并拆分到账时效条目",
+          "by": "顾清",
+          "at": "2026-10-28T15:30:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "refund-arrival",
+      "code": "KB-1002",
+      "title": "退款到账时效",
+      "category": "refund",
+      "keywords": ["退款", "到账", "时效", "工作日", "原路退回"],
+      "owner": "顾清",
+      "source": "official",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "published",
+          "content": "退款审核通过后 3 个工作日内原路退回。",
+          "facts": [
+            {
+              "key": "refund_arrival",
+              "label": "退款到账时效",
+              "expected": "3 个工作日（旧版口径）",
+              "compare": "duration_minutes",
+              "expectedMinutes": 1440,
+              "unit": "分钟",
+              "claimPatterns": [
+                "退款[^。！？]{0,14}?(\\d{1,2})\\s*个?\\s*(工作日|自然日|天|小时)",
+                "(\\d{1,2})\\s*个?\\s*(工作日|自然日|天|小时)[^。！？]{0,8}?(?:到账|退回)"
+              ],
+              "violationPatterns": [],
+              "note": "旧版口径：3 个工作日（按 8 小时/工作日折算）。已被 v2 取代。"
+            }
+          ],
+          "note": "初始版本（已过期）",
+          "by": "顾清",
+          "at": "2026-10-12T09:10:00+08:00"
+        },
+        {
+          "version": 2,
+          "status": "published",
+          "content": "退款审核通过后 24 小时内原路退回；大额退款可能延迟至 48 小时，以银行处理为准。",
+          "facts": [
+            {
+              "key": "refund_arrival",
+              "label": "退款到账时效",
+              "expected": "24 小时（原路退回）",
+              "compare": "duration_minutes",
+              "expectedMinutes": 1440,
+              "unit": "分钟",
+              "claimPatterns": [
+                "退款[^。！？]{0,14}?(\\d{1,2})\\s*个?\\s*(工作日|自然日|天|小时)",
+                "(\\d{1,2})\\s*个?\\s*(工作日|自然日|天|小时)[^。！？]{0,8}?(?:到账|退回)"
+              ],
+              "violationPatterns": [],
+              "note": "官方口径：24 小时内原路退回；工作日按 8 小时折算，自然日/天按 24 小时折算。"
+            }
+          ],
+          "note": "根据质检发现「7 个工作日」错误口径与官方公告修订：24 小时内原路退回",
+          "by": "顾清",
+          "at": "2026-10-28T15:40:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "first-charge-rebate",
+      "code": "KB-1003",
+      "title": "首充双倍返利",
+      "category": "recharge",
+      "keywords": ["首充", "返利", "返还", "钻石", "双倍"],
+      "owner": "顾清",
+      "source": "official",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "published",
+          "content": "首充双倍返利指首充金额返还 100% 等值钻石（即双倍），每个账号限一次，具体以活动页为准。",
+          "facts": [
+            {
+              "key": "first_charge_return",
+              "label": "首充返利比例",
+              "expected": "100%（等值钻石）",
+              "compare": "number",
+              "expectedNumber": 100,
+              "unit": "%",
+              "claimPatterns": ["首充[^。！？]{0,12}?返[^。！？]{0,10}?(\\d{1,3})\\s*%"],
+              "violationPatterns": [],
+              "note": "首充返利为 100% 等值钻石，禁止承诺更高比例。"
+            }
+          ],
+          "note": "初始版本",
+          "by": "顾清",
+          "at": "2026-10-20T10:00:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "daily-free-draw",
+      "code": "KB-1004",
+      "title": "活动每日免费抽卡次数",
+      "category": "activity",
+      "keywords": ["活动", "免费", "抽卡", "每日", "次数"],
+      "owner": "顾清",
+      "source": "official",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "published",
+          "content": "「星海远征」限时活动期间，每个账号每天 1 次免费抽卡，每日 05:00 刷新。",
+          "facts": [
+            {
+              "key": "daily_free_draws",
+              "label": "每日免费抽卡次数",
+              "expected": "1 次/天",
+              "compare": "number",
+              "expectedNumber": 1,
+              "unit": "次",
+              "claimPatterns": ["每天\\s*(\\d+)\\s*次[^。！？]{0,10}?(?:免费|抽卡|抽取)"],
+              "violationPatterns": [],
+              "note": "活动每日免费抽卡 1 次；「老玩家 2 次」为错误口径。"
+            }
+          ],
+          "note": "初始版本",
+          "by": "顾清",
+          "at": "2026-10-20T10:05:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "version-3-launch",
+      "code": "KB-1005",
+      "title": "3.0 版本上线时间",
+      "category": "version",
+      "keywords": ["版本", "3.0", "上线", "公告", "更新时间"],
+      "owner": "顾清",
+      "source": "official",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "published",
+          "content": "3.0 版本计划于 2026-11-05 10:00 上线，具体以官网公告为准；坐席不得口头提前或推迟档期。",
+          "facts": [
+            {
+              "key": "version_3_0_launch",
+              "label": "3.0 版本上线时间",
+              "expected": "2026-11-05",
+              "compare": "date",
+              "expectedMonth": 11,
+              "expectedDay": 5,
+              "unit": "日期",
+              "claimPatterns": [
+                "(?:版本)?[^。！？]{0,8}?(\\d{1,2})\\s*月\\s*(\\d{1,2})\\s*日[^。！？]{0,10}?(?:上线|发布|更新)"
+              ],
+              "violationPatterns": ["公告是旧的", "以我说的为准"],
+              "note": "上线日期 2026-11-05；「11 月 30 日」「12 月」等其他档期均需先核对公告。"
+            }
+          ],
+          "note": "初始版本",
+          "by": "顾清",
+          "at": "2026-10-22T11:00:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "ban-appeal",
+      "code": "KB-1006",
+      "title": "账号封禁与误封申诉",
+      "category": "account",
+      "keywords": ["封号", "封禁", "误封", "申诉", "外挂"],
+      "owner": "顾清",
+      "source": "official",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "published",
+          "content": "误封可在游戏内客服中心提交申诉，3 个工作日内复核；使用外挂/脚本的封禁不予解封。",
+          "facts": [
+            {
+              "key": "ban_appeal",
+              "label": "误封申诉口径",
+              "expected": "误封可申诉（3 个工作日内复核）",
+              "compare": "text",
+              "claimPatterns": [],
+              "violationPatterns": [
+                "(?:误封|封号|封禁)[^。！？]{0,10}?(?:不可能|不会|不存在|自己找原因)",
+                "(?:外挂|脚本)[^。！？]{0,8}?(?:不存在|没有|管不了)"
+              ],
+              "note": "误封可申诉；不得以「不存在误封」「自己找原因」推脱。"
+            }
+          ],
+          "note": "初始版本",
+          "by": "顾清",
+          "at": "2026-10-23T09:30:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "recharge-arrival",
+      "code": "KB-1007",
+      "title": "充值到账与订单查询",
+      "category": "recharge",
+      "keywords": ["充值", "到账", "订单", "工单", "支付"],
+      "owner": "顾清",
+      "source": "official",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "published",
+          "content": "充值成功后通常 5 分钟内到账；超过 30 分钟未到账可凭订单号提交工单核查，不得要求用户重复支付。",
+          "facts": [
+            {
+              "key": "recharge_arrival",
+              "label": "充值到账时效",
+              "expected": "5 分钟内到账",
+              "compare": "duration_minutes",
+              "expectedMinutes": 5,
+              "unit": "分钟",
+              "claimPatterns": [
+                "充值[^。！？]{0,10}?(\\d{1,3})\\s*(分钟|小时|工作日|天)[^。！？]{0,8}?(?:到账|未到账)"
+              ],
+              "violationPatterns": [],
+              "note": "充值通常 5 分钟内到账；超过 30 分钟走工单核查。"
+            }
+          ],
+          "note": "初始版本",
+          "by": "顾清",
+          "at": "2026-10-24T14:00:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "event-end-time",
+      "code": "KB-1008",
+      "title": "活动结束时间口径（待完善）",
+      "category": "activity",
+      "keywords": ["活动", "结束", "公告", "时间"],
+      "owner": "顾清",
+      "source": "manual",
+      "sourceRef": null,
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "draft",
+          "content": "待补充：活动统一以官网公告的结束时间为准，坐席不得口头承诺提前或延后。需要补齐：当前在售活动清单、结束时间、例外补偿规则。",
+          "facts": [],
+          "note": "知识周会识别的空白条目，待顾清补充具体事实与识别规则",
+          "by": "顾清",
+          "at": "2026-11-02T16:20:00+08:00"
+        }
+      ]
+    },
+    {
+      "key": "recharge-rebate-rate",
+      "code": "KB-1009",
+      "title": "充值返利比例（质检驱动草稿）",
+      "category": "recharge",
+      "keywords": ["充值", "返利", "比例", "活动"],
+      "owner": "顾清",
+      "source": "qc_badcase",
+      "sourceRef": {
+        "type": "conversation",
+        "id": "conv-1011",
+        "label": "qc-0011"
+      },
+      "linkedBadcaseIds": [],
+      "revisions": [
+        {
+          "version": 1,
+          "status": "draft",
+          "content": "质检发现坐席宣称「充值返利 30%」。请核对当前活动规则后补充官方返利比例与例外条件，再发布。常规活动返利上限为 5%，超出部分需活动页单独公示。",
+          "facts": [
+            {
+              "key": "recharge_rebate_rate",
+              "label": "充值返利比例",
+              "expected": "5%（常规活动上限，待核实）",
+              "compare": "number",
+              "expectedNumber": 5,
+              "unit": "%",
+              "claimPatterns": ["充值返利[^。！？]{0,8}?(\\d{1,3})\\s*%"],
+              "violationPatterns": [],
+              "note": "来源会话 conv-1011（qc-0011）：坐席称「充值返利 30%」。发布前需顾清核对活动页。"
+            }
+          ],
+          "note": "由质检知识错误命中自动生成的知识完善草稿",
+          "by": "顾清",
+          "at": "2026-11-02T17:10:00+08:00"
+        }
+      ]
+    }
+  ]
+}

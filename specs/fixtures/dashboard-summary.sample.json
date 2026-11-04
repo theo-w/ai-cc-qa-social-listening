@@ -1,0 +1,21 @@
+{
+  "range": "7d",
+  "generatedAt": "2026-11-03T02:00:00.000Z",
+  "kpis": [
+    { "id": "qcCoverage", "label": "质检覆盖率", "value": 1, "target": 0.9, "op": ">=", "status": "ok", "delta": 0.02, "unit": "percent" },
+    { "id": "qcAccuracy", "label": "质检准确率", "value": 0.86, "target": 0.8, "op": ">=", "status": "ok", "delta": 0.01, "unit": "percent" },
+    { "id": "badcaseCloseRate", "label": "badcase 闭环率", "value": 0.62, "target": 0.7, "op": ">=", "status": "warn", "delta": -0.04, "unit": "percent" },
+    { "id": "p0ResponseMin", "label": "P0 首响", "value": 21, "target": 30, "op": "<=", "status": "ok", "delta": -3, "unit": "min" },
+    { "id": "alertPrecision", "label": "预警准确率", "value": 0.83, "target": 0.8, "op": ">=", "status": "ok", "delta": 0, "unit": "percent" },
+    { "id": "clueCloseRate", "label": "线索闭环率", "value": 0.5, "target": 0.6, "op": ">=", "status": "warn", "delta": 0.05, "unit": "percent" },
+    { "id": "csat", "label": "满意度", "value": 0.91, "target": 0.9, "op": ">=", "status": "ok", "delta": 0.01, "unit": "percent" }
+  ],
+  "volume": { "conversations": 60, "reviewPending": 9, "badcasesOpen": 7, "alertsOpen": 5, "cluesOpen": 4 },
+  "quality": { "avgScore": 71.4, "violationRate": 0.633 },
+  "distribution": {
+    "tags": [{ "code": "attitude", "name": "服务态度", "count": 9 }],
+    "channels": [{ "channel": "online", "count": 30 }],
+    "alertLevels": [{ "level": "P0", "count": 2 }, { "level": "P1", "count": 4 }, { "level": "P2", "count": 3 }],
+    "clueTargets": [{ "target": "product", "count": 3 }]
+  }
+}

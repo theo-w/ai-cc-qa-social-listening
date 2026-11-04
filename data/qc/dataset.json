@@ -1,0 +1,4202 @@
+{
+  "datasetId": "qc-eval-v0.1",
+  "version": "0.1.0",
+  "datasetVersion": "2026.11.03",
+  "description": "客服质检评测集：60 条对话（40 条违规 + 20 条正常），覆盖 attitude/forbidden/off_topic/wrong_knowledge/timeout/escalation 六类标签、多标签组合、隐式边界样本与正常样本，用于规则引擎判定评测与演示。",
+  "generatedAt": "2026-11-03T10:00:00+08:00",
+  "items": [
+    {
+      "id": "qc-0001",
+      "channel": "online",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7701",
+        "name": "用户8000"
+      },
+      "startedAt": "2026-10-20T09:12:00+08:00",
+      "durationSec": 230,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你好，我昨天充值的 648 显示成功，但游戏里没收到钻石，能帮我看下吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供一下订单号。",
+          "atSec": 28,
+          "gapSec": 28
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "订单号 SO2026****8821，手机号 138****2210。",
+          "atSec": 74,
+          "gapSec": 46
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "系统显示已经到账了，您自己不会看吗？",
+          "atSec": 132,
+          "gapSec": 58
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "你什么态度？我就是没看到才来问的。",
+          "atSec": 168,
+          "gapSec": 36
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "这边建议您重新登录游戏查看。",
+          "atSec": 190,
+          "gapSec": 22
+        }
+      ],
+      "importedAt": "2026-10-20T23:10:00+08:00",
+      "batchId": "B-2026-10-20",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude"
+        ],
+        "primaryTag": "attitude",
+        "note": "坐席使用「您自己不会看吗」反问羞辱用户，命中 attitude，证据 seq=4。",
+        "complexity": "explicit",
+        "confidence": 0.86,
+        "needsReview": false,
+        "summary": "用户咨询充值到账问题，坐席以反问回应，判定服务态度违规。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "系统显示已经到账了，您自己不会看吗？"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0002",
+      "channel": "ticket",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7702",
+        "name": "用户8037"
+      },
+      "startedAt": "2026-10-21T13:40:00+08:00",
+      "durationSec": 208,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我的礼包码兑换失败了，提示无效，是不是过期了？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供礼包码前六位。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "GIFT-****-9K2M。",
+          "atSec": 55,
+          "gapSec": 33
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "是您自己输错了，这都看不出来吗？",
+          "atSec": 96,
+          "gapSec": 41
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "我检查过了，就是复制的。",
+          "atSec": 128,
+          "gapSec": 32
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "那可能是您复制的时候多了空格，下次注意。",
+          "atSec": 155,
+          "gapSec": 27
+        }
+      ],
+      "importedAt": "2026-10-21T23:10:00+08:00",
+      "batchId": "B-2026-10-21",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude"
+        ],
+        "primaryTag": "attitude",
+        "note": "坐席使用「这都看不出来吗」嘲讽用户，命中 attitude，证据 seq=4。",
+        "complexity": "explicit",
+        "confidence": 0.88,
+        "needsReview": false,
+        "summary": "用户礼包码兑换失败求助，坐席嘲讽用户操作，判定服务态度违规。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "是您自己输错了，这都看不出来吗？"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0003",
+      "channel": "phone",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7703",
+        "name": "用户8074"
+      },
+      "startedAt": "2026-10-22T19:32:00+08:00",
+      "durationSec": 208,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我这个账号绑定的手机号不用了，怎么换绑？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "换绑需要原手机号收验证码。",
+          "atSec": 26,
+          "gapSec": 26
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "可是原手机号已经注销了，收不到验证码啊。",
+          "atSec": 63,
+          "gapSec": 37
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "那没办法，爱要不要，就这个方案。",
+          "atSec": 98,
+          "gapSec": 35
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "你们就没有别的办法吗？",
+          "atSec": 130,
+          "gapSec": 32
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "没有。",
+          "atSec": 142,
+          "gapSec": 12
+        }
+      ],
+      "importedAt": "2026-10-22T23:10:00+08:00",
+      "batchId": "B-2026-10-22",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude"
+        ],
+        "primaryTag": "attitude",
+        "note": "坐席使用「爱要不要，就这个方案」「下一个」驱赶用户，命中 attitude，证据 seq=4。",
+        "complexity": "explicit",
+        "confidence": 0.91,
+        "needsReview": false,
+        "summary": "用户询问换绑手机号，坐席用驱赶式话术回应，判定服务态度违规。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "那没办法，爱要不要，就这个方案。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0004",
+      "channel": "online",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7704",
+        "name": "用户8111"
+      },
+      "startedAt": "2026-10-23T10:05:00+08:00",
+      "durationSec": 189,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "请问月卡到期后会自动续费吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "月卡是 30 天的，到期自己续。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我的意思是会不会自动扣费？",
+          "atSec": 48,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "说了多少遍了，不会自动扣，别问了。",
+          "atSec": 84,
+          "gapSec": 36
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好吧，谢谢。",
+          "atSec": 110,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-23T23:10:00+08:00",
+      "batchId": "B-2026-10-23",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude"
+        ],
+        "primaryTag": "attitude",
+        "note": "坐席使用「说了多少遍了，别问了」表达不耐烦，命中 attitude，证据 seq=4。",
+        "complexity": "explicit",
+        "confidence": 0.93,
+        "needsReview": false,
+        "summary": "用户确认月卡扣费规则，坐席不耐烦回应，判定服务态度违规。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "说了多少遍了，不会自动扣，别问了。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0005",
+      "channel": "ticket",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7705",
+        "name": "用户8148"
+      },
+      "startedAt": "2026-10-24T15:18:00+08:00",
+      "durationSec": 232,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我提交的退款申请三天了还没处理，能帮我催一下吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，退款按流程处理，请耐心等待。",
+          "atSec": 30,
+          "gapSec": 30
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "可是我等着用钱，能不能给个具体时间？",
+          "atSec": 72,
+          "gapSec": 42
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "行吧，随便您怎么想，反正流程就是这样。",
+          "atSec": 108,
+          "gapSec": 36
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "……那我再等等吧。",
+          "atSec": 140,
+          "gapSec": 32
+        }
+      ],
+      "importedAt": "2026-10-24T23:10:00+08:00",
+      "batchId": "B-2026-10-24",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude"
+        ],
+        "primaryTag": "attitude",
+        "note": "边界样本：坐席「行吧，随便您怎么想」语气阴阳，命中 attitude 但需结合上下文判定，证据 seq=4。",
+        "complexity": "implicit",
+        "confidence": 0.7,
+        "needsReview": true,
+        "summary": "用户催退款进度，坐席以冷淡阴阳话术回应，需人工复核判定服务态度违规。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "行吧，随便您怎么想，反正流程就是这样。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0006",
+      "channel": "phone",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7706",
+        "name": "用户8185"
+      },
+      "startedAt": "2026-10-25T21:10:00+08:00",
+      "durationSec": 165,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "为什么我完成任务没有发奖励？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "请您先确认一下任务是否真的完成了。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我确定完成了，进度条都满了。",
+          "atSec": 58,
+          "gapSec": 34
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "那请您说话客气一点，我这边也很忙。",
+          "atSec": 92,
+          "gapSec": 34
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "我没有不客气啊……",
+          "atSec": 120,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-25T23:10:00+08:00",
+      "batchId": "B-2026-10-25",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude"
+        ],
+        "primaryTag": "attitude",
+        "note": "边界样本：坐席「请您说话客气一点」反向指责用户，命中 attitude 但语气隐晦，证据 seq=4。",
+        "complexity": "implicit",
+        "confidence": 0.72,
+        "needsReview": true,
+        "summary": "用户追问奖励未发放，坐席反过来指责用户语气，需人工复核服务态度问题。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "那请您说话客气一点，我这边也很忙。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0007",
+      "channel": "online",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7707",
+        "name": "用户8222"
+      },
+      "startedAt": "2026-10-26T11:24:00+08:00",
+      "durationSec": 124,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "好的，问题解决了，谢谢。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "不客气，麻烦您给个五星好评，我们这边有考核。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "行吧，我去评价。",
+          "atSec": 46,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "记得截图发我，我这边要登记。",
+          "atSec": 66,
+          "gapSec": 20
+        }
+      ],
+      "importedAt": "2026-10-26T23:10:00+08:00",
+      "batchId": "B-2026-10-26",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden"
+        ],
+        "primaryTag": "forbidden",
+        "note": "坐席索评并索要截图（「五星好评」「截图发我」），命中 forbidden，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.86,
+        "needsReview": false,
+        "summary": "问题解决后坐席索要五星好评，并要求截图登记，判定违规话术。",
+        "emotion": "calm",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "不客气，麻烦您给个五星好评，我们这边有考核。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0008",
+      "channel": "ticket",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7708",
+        "name": "用户8259"
+      },
+      "startedAt": "2026-10-27T17:06:00+08:00",
+      "durationSec": 159,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我的订单一直显示处理中，怎么办？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "这个问题官方处理很慢，您加我微信 kf_8821，私下找我处理。",
+          "atSec": 25,
+          "gapSec": 25
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "微信？官方渠道不能处理吗？",
+          "atSec": 60,
+          "gapSec": 35
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "加微信方便一点，我帮您插个队。",
+          "atSec": 88,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-27T23:10:00+08:00",
+      "batchId": "B-2026-10-27",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden"
+        ],
+        "primaryTag": "forbidden",
+        "note": "坐席引导站外联系（「加我微信」「私下找我处理」），命中 forbidden，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.88,
+        "needsReview": false,
+        "summary": "坐席引导用户加私人微信并声称可插队处理，判定违规话术。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "这个问题官方处理很慢，您加我微信 kf_8821，私下找我处理。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0009",
+      "channel": "phone",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7709",
+        "name": "用户8296"
+      },
+      "startedAt": "2026-10-28T09:12:00+08:00",
+      "durationSec": 168,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "那个限定皮肤还能买吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "官方渠道已经下架了，您私下转账 200 给我，我帮你直接开通。",
+          "atSec": 28,
+          "gapSec": 28
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "这样可以吗？不会被封号吧？",
+          "atSec": 62,
+          "gapSec": 34
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "放心，我操作很多次了。",
+          "atSec": 84,
+          "gapSec": 22
+        }
+      ],
+      "importedAt": "2026-10-28T23:10:00+08:00",
+      "batchId": "B-2026-10-28",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden"
+        ],
+        "primaryTag": "forbidden",
+        "note": "坐席提出私下交易（「私下转账 200 给我」），命中 forbidden，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.91,
+        "needsReview": false,
+        "summary": "坐席引导用户私下转账购买已下架皮肤，判定违规话术。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "官方渠道已经下架了，您私下转账 200 给我，我帮你直接开通。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0010",
+      "channel": "online",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7710",
+        "name": "用户8333"
+      },
+      "startedAt": "2026-10-29T13:40:00+08:00",
+      "durationSec": 159,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我冲了 648 没到账，能退吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "放心，百分百能退，包退，一分不少。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "那大概多久？",
+          "atSec": 48,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "很快的，绝对没问题。",
+          "atSec": 62,
+          "gapSec": 14
+        }
+      ],
+      "importedAt": "2026-10-29T23:10:00+08:00",
+      "batchId": "B-2026-10-29",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden"
+        ],
+        "primaryTag": "forbidden",
+        "note": "坐席使用绝对化承诺（「百分百能退」「包退」），命中 forbidden，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.93,
+        "needsReview": false,
+        "summary": "坐席对退款给出绝对化承诺，判定违规话术。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "放心，百分百能退，包退，一分不少。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0011",
+      "channel": "ticket",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7711",
+        "name": "用户8370"
+      },
+      "startedAt": "2026-10-30T19:32:00+08:00",
+      "durationSec": 122,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "充值有什么优惠吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "有内部返利，充值返利 30%，私下返给你，别走官方活动。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "还有这种？",
+          "atSec": 50,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "对，您把款转我，我这边给您操作。",
+          "atSec": 72,
+          "gapSec": 22
+        }
+      ],
+      "importedAt": "2026-10-30T23:10:00+08:00",
+      "batchId": "B-2026-10-30",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden"
+        ],
+        "primaryTag": "forbidden",
+        "note": "坐席介绍内部返利与私下交易（「内部返利」「私下返给你」），命中 forbidden，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.95,
+        "needsReview": false,
+        "summary": "坐席向用户介绍私下返利与内部充值渠道，判定违规话术。",
+        "emotion": "calm",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "有内部返利，充值返利 30%，私下返给你，别走官方活动。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0012",
+      "channel": "phone",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7712",
+        "name": "用户8407"
+      },
+      "startedAt": "2026-10-31T10:05:00+08:00",
+      "durationSec": 127,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "礼包补偿收到了，谢谢。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "给个好评截图发我，我送您 200 钻石。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "还要截图啊？",
+          "atSec": 46,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "对，好评越多我们绩效越高。",
+          "atSec": 64,
+          "gapSec": 18
+        }
+      ],
+      "importedAt": "2026-10-31T23:10:00+08:00",
+      "batchId": "B-2026-10-31",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden"
+        ],
+        "primaryTag": "forbidden",
+        "note": "坐席用福利换好评（「好评截图发我」「送您 200」），命中 forbidden，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.97,
+        "needsReview": false,
+        "summary": "坐席以赠送钻石为条件换取用户好评截图，判定违规话术。",
+        "emotion": "calm",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "给个好评截图发我，我送您 200 钻石。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0013",
+      "channel": "online",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7713",
+        "name": "用户8444"
+      },
+      "startedAt": "2026-11-01T15:18:00+08:00",
+      "durationSec": 170,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你好，我申请的退款什么时候能到账？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，建议您多关注游戏内的限时活动哦，最近活动很丰富。",
+          "atSec": 30,
+          "gapSec": 30
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我问的是退款到账时间。",
+          "atSec": 66,
+          "gapSec": 36
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "活动期间充值还有额外奖励，您可以看看。",
+          "atSec": 94,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-11-01T23:10:00+08:00",
+      "batchId": "B-2026-11-01",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "off_topic"
+        ],
+        "primaryTag": "off_topic",
+        "note": "坐席未回应退款诉求，改用活动推广话术，命中 off_topic，证据 seq=2（seq=4 仍回避）。",
+        "complexity": "explicit",
+        "confidence": 0.86,
+        "needsReview": false,
+        "summary": "用户询问退款到账时间，坐席连续两轮以活动推广回避问题，判定答非所问。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "off_topic",
+            "evidenceSeq": 2,
+            "quote": "您好，建议您多关注游戏内的限时活动哦，最近活动很丰富。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0014",
+      "channel": "ticket",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7714",
+        "name": "用户8481"
+      },
+      "startedAt": "2026-11-02T21:10:00+08:00",
+      "durationSec": 177,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我充值显示失败，但是扣款了，怎么处理？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "亲爱的玩家，版本更新将于今晚 24 点开始，请提前下线。",
+          "atSec": 26,
+          "gapSec": 26
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我是说扣款了没到账！",
+          "atSec": 60,
+          "gapSec": 34
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "感谢您的支持，祝您游戏愉快。",
+          "atSec": 88,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-11-02T23:10:00+08:00",
+      "batchId": "B-2026-11-02",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "off_topic"
+        ],
+        "primaryTag": "off_topic",
+        "note": "坐席未回应扣款问题，改发版本更新公告话术，命中 off_topic，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.88,
+        "needsReview": false,
+        "summary": "用户反馈扣款未到账，坐席以版本更新公告回避，判定答非所问。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "off_topic",
+            "evidenceSeq": 2,
+            "quote": "亲爱的玩家，版本更新将于今晚 24 点开始，请提前下线。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0015",
+      "channel": "phone",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7715",
+        "name": "用户8518"
+      },
+      "startedAt": "2026-10-20T11:24:00+08:00",
+      "durationSec": 118,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "账号被盗了，怎么找回？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您可以关注我们的公众号，领取新手礼包。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我不是要礼包，账号被盗了。",
+          "atSec": 52,
+          "gapSec": 30
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "新手礼包里面有钻石和体力哦。",
+          "atSec": 76,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-20T23:10:00+08:00",
+      "batchId": "B-2026-10-20",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "off_topic"
+        ],
+        "primaryTag": "off_topic",
+        "note": "坐席未回应账号找回诉求，改用礼包推广，命中 off_topic，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.91,
+        "needsReview": false,
+        "summary": "用户咨询账号被盗找回，坐席以领取新手礼包话术回应，判定答非所问。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "off_topic",
+            "evidenceSeq": 2,
+            "quote": "您可以关注我们的公众号，领取新手礼包。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0016",
+      "channel": "online",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7716",
+        "name": "用户8555"
+      },
+      "startedAt": "2026-10-21T17:06:00+08:00",
+      "durationSec": 147,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我想问下，充值的钱能退吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "请提供一下您的角色名和区服。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "角色名 夜航星，区服 S12，我是想问退款。",
+          "atSec": 58,
+          "gapSec": 34
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "感谢您的支持，祝您游戏愉快，再见。",
+          "atSec": 92,
+          "gapSec": 34
+        }
+      ],
+      "importedAt": "2026-10-21T23:10:00+08:00",
+      "batchId": "B-2026-10-21",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "off_topic"
+        ],
+        "primaryTag": "off_topic",
+        "note": "边界样本：连续两轮未回应用户退款核心诉求、直接结束语，命中 off_topic，证据 seq=4。",
+        "complexity": "implicit",
+        "confidence": 0.67,
+        "needsReview": true,
+        "summary": "用户询问退款可行性，坐席收集信息后直接结束会话未回答问题，需人工复核答非所问。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "off_topic",
+            "evidenceSeq": 4,
+            "quote": "感谢您的支持，祝您游戏愉快，再见。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0017",
+      "channel": "ticket",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7717",
+        "name": "用户8592"
+      },
+      "startedAt": "2026-10-22T09:12:00+08:00",
+      "durationSec": 140,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你们客服电话是多少？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您看一下首充礼包，充 6 元可以领限定时装。",
+          "atSec": 18,
+          "gapSec": 18
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我要客服电话，不是礼包。",
+          "atSec": 48,
+          "gapSec": 30
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "限定时装很划算的哦。",
+          "atSec": 72,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-22T23:10:00+08:00",
+      "batchId": "B-2026-10-22",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "off_topic"
+        ],
+        "primaryTag": "off_topic",
+        "note": "坐席未提供客服电话，改用礼包推广，命中 off_topic，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.95,
+        "needsReview": false,
+        "summary": "用户询问客服电话，坐席以首充礼包推广回应，判定答非所问。",
+        "emotion": "calm",
+        "tagEvidence": [
+          {
+            "code": "off_topic",
+            "evidenceSeq": 2,
+            "quote": "您看一下首充礼包，充 6 元可以领限定时装。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0018",
+      "channel": "phone",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7718",
+        "name": "用户8629"
+      },
+      "startedAt": "2026-10-23T13:40:00+08:00",
+      "durationSec": 159,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我多充了一笔，能退款吗？会收手续费吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "退款手续费是 20%，这个是公司规定。",
+          "atSec": 26,
+          "gapSec": 26
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "20%？这么多？",
+          "atSec": 58,
+          "gapSec": 32
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "对，退款都要扣，您确定要退吗？",
+          "atSec": 78,
+          "gapSec": 20
+        }
+      ],
+      "importedAt": "2026-10-23T23:10:00+08:00",
+      "batchId": "B-2026-10-23",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "wrong_knowledge"
+        ],
+        "primaryTag": "wrong_knowledge",
+        "note": "知识库退款规则为不收取手续费，坐席错误陈述「退款手续费是 20%」，命中 wrong_knowledge，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.97,
+        "needsReview": false,
+        "summary": "用户咨询退款手续费，坐席错误陈述 20% 费率，判定知识错误。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "wrong_knowledge",
+            "evidenceSeq": 2,
+            "quote": "退款手续费是 20%，这个是公司规定。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0019",
+      "channel": "online",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7719",
+        "name": "用户8666"
+      },
+      "startedAt": "2026-10-24T19:32:00+08:00",
+      "durationSec": 160,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "首充双倍返利到底返多少？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "首充双倍返利是返 300% 的钻石，很划算。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "真的假的？",
+          "atSec": 46,
+          "gapSec": 22
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "是的，充多少返多少，上限也很高。",
+          "atSec": 66,
+          "gapSec": 20
+        }
+      ],
+      "importedAt": "2026-10-24T23:10:00+08:00",
+      "batchId": "B-2026-10-24",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "wrong_knowledge"
+        ],
+        "primaryTag": "wrong_knowledge",
+        "note": "官方首充规则为返还 100% 等值钻石，坐席错误陈述「300%」，命中 wrong_knowledge，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.86,
+        "needsReview": false,
+        "summary": "用户咨询首充返利比例，坐席错误陈述为 300%，判定知识错误。",
+        "emotion": "calm",
+        "tagEvidence": [
+          {
+            "code": "wrong_knowledge",
+            "evidenceSeq": 2,
+            "quote": "首充双倍返利是返 300% 的钻石，很划算。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0020",
+      "channel": "ticket",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7720",
+        "name": "用户8703"
+      },
+      "startedAt": "2026-10-25T10:05:00+08:00",
+      "durationSec": 119,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "新版本 3.0 什么时候上线？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "新版本 3.0 会在 11 月 30 日上线，已经定档了。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我看公告写的是 12 月？",
+          "atSec": 52,
+          "gapSec": 30
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "公告是旧的，以我说的为准。",
+          "atSec": 72,
+          "gapSec": 20
+        }
+      ],
+      "importedAt": "2026-10-25T23:10:00+08:00",
+      "batchId": "B-2026-10-25",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "wrong_knowledge"
+        ],
+        "primaryTag": "wrong_knowledge",
+        "note": "边界样本：坐席称「11 月 30 日上线」与官方公告 12 月上线冲突，命中 wrong_knowledge，证据 seq=2，需人工复核。",
+        "complexity": "implicit",
+        "confidence": 0.61,
+        "needsReview": true,
+        "summary": "用户询问新版本上线时间，坐席给出与官方公告冲突的时间，需人工复核知识错误。",
+        "emotion": "calm",
+        "tagEvidence": [
+          {
+            "code": "wrong_knowledge",
+            "evidenceSeq": 2,
+            "quote": "新版本 3.0 会在 11 月 30 日上线，已经定档了。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0021",
+      "channel": "phone",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7721",
+        "name": "用户8740"
+      },
+      "startedAt": "2026-10-26T15:18:00+08:00",
+      "durationSec": 126,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "退款提交后多久到账？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "退款要 7 个工作日才能到账，走银行流程。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "这么久吗？",
+          "atSec": 50,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "对，最快也是 7 个工作日。",
+          "atSec": 66,
+          "gapSec": 16
+        }
+      ],
+      "importedAt": "2026-10-26T23:10:00+08:00",
+      "batchId": "B-2026-10-26",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "wrong_knowledge"
+        ],
+        "primaryTag": "wrong_knowledge",
+        "note": "边界样本：官方规则为 24 小时内原路退回，坐席错误陈述「7 个工作日」，命中 wrong_knowledge，证据 seq=2，需人工复核。",
+        "complexity": "implicit",
+        "confidence": 0.64,
+        "needsReview": true,
+        "summary": "用户咨询退款到账时间，坐席给出错误时长，需人工复核知识错误。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "wrong_knowledge",
+            "evidenceSeq": 2,
+            "quote": "退款要 7 个工作日才能到账，走银行流程。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0022",
+      "channel": "online",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7722",
+        "name": "用户8777"
+      },
+      "startedAt": "2026-10-27T21:10:00+08:00",
+      "durationSec": 143,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "活动每天能免费抽几次卡？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "活动期间每天 2 次免费抽卡，凌晨 5 点刷新。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "公告写的是 1 次啊。",
+          "atSec": 50,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "那是给新人的，老玩家是 2 次。",
+          "atSec": 70,
+          "gapSec": 20
+        }
+      ],
+      "importedAt": "2026-10-27T23:10:00+08:00",
+      "batchId": "B-2026-10-27",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "wrong_knowledge"
+        ],
+        "primaryTag": "wrong_knowledge",
+        "note": "官方活动规则为每天 1 次免费抽卡，坐席错误陈述「每天 2 次免费抽卡」，命中 wrong_knowledge，证据 seq=2。",
+        "complexity": "explicit",
+        "confidence": 0.93,
+        "needsReview": false,
+        "summary": "用户咨询活动免费抽卡次数，坐席错误陈述为每天 2 次，判定知识错误。",
+        "emotion": "calm",
+        "tagEvidence": [
+          {
+            "code": "wrong_knowledge",
+            "evidenceSeq": 2,
+            "quote": "活动期间每天 2 次免费抽卡，凌晨 5 点刷新。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0023",
+      "channel": "ticket",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7723",
+        "name": "用户8814"
+      },
+      "startedAt": "2026-10-28T11:24:00+08:00",
+      "durationSec": 426,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你好，我想查一下我的订单有没有发货。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "稍等，我帮您查一下。",
+          "atSec": 35,
+          "gapSec": 35
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的。",
+          "atSec": 60,
+          "gapSec": 25
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "查到了，订单已经发货，物流单号 SF****8821。",
+          "atSec": 305,
+          "gapSec": 245
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好的，谢谢。",
+          "atSec": 340,
+          "gapSec": 35
+        }
+      ],
+      "importedAt": "2026-10-28T23:10:00+08:00",
+      "batchId": "B-2026-10-28",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "timeout"
+        ],
+        "primaryTag": "timeout",
+        "note": "坐席回复间隔 245s（>180s），命中 timeout，证据 seq=4（与 seq=3 的 atSec 差值 245s）。",
+        "complexity": "explicit",
+        "confidence": 0.95,
+        "needsReview": false,
+        "summary": "用户查询订单发货情况，坐席第二次回复间隔 245 秒，判定响应超时。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "timeout",
+            "evidenceSeq": 4,
+            "quote": "查到了，订单已经发货，物流单号 SF****8821。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0024",
+      "channel": "phone",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7724",
+        "name": "用户8851"
+      },
+      "startedAt": "2026-10-29T17:06:00+08:00",
+      "durationSec": 554,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我账号登录提示密码错误，重置了好几遍还是不行。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供账号 ID。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "ID 是 882177。",
+          "atSec": 50,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "已经帮您重置密码，请用新密码登录。",
+          "atSec": 420,
+          "gapSec": 370
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好了，谢谢。",
+          "atSec": 455,
+          "gapSec": 35
+        }
+      ],
+      "importedAt": "2026-10-29T23:10:00+08:00",
+      "batchId": "B-2026-10-29",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "timeout"
+        ],
+        "primaryTag": "timeout",
+        "note": "坐席回复间隔 370s（>180s），命中 timeout，证据 seq=4（与 seq=3 的 atSec 差值 370s）。",
+        "complexity": "explicit",
+        "confidence": 0.97,
+        "needsReview": false,
+        "summary": "用户求助密码重置，坐席回复间隔 370 秒，判定响应超时。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "timeout",
+            "evidenceSeq": 4,
+            "quote": "已经帮您重置密码，请用新密码登录。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0025",
+      "channel": "online",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7725",
+        "name": "用户8888"
+      },
+      "startedAt": "2026-10-30T09:12:00+08:00",
+      "durationSec": 672,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我想改一下绑定邮箱。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "请提供原邮箱和新邮箱。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "原邮箱 u***21@example.com，新邮箱 u***88@example.com。",
+          "atSec": 55,
+          "gapSec": 35
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "好的，正在为您处理。",
+          "atSec": 575,
+          "gapSec": 520
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好了吗？",
+          "atSec": 600,
+          "gapSec": 25
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "已经修改成功。",
+          "atSec": 620,
+          "gapSec": 20
+        }
+      ],
+      "importedAt": "2026-10-30T23:10:00+08:00",
+      "batchId": "B-2026-10-30",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "timeout"
+        ],
+        "primaryTag": "timeout",
+        "note": "坐席回复间隔 520s（>180s），命中 timeout，证据 seq=4（与 seq=3 的 atSec 差值 520s）。",
+        "complexity": "explicit",
+        "confidence": 0.86,
+        "needsReview": false,
+        "summary": "用户申请换绑邮箱，坐席首次响应间隔 520 秒，判定响应超时。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "timeout",
+            "evidenceSeq": 4,
+            "quote": "好的，正在为您处理。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0026",
+      "channel": "ticket",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7726",
+        "name": "用户8925"
+      },
+      "startedAt": "2026-10-31T13:40:00+08:00",
+      "durationSec": 335,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "这个活动奖励怎么还没发？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "稍等，我核实一下。",
+          "atSec": 18,
+          "gapSec": 18
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "嗯。",
+          "atSec": 40,
+          "gapSec": 22
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "核实完了，奖励会在 24 小时内补发。",
+          "atSec": 248,
+          "gapSec": 208
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好。",
+          "atSec": 270,
+          "gapSec": 22
+        }
+      ],
+      "importedAt": "2026-10-31T23:10:00+08:00",
+      "batchId": "B-2026-10-31",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "timeout"
+        ],
+        "primaryTag": "timeout",
+        "note": "坐席回复间隔 208s（>180s），命中 timeout，证据 seq=4（与 seq=3 的 atSec 差值 208s）。",
+        "complexity": "explicit",
+        "confidence": 0.88,
+        "needsReview": false,
+        "summary": "用户催活动奖励补发，坐席核实回复间隔 208 秒，判定响应超时。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "timeout",
+            "evidenceSeq": 4,
+            "quote": "核实完了，奖励会在 24 小时内补发。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0027",
+      "channel": "phone",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7727",
+        "name": "用户8962"
+      },
+      "startedAt": "2026-11-01T19:32:00+08:00",
+      "durationSec": 208,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你好，我买的礼包没收到。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供订单号。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "SO2026****3344。",
+          "atSec": 50,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "订单显示已发放，请在背包查看。",
+          "atSec": 76,
+          "gapSec": 26
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "背包真的没有，你们是不是在骗人？我要投诉！",
+          "atSec": 108,
+          "gapSec": 32
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "我再帮您核实一下，请稍等。",
+          "atSec": 130,
+          "gapSec": 22
+        }
+      ],
+      "importedAt": "2026-11-01T23:10:00+08:00",
+      "batchId": "B-2026-11-01",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "escalation"
+        ],
+        "primaryTag": "escalation",
+        "note": "用户明确表示「我要投诉」，情绪由平静转愤怒，命中 escalation，证据 seq=5。",
+        "complexity": "explicit",
+        "confidence": 0.91,
+        "needsReview": false,
+        "summary": "用户礼包未收到，坐席机械答复后用户由平静转为愤怒并投诉，判定情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "背包真的没有，你们是不是在骗人？我要投诉！"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0028",
+      "channel": "online",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7728",
+        "name": "用户8999"
+      },
+      "startedAt": "2026-11-02T10:05:00+08:00",
+      "durationSec": 181,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我的角色被误封了，怎么回事？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，封禁原因需要人工审核，请提交申诉。",
+          "atSec": 26,
+          "gapSec": 26
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我提交了三次都没人理，我要去 12315 投诉你们。",
+          "atSec": 62,
+          "gapSec": 36
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "申诉会按顺序处理，请您耐心等待。",
+          "atSec": 90,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-11-02T23:10:00+08:00",
+      "batchId": "B-2026-11-02",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "escalation"
+        ],
+        "primaryTag": "escalation",
+        "note": "用户提及「12315 投诉」，命中 escalation，证据 seq=3。",
+        "complexity": "explicit",
+        "confidence": 0.93,
+        "needsReview": false,
+        "summary": "用户申诉角色封禁无回应，升级为 12315 投诉威胁，判定情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "escalation",
+            "evidenceSeq": 3,
+            "quote": "我提交了三次都没人理，我要去 12315 投诉你们。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0029",
+      "channel": "ticket",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7729",
+        "name": "用户9036"
+      },
+      "startedAt": "2026-10-20T15:18:00+08:00",
+      "durationSec": 128,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "这个新版本的 bug 修复了吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "已反馈给技术团队，正在处理中。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "处理一周了还没好，我直接去媒体曝光你们。",
+          "atSec": 58,
+          "gapSec": 34
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "非常抱歉，我会帮您加急反馈。",
+          "atSec": 84,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-20T23:10:00+08:00",
+      "batchId": "B-2026-10-20",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "escalation"
+        ],
+        "primaryTag": "escalation",
+        "note": "用户提及「媒体曝光」，命中 escalation，证据 seq=3。",
+        "complexity": "explicit",
+        "confidence": 0.95,
+        "needsReview": false,
+        "summary": "用户反馈版本 bug 长期未修，升级为媒体曝光威胁，判定情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "escalation",
+            "evidenceSeq": 3,
+            "quote": "处理一周了还没好，我直接去媒体曝光你们。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0030",
+      "channel": "phone",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7730",
+        "name": "用户9073"
+      },
+      "startedAt": "2026-10-21T21:10:00+08:00",
+      "durationSec": 145,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "客服，我的充值没到账。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "已经提交补单，预计 24 小时内到账。",
+          "atSec": 26,
+          "gapSec": 26
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "每次都这么说，不解决我就退游，还要去论坛曝光。",
+          "atSec": 60,
+          "gapSec": 34
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "理解您的心情，我会继续跟进。",
+          "atSec": 88,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-21T23:10:00+08:00",
+      "batchId": "B-2026-10-21",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "escalation"
+        ],
+        "primaryTag": "escalation",
+        "note": "用户提及「退游」「曝光」，命中 escalation，证据 seq=3。",
+        "complexity": "explicit",
+        "confidence": 0.97,
+        "needsReview": false,
+        "summary": "用户充值未到账，坐席重复模板答复后用户提及退游与曝光，判定情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "escalation",
+            "evidenceSeq": 3,
+            "quote": "每次都这么说，不解决我就退游，还要去论坛曝光。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0031",
+      "channel": "online",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7731",
+        "name": "用户9110"
+      },
+      "startedAt": "2026-10-22T11:24:00+08:00",
+      "durationSec": 200,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我的订单多扣了一次钱，帮我处理下。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供订单号。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "SO2026****7711。",
+          "atSec": 46,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "您自己付款的时候不会看一下订单吗？",
+          "atSec": 80,
+          "gapSec": 34
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "你这是什么意思？我要投诉你！",
+          "atSec": 112,
+          "gapSec": 32
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "投诉就投诉，随便。",
+          "atSec": 130,
+          "gapSec": 18
+        }
+      ],
+      "importedAt": "2026-10-22T23:10:00+08:00",
+      "batchId": "B-2026-10-22",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude",
+          "escalation"
+        ],
+        "primaryTag": "attitude",
+        "note": "坐席「您自己付款的时候不会看一下订单吗」命中 attitude（seq=4）；用户「我要投诉你」命中 escalation（seq=5）。primaryTag=attitude（25>20）。",
+        "complexity": "explicit",
+        "confidence": 0.86,
+        "needsReview": false,
+        "summary": "坐席嘲讽用户付款操作，用户被激怒表示投诉，判定态度违规并情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "您自己付款的时候不会看一下订单吗？"
+          },
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "你这是什么意思？我要投诉你！"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0032",
+      "channel": "ticket",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7732",
+        "name": "用户9147"
+      },
+      "startedAt": "2026-10-23T17:06:00+08:00",
+      "durationSec": 183,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "麻烦帮我查一下礼包为什么没发。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "查不了，系统没显示。",
+          "atSec": 18,
+          "gapSec": 18
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "那能不能转人工帮忙看看？",
+          "atSec": 46,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "我就是人工，你爱信不信。",
+          "atSec": 72,
+          "gapSec": 26
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "行，我去 12315 投诉。",
+          "atSec": 100,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-23T23:10:00+08:00",
+      "batchId": "B-2026-10-23",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude",
+          "escalation"
+        ],
+        "primaryTag": "attitude",
+        "note": "坐席「你爱信不信」命中 attitude（seq=4）；用户「去 12315 投诉」命中 escalation（seq=5）。primaryTag=attitude。",
+        "complexity": "explicit",
+        "confidence": 0.88,
+        "needsReview": false,
+        "summary": "坐席以「爱信不信」怼用户，用户升级为 12315 投诉，判定态度违规并情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 4,
+            "quote": "我就是人工，你爱信不信。"
+          },
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "行，我去 12315 投诉。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0033",
+      "channel": "phone",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7733",
+        "name": "用户9184"
+      },
+      "startedAt": "2026-10-24T09:12:00+08:00",
+      "durationSec": 196,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我这个月已经找了三次客服了，问题还没解决。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "那您自己不会反思一下是不是操作有问题？",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我操作没问题，你们就是不解决！",
+          "atSec": 50,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "随便您，反正我说了没问题。",
+          "atSec": 76,
+          "gapSec": 26
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "我要找你们领导投诉。",
+          "atSec": 100,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-24T23:10:00+08:00",
+      "batchId": "B-2026-10-24",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "attitude",
+          "escalation"
+        ],
+        "primaryTag": "attitude",
+        "note": "坐席「不会反思一下」命中 attitude（seq=2）；用户「找你们领导投诉」命中 escalation（seq=5）。primaryTag=attitude。",
+        "complexity": "explicit",
+        "confidence": 0.91,
+        "needsReview": false,
+        "summary": "坐席反问用户让其反思，用户表示找领导投诉，判定态度违规并情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "attitude",
+            "evidenceSeq": 2,
+            "quote": "那您自己不会反思一下是不是操作有问题？"
+          },
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "我要找你们领导投诉。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0034",
+      "channel": "online",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7734",
+        "name": "用户9221"
+      },
+      "startedAt": "2026-10-25T13:40:00+08:00",
+      "durationSec": 145,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "问题已经解决了，谢谢。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "那麻烦您去评价一下，给个五星好评，截图发我。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "凭什么要给好评？不给我就不处理了？",
+          "atSec": 50,
+          "gapSec": 30
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "这是我们的考核，您配合一下嘛。",
+          "atSec": 72,
+          "gapSec": 22
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "你们这是强迫好评，我要投诉到平台。",
+          "atSec": 96,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-25T23:10:00+08:00",
+      "batchId": "B-2026-10-25",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden",
+          "escalation"
+        ],
+        "primaryTag": "forbidden",
+        "note": "坐席「五星好评」「截图发我」命中 forbidden（seq=2）；用户「投诉到平台」命中 escalation（seq=5）。primaryTag=forbidden。",
+        "complexity": "explicit",
+        "confidence": 0.93,
+        "needsReview": false,
+        "summary": "坐席强迫用户给好评并索要截图，用户表示投诉，判定违规话术并情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "那麻烦您去评价一下，给个五星好评，截图发我。"
+          },
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "你们这是强迫好评，我要投诉到平台。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0035",
+      "channel": "ticket",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7735",
+        "name": "用户9258"
+      },
+      "startedAt": "2026-10-26T19:32:00+08:00",
+      "durationSec": 160,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我的号能卖吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "官方不让交易，但您私下转账 300 给我，我帮您走内部渠道转。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "还要私下转账？你们不会是骗子吧。",
+          "atSec": 54,
+          "gapSec": 30
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "放心，我这边操作很多次了。",
+          "atSec": 74,
+          "gapSec": 20
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "我不转了，我要去曝光你们这种行为。",
+          "atSec": 98,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-26T23:10:00+08:00",
+      "batchId": "B-2026-10-26",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "forbidden",
+          "escalation"
+        ],
+        "primaryTag": "forbidden",
+        "note": "边界样本：坐席「私下转账 300 给我」「内部渠道」命中 forbidden（seq=2）；用户「曝光你们这种行为」命中 escalation（seq=5）。primaryTag=forbidden。",
+        "complexity": "implicit",
+        "confidence": 0.7,
+        "needsReview": true,
+        "summary": "坐席引导私下转账走内部渠道，用户意识到风险后表示曝光，需人工复核违规话术与情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "forbidden",
+            "evidenceSeq": 2,
+            "quote": "官方不让交易，但您私下转账 300 给我，我帮您走内部渠道转。"
+          },
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "我不转了，我要去曝光你们这种行为。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0036",
+      "channel": "phone",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7736",
+        "name": "用户9295"
+      },
+      "startedAt": "2026-10-27T10:05:00+08:00",
+      "durationSec": 430,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你好，我申请的退款审核到哪一步了？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，我们最近上线了新活动，欢迎体验。",
+          "atSec": 30,
+          "gapSec": 30
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "我问退款进度。",
+          "atSec": 64,
+          "gapSec": 34
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "活动期间充值有双倍奖励哦。",
+          "atSec": 300,
+          "gapSec": 236
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "能不能好好回答我的问题？",
+          "atSec": 335,
+          "gapSec": 35
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "请您关注官方公告。",
+          "atSec": 355,
+          "gapSec": 20
+        }
+      ],
+      "importedAt": "2026-10-27T23:10:00+08:00",
+      "batchId": "B-2026-10-27",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "off_topic",
+          "timeout"
+        ],
+        "primaryTag": "off_topic",
+        "note": "坐席以活动推广回避退款诉求，命中 off_topic（seq=2）；回复间隔 236s（>180s），命中 timeout（seq=4）。primaryTag=off_topic（15>10）。",
+        "complexity": "explicit",
+        "confidence": 0.97,
+        "needsReview": false,
+        "summary": "用户催退款进度，坐席以活动推广回避且回复间隔 236 秒，判定答非所问并响应超时。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "off_topic",
+            "evidenceSeq": 2,
+            "quote": "您好，我们最近上线了新活动，欢迎体验。"
+          },
+          {
+            "code": "timeout",
+            "evidenceSeq": 4,
+            "quote": "活动期间充值有双倍奖励哦。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0037",
+      "channel": "online",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7737",
+        "name": "用户9332"
+      },
+      "startedAt": "2026-10-28T15:18:00+08:00",
+      "durationSec": 388,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我的账号被限制了，说自己看公告，公告在哪？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供您的角色 ID。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "ID 7731，我问的是限制原因。",
+          "atSec": 55,
+          "gapSec": 33
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "这边建议您先看活动规则，感谢您的支持。",
+          "atSec": 270,
+          "gapSec": 215
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "你们就这样敷衍？",
+          "atSec": 300,
+          "gapSec": 30
+        }
+      ],
+      "importedAt": "2026-10-28T23:10:00+08:00",
+      "batchId": "B-2026-10-28",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "off_topic",
+          "timeout"
+        ],
+        "primaryTag": "off_topic",
+        "note": "边界样本：坐席以活动规则回避限制原因，命中 off_topic（seq=4）；回复间隔 215s（>180s），命中 timeout（seq=4）。primaryTag=off_topic。",
+        "complexity": "implicit",
+        "confidence": 0.58,
+        "needsReview": true,
+        "summary": "用户追问账号限制原因，坐席回避并回复超时，需人工复核答非所问与超时。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "off_topic",
+            "evidenceSeq": 4,
+            "quote": "这边建议您先看活动规则，感谢您的支持。"
+          },
+          {
+            "code": "timeout",
+            "evidenceSeq": 4,
+            "quote": "这边建议您先看活动规则，感谢您的支持。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0038",
+      "channel": "ticket",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7738",
+        "name": "用户9369"
+      },
+      "startedAt": "2026-10-29T21:10:00+08:00",
+      "durationSec": 371,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我提交的申诉三天没回复了。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "请提供申诉单号。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "AP-2026-****771。",
+          "atSec": 48,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "帮您查询一下。",
+          "atSec": 70,
+          "gapSec": 22
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "都 5 分钟了，你们效率太低了，我要投诉！",
+          "atSec": 120,
+          "gapSec": 50
+        },
+        {
+          "seq": 6,
+          "role": "agent",
+          "text": "查询到处理结果，已通过。",
+          "atSec": 330,
+          "gapSec": 210
+        }
+      ],
+      "importedAt": "2026-10-29T23:10:00+08:00",
+      "batchId": "B-2026-10-29",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "escalation",
+          "timeout"
+        ],
+        "primaryTag": "escalation",
+        "note": "用户「我要投诉」命中 escalation（seq=5）；坐席回复间隔 210s（>180s），命中 timeout（seq=6）。primaryTag=escalation（20>10）。",
+        "complexity": "explicit",
+        "confidence": 0.88,
+        "needsReview": false,
+        "summary": "用户催申诉结果并情绪升级，坐席回复间隔 210 秒，判定情绪升级并响应超时。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "都 5 分钟了，你们效率太低了，我要投诉！"
+          },
+          {
+            "code": "timeout",
+            "evidenceSeq": 6,
+            "quote": "查询到处理结果，已通过。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0039",
+      "channel": "phone",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7739",
+        "name": "用户9406"
+      },
+      "startedAt": "2026-10-30T11:24:00+08:00",
+      "durationSec": 158,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我多充的 328 能退吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "可以退，但是退款手续费是 20%。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "你们之前说退款免费，现在扣 20%？",
+          "atSec": 54,
+          "gapSec": 30
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "这是系统自动扣的，我们也没办法。",
+          "atSec": 78,
+          "gapSec": 24
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "乱收费，我要投诉你们！",
+          "atSec": 104,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-30T23:10:00+08:00",
+      "batchId": "B-2026-10-30",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "wrong_knowledge",
+          "escalation"
+        ],
+        "primaryTag": "wrong_knowledge",
+        "note": "坐席「退款手续费是 20%」命中 wrong_knowledge（seq=2）；用户「我要投诉你们」命中 escalation（seq=5）。primaryTag=wrong_knowledge（25>20）。",
+        "complexity": "explicit",
+        "confidence": 0.91,
+        "needsReview": false,
+        "summary": "坐席错误陈述退款手续费，用户不满乱收费并投诉，判定知识错误并情绪升级。",
+        "emotion": "angry",
+        "tagEvidence": [
+          {
+            "code": "wrong_knowledge",
+            "evidenceSeq": 2,
+            "quote": "可以退，但是退款手续费是 20%。"
+          },
+          {
+            "code": "escalation",
+            "evidenceSeq": 5,
+            "quote": "乱收费，我要投诉你们！"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0040",
+      "channel": "online",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7740",
+        "name": "用户9443"
+      },
+      "startedAt": "2026-10-31T17:06:00+08:00",
+      "durationSec": 149,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我申请退款了，钱多久能到？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "退款一般要 7 个工作日。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "能不能具体一点，是 7 个自然日还是工作日？",
+          "atSec": 54,
+          "gapSec": 32
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "您先关注游戏内公告吧，公告里都有。",
+          "atSec": 82,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-31T23:10:00+08:00",
+      "batchId": "B-2026-10-31",
+      "labels": {
+        "verdict": "violation",
+        "tags": [
+          "wrong_knowledge",
+          "off_topic"
+        ],
+        "primaryTag": "wrong_knowledge",
+        "note": "边界样本：坐席「7 个工作日」命中 wrong_knowledge（seq=2）；用户追问后坐席以「关注公告」回避，命中 off_topic（seq=4）。primaryTag=wrong_knowledge。",
+        "complexity": "implicit",
+        "confidence": 0.67,
+        "needsReview": true,
+        "summary": "坐席给出错误退款时长，用户追问细节时坐席回避，需人工复核知识错误与答非所问。",
+        "emotion": "anxious",
+        "tagEvidence": [
+          {
+            "code": "wrong_knowledge",
+            "evidenceSeq": 2,
+            "quote": "退款一般要 7 个工作日。"
+          },
+          {
+            "code": "off_topic",
+            "evidenceSeq": 4,
+            "quote": "您先关注游戏内公告吧，公告里都有。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qc-0041",
+      "channel": "ticket",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7741",
+        "name": "用户9480"
+      },
+      "startedAt": "2026-11-01T09:12:00+08:00",
+      "durationSec": 198,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你好，我昨天充值的 648 显示成功，但游戏里没收到钻石，能帮我查一下吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供一下订单号或支付流水号。",
+          "atSec": 26,
+          "gapSec": 26
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "订单号 SO2026****2210。",
+          "atSec": 58,
+          "gapSec": 32
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "查到了，这笔订单因为支付渠道延迟，已经补发到账，请在邮件里领取。",
+          "atSec": 92,
+          "gapSec": 34
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "收到了，谢谢。",
+          "atSec": 118,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-11-01T23:10:00+08:00",
+      "batchId": "B-2026-11-01",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席按流程核实并告知补发，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.9,
+        "needsReview": false,
+        "summary": "用户查询充值到账，坐席核实订单并说明补发，问题解决，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0042",
+      "channel": "phone",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7742",
+        "name": "用户9517"
+      },
+      "startedAt": "2026-11-02T13:40:00+08:00",
+      "durationSec": 197,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我想换绑手机号，原来的号码不用了。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，换绑需要先完成实名验证，我这边帮您发起流程。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "需要准备什么材料？",
+          "atSec": 52,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "请提供身份证后四位和最近一笔充值订单号即可。",
+          "atSec": 80,
+          "gapSec": 28
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好的，稍后提供。",
+          "atSec": 104,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-11-02T23:10:00+08:00",
+      "batchId": "B-2026-11-02",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席给出换绑所需材料与办理路径，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.92,
+        "needsReview": false,
+        "summary": "用户咨询换绑手机号，坐席告知材料与流程，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0043",
+      "channel": "online",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7743",
+        "name": "用户9554"
+      },
+      "startedAt": "2026-10-20T19:32:00+08:00",
+      "durationSec": 156,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "活动奖励我等了两天还没发，有点着急。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，本次活动奖励在活动结束后 24 小时内统一发放，我帮您确认一下。",
+          "atSec": 28,
+          "gapSec": 28
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的，麻烦帮我看看。",
+          "atSec": 56,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "已确认您的奖励会在今天 18 点前补发，请留意邮件。",
+          "atSec": 84,
+          "gapSec": 28
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好的，那我等等。",
+          "atSec": 110,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-20T23:10:00+08:00",
+      "batchId": "B-2026-10-20",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "边界正常样本：用户略带焦虑，坐席按规则说明发放时间并承诺补发，未出现违规话术，需人工复核是否判违规。",
+        "complexity": "implicit",
+        "confidence": 0.66,
+        "needsReview": true,
+        "summary": "用户催活动奖励发放，坐席核实补发时间并安抚，需人工复核是否构成违规。",
+        "emotion": "anxious",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0044",
+      "channel": "ticket",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7744",
+        "name": "用户9591"
+      },
+      "startedAt": "2026-10-21T10:05:00+08:00",
+      "durationSec": 153,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "新版本什么时候上线？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，3.0 版本计划在 11 月 5 日 10 点上线，更新公告已发在官网。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的，会有什么新内容？",
+          "atSec": 44,
+          "gapSec": 24
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "会开放新地图和新的副本玩法，具体可以看官网公告。",
+          "atSec": 70,
+          "gapSec": 26
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好的，谢谢。",
+          "atSec": 94,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-21T23:10:00+08:00",
+      "batchId": "B-2026-10-21",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席回答版本时间与内容，未出现知识错误，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.96,
+        "needsReview": false,
+        "summary": "用户咨询新版本上线时间与内容，坐席按公告回答，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0045",
+      "channel": "phone",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7745",
+        "name": "用户9628"
+      },
+      "startedAt": "2026-10-22T15:18:00+08:00",
+      "durationSec": 176,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我多充了一笔，能退款吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，未消耗的钻石可以申请退款，原路退回，24 小时内到账。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "那手续费怎么算？",
+          "atSec": 54,
+          "gapSec": 30
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "退款不收取手续费，您可以在充值记录里提交申请。",
+          "atSec": 80,
+          "gapSec": 26
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好的，我去试试。",
+          "atSec": 104,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-22T23:10:00+08:00",
+      "batchId": "B-2026-10-22",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "边界正常样本：坐席如实说明退款不收取手续费、24 小时内原路退回，未出现错误承诺，需人工复核。",
+        "complexity": "implicit",
+        "confidence": 0.72,
+        "needsReview": true,
+        "summary": "用户咨询多充退款规则，坐席说明不收费与到账时间，需人工复核是否构成违规。",
+        "emotion": "anxious",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0046",
+      "channel": "online",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7746",
+        "name": "用户9665"
+      },
+      "startedAt": "2026-10-23T21:10:00+08:00",
+      "durationSec": 189,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "礼包码兑换失败，提示无效。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供礼包码，我帮您核对格式。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "GIFT-9K2M-****。",
+          "atSec": 50,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "这个码已经过期了，我给您补发一个新的礼包码：NEW-****-8821。",
+          "atSec": 78,
+          "gapSec": 28
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "兑换成功了，谢谢。",
+          "atSec": 104,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-23T23:10:00+08:00",
+      "batchId": "B-2026-10-23",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席核对礼包码并补发，处理闭环，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.9,
+        "needsReview": false,
+        "summary": "用户礼包码兑换失败，坐席核对后补发新码，问题解决，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0047",
+      "channel": "ticket",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7747",
+        "name": "用户9702"
+      },
+      "startedAt": "2026-10-24T11:24:00+08:00",
+      "durationSec": 204,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我不小心把角色删除了，还能恢复吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，角色删除后 7 天内可以申请恢复，我帮您提交。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的，麻烦快点。",
+          "atSec": 50,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "已经提交恢复申请，预计 10 分钟内完成，请重新登录查看。",
+          "atSec": 78,
+          "gapSec": 28
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "恢复好了，谢谢。",
+          "atSec": 106,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-24T23:10:00+08:00",
+      "batchId": "B-2026-10-24",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席按规则说明恢复时限并提交申请，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.92,
+        "needsReview": false,
+        "summary": "用户误删角色求助恢复，坐席提交恢复申请并告知完成时间，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0048",
+      "channel": "phone",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7748",
+        "name": "用户9739"
+      },
+      "startedAt": "2026-10-25T17:06:00+08:00",
+      "durationSec": 129,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "跨服匹配一直匹配不到人。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请确认网络正常，我这边帮您重新排队试试。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "网络没问题。",
+          "atSec": 50,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "已为您重置匹配队列，请稍后再试，如果还不行可以提交工单。",
+          "atSec": 78,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-25T23:10:00+08:00",
+      "batchId": "B-2026-10-25",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席给出排查步骤与后续路径，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.94,
+        "needsReview": false,
+        "summary": "用户跨服匹配不到人，坐席排查网络并重置队列，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0049",
+      "channel": "online",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7749",
+        "name": "用户9776"
+      },
+      "startedAt": "2026-10-26T09:12:00+08:00",
+      "durationSec": 138,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我提交的工单现在什么进度？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请提供工单号，我帮您查询。",
+          "atSec": 20,
+          "gapSec": 20
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "TK-2026-****331。",
+          "atSec": 46,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "工单已分配处理人，预计今天 18 点前回复，您可以留意站内消息。",
+          "atSec": 74,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-26T23:10:00+08:00",
+      "batchId": "B-2026-10-26",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席提供工单进度与预计回复时间，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.96,
+        "needsReview": false,
+        "summary": "用户查询工单进度，坐席查询并告知处理人与预计时间，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0050",
+      "channel": "ticket",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7750",
+        "name": "用户9813"
+      },
+      "startedAt": "2026-10-27T13:40:00+08:00",
+      "durationSec": 155,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我想换绑邮箱，但是原邮箱登不上了。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，这种情况需要人工审核，请提供账号 ID 和最近充值记录。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "账号 ID 882177，最近充值 328 元。",
+          "atSec": 52,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "已提交人工审核，预计 2 小时内处理完成。",
+          "atSec": 78,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-27T23:10:00+08:00",
+      "batchId": "B-2026-10-27",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席说明人工审核所需信息与时限，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.98,
+        "needsReview": false,
+        "summary": "用户咨询换绑邮箱，坐席走人工审核流程并告知时限，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0051",
+      "channel": "phone",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7751",
+        "name": "用户9850"
+      },
+      "startedAt": "2026-10-28T19:32:00+08:00",
+      "durationSec": 196,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "游戏最近有点卡，打副本总掉帧。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，方便提供一下机型和系统版本吗？我帮您排查。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "手机是某品牌旗舰，系统最新版本。",
+          "atSec": 52,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "建议您在设置里关闭高帧率选项，我这边也帮您记录反馈给技术团队。",
+          "atSec": 80,
+          "gapSec": 28
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好多了，谢谢。",
+          "atSec": 106,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-28T23:10:00+08:00",
+      "batchId": "B-2026-10-28",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "边界正常样本：用户抱怨卡顿但坐席积极排查并记录反馈，无违规话术，需人工复核。",
+        "complexity": "implicit",
+        "confidence": 0.6,
+        "needsReview": true,
+        "summary": "用户反馈游戏卡顿，坐席排查并给出优化建议，需人工复核是否构成违规。",
+        "emotion": "anxious",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0052",
+      "channel": "online",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7752",
+        "name": "用户9887"
+      },
+      "startedAt": "2026-10-29T10:05:00+08:00",
+      "durationSec": 151,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你好，我想举报一个外挂，竞技场里有人开自动瞄准。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，感谢举报，请提供对方角色名和区服，我帮您提交核验。",
+          "atSec": 26,
+          "gapSec": 26
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "角色名 影刃，区服 S03。",
+          "atSec": 54,
+          "gapSec": 28
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "已提交核验，核实后会按规则处理，处理结果会通过站内信通知您。",
+          "atSec": 82,
+          "gapSec": 28
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好的，谢谢。",
+          "atSec": 108,
+          "gapSec": 26
+        }
+      ],
+      "importedAt": "2026-10-29T23:10:00+08:00",
+      "batchId": "B-2026-10-29",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "边界正常样本：用户提及外挂但坐席按流程受理举报，未出现违规话术，需人工复核。",
+        "complexity": "implicit",
+        "confidence": 0.63,
+        "needsReview": true,
+        "summary": "用户举报外挂，坐席记录并说明核验流程，需人工复核是否构成违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0053",
+      "channel": "ticket",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7753",
+        "name": "用户9924"
+      },
+      "startedAt": "2026-10-30T15:18:00+08:00",
+      "durationSec": 134,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "充值都有哪些档位？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，目前有 6 元、30 元、98 元、328 元、648 元五档，首充双倍返利。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "首充双倍是每个档位都有吗？",
+          "atSec": 50,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "首充双倍仅限首次购买的第一个档位，您可以在充值页面看到标识。",
+          "atSec": 78,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-30T23:10:00+08:00",
+      "batchId": "B-2026-10-30",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席准确说明档位与首充双倍规则，无错误陈述，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.94,
+        "needsReview": false,
+        "summary": "用户咨询充值档位与首充规则，坐席准确说明，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0054",
+      "channel": "phone",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7754",
+        "name": "用户9961"
+      },
+      "startedAt": "2026-10-31T21:10:00+08:00",
+      "durationSec": 165,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "我的活动奖励好像漏发了，少了一个宝箱。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，我帮您核对活动进度和发放记录。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的。",
+          "atSec": 46,
+          "gapSec": 24
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "确认漏发，已经为您补发到邮件，请查收。",
+          "atSec": 72,
+          "gapSec": 26
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "收到了，谢谢。",
+          "atSec": 96,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-31T23:10:00+08:00",
+      "batchId": "B-2026-10-31",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席核实漏发并补发邮件，处理闭环，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.96,
+        "needsReview": false,
+        "summary": "用户反馈活动奖励漏发，坐席核实后补发，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0055",
+      "channel": "online",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7755",
+        "name": "用户9998"
+      },
+      "startedAt": "2026-11-01T11:24:00+08:00",
+      "durationSec": 176,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "月卡到期会自动续费吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，月卡不会自动续费，到期后需要手动购买。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "那到期后还有购买入口吗？",
+          "atSec": 46,
+          "gapSec": 24
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "有的，在商城月卡页面可以随时续费。",
+          "atSec": 70,
+          "gapSec": 24
+        },
+        {
+          "seq": 5,
+          "role": "customer",
+          "text": "好的，知道了。",
+          "atSec": 94,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-11-01T23:10:00+08:00",
+      "batchId": "B-2026-11-01",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席准确说明月卡不自动续费及续费入口，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.98,
+        "needsReview": false,
+        "summary": "用户咨询月卡续费规则，坐席准确说明不自动续费，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0056",
+      "channel": "ticket",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7756",
+        "name": "用户8036"
+      },
+      "startedAt": "2026-11-02T17:06:00+08:00",
+      "durationSec": 165,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "你们官方客服电话是多少？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，官方客服热线是 400-****-1234，服务时间是每天 9 点到 21 点。",
+          "atSec": 22,
+          "gapSec": 22
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的，谢谢。",
+          "atSec": 46,
+          "gapSec": 24
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "不客气，有问题也可以随时在游戏内提交工单。",
+          "atSec": 70,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-11-02T23:10:00+08:00",
+      "batchId": "B-2026-11-02",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席提供官方热线与服务时间，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.9,
+        "needsReview": false,
+        "summary": "用户咨询官方客服电话，坐席提供热线与服务时间，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0057",
+      "channel": "phone",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1001",
+        "name": "林晓"
+      },
+      "customer": {
+        "id": "C-7757",
+        "name": "用户8073"
+      },
+      "startedAt": "2026-10-20T09:12:00+08:00",
+      "durationSec": 126,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "收到短信说我账号异地登录，是真的吗？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，请勿点击短信中的链接，建议您立即修改密码并开启二次验证。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的，我现在去改。",
+          "atSec": 50,
+          "gapSec": 26
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "修改完成后可以在安全中心查看登录记录，有问题随时联系我们。",
+          "atSec": 78,
+          "gapSec": 28
+        }
+      ],
+      "importedAt": "2026-10-20T23:10:00+08:00",
+      "batchId": "B-2026-10-20",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席提示修改密码与开启二次验证，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.92,
+        "needsReview": false,
+        "summary": "用户收到异地登录短信，坐席提供账号安全处置建议，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0058",
+      "channel": "online",
+      "product": "云上大陆",
+      "agent": {
+        "id": "A-1002",
+        "name": "陈默"
+      },
+      "customer": {
+        "id": "C-7758",
+        "name": "用户8110"
+      },
+      "startedAt": "2026-10-21T13:40:00+08:00",
+      "durationSec": 131,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "刚下载游戏，新手指引在哪？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "您好，完成创建角色后会自动进入新手指引，也可以在主界面右侧点击指引按钮。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "找到了，谢谢。",
+          "atSec": 48,
+          "gapSec": 24
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "不客气，祝您游戏愉快。",
+          "atSec": 70,
+          "gapSec": 22
+        }
+      ],
+      "importedAt": "2026-10-21T23:10:00+08:00",
+      "batchId": "B-2026-10-21",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：坐席说明新手指引入口，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.94,
+        "needsReview": false,
+        "summary": "新玩家咨询新手指引位置，坐席给出操作路径，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0059",
+      "channel": "ticket",
+      "product": "机甲前线",
+      "agent": {
+        "id": "A-1003",
+        "name": "苏禾"
+      },
+      "customer": {
+        "id": "C-7759",
+        "name": "用户8147"
+      },
+      "startedAt": "2026-10-22T19:32:00+08:00",
+      "durationSec": 144,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "customer",
+          "text": "希望以后能多出点新地图，现在的地图有点玩腻了。",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "agent",
+          "text": "感谢建议，我会记录并反馈给策划团队，您可以关注后续版本公告。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "customer",
+          "text": "好的，期待。",
+          "atSec": 48,
+          "gapSec": 24
+        },
+        {
+          "seq": 4,
+          "role": "agent",
+          "text": "感谢您的支持，祝您游戏愉快。",
+          "atSec": 70,
+          "gapSec": 22
+        }
+      ],
+      "importedAt": "2026-10-22T23:10:00+08:00",
+      "batchId": "B-2026-10-22",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "边界正常样本：用户表达「玩腻了」的负面表述但属建议，坐席记录反馈，无违规话术，需人工复核。",
+        "complexity": "implicit",
+        "confidence": 0.69,
+        "needsReview": true,
+        "summary": "用户对新地图提出建议，坐席记录并反馈，需人工复核是否构成违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    },
+    {
+      "id": "qc-0060",
+      "channel": "phone",
+      "product": "星海远征",
+      "agent": {
+        "id": "A-1004",
+        "name": "何洋"
+      },
+      "customer": {
+        "id": "C-7760",
+        "name": "用户8184"
+      },
+      "startedAt": "2026-10-23T10:05:00+08:00",
+      "durationSec": 159,
+      "messages": [
+        {
+          "seq": 1,
+          "role": "agent",
+          "text": "您好，这里是客服回访，想了解一下您上次的问题是否已经解决？",
+          "atSec": 0,
+          "gapSec": 0
+        },
+        {
+          "seq": 2,
+          "role": "customer",
+          "text": "解决了，处理得挺快的。",
+          "atSec": 24,
+          "gapSec": 24
+        },
+        {
+          "seq": 3,
+          "role": "agent",
+          "text": "好的，感谢您的反馈，如果还有其他问题可以随时联系我们。",
+          "atSec": 48,
+          "gapSec": 24
+        },
+        {
+          "seq": 4,
+          "role": "customer",
+          "text": "好的，谢谢。",
+          "atSec": 72,
+          "gapSec": 24
+        }
+      ],
+      "importedAt": "2026-10-23T23:10:00+08:00",
+      "batchId": "B-2026-10-23",
+      "labels": {
+        "verdict": "pass",
+        "tags": [],
+        "primaryTag": null,
+        "note": "正常样本：回访确认问题已解决，无违规标签。",
+        "complexity": "explicit",
+        "confidence": 0.98,
+        "needsReview": false,
+        "summary": "客服回访确认用户问题已解决，用户表示满意，无违规。",
+        "emotion": "calm",
+        "tagEvidence": []
+      }
+    }
+  ]
+}

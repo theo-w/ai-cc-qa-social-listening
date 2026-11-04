@@ -1,0 +1,15 @@
+{
+  "name": "@qcc/tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "QCC Workbench 契约测试与验收测试（Node 24 内置 node:test，零额外依赖）",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 *.test.mjs",
+    "test:data": "node --test data.test.mjs",
+    "test:api": "node --test --test-concurrency=1 contract.test.mjs acceptance.test.mjs"
+  }
+}

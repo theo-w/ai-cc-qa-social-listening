@@ -1,0 +1,8 @@
+{
+  "title": "回档导致充值未到账（集中反馈）",
+  "description": "11-01 起 Steam/TapTap 集中反馈回档后充值未到账，需产研核查订单补偿逻辑。",
+  "sourceType": "sentiment", "sourceRef": { "type": "alert", "id": "AL-20261101-回档-01", "label": "回档 · P0 预警" },
+  "target": "product", "priority": "high",
+  "evidence": ["评论 11-01 回档后充值 648 未到账", "评论 11-02 补偿未到账"],
+  "createdBy": "江岚"
+}

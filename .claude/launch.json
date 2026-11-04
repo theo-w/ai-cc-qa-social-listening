@@ -1,0 +1,27 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "api-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@qcc/api", "dev"],
+      "port": 8787
+    },
+    {
+      "name": "web",
+      "url": "http://localhost:5178",
+      "port": 5178
+    },
+    {
+      "name": "web-preview",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@qcc/web", "exec", "vite", "--port", "5179", "--strictPort"],
+      "port": 5179
+    },
+    {
+      "name": "api",
+      "url": "http://127.0.0.1:8787",
+      "port": 8787
+    }
+  ]
+}

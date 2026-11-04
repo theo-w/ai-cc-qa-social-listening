@@ -1,0 +1,135 @@
+/* ============================================================================
+   QCC Workbench design tokens
+   唯一色板/字号/间距/圆角/动效来源。页面与组件只允许引用变量，禁止散落魔法值。
+   ========================================================================== */
+
+:root {
+  /* ---------- 画布与文字 ---------- */
+  --paper: #f5f4f0;
+  --paper-deep: #ece9e2;
+  --surface: #ffffff;
+  --surface-subtle: #faf9f6;
+  --surface-raised: #ffffff;
+
+  --ink: #17191d;
+  --ink-soft: #3f434b;
+  --ink-muted: #6f747e;
+  --ink-faint: #9a9ea7;
+
+  --line: #e4e1d8;
+  --line-strong: #cfcbc0;
+
+  /* ---------- 主色（深墨绿） ---------- */
+  --primary: #145c4c;
+  --primary-hover: #0e4a3d;
+  --primary-active: #0a3c32;
+  --primary-wash: #e7f0ec;
+  --primary-wash-strong: #d6e7e0;
+  --primary-ink: #0b3a30;
+
+  /* ---------- 语义色 ---------- */
+  --ok: #2b7554;
+  --ok-wash: #e5f1ea;
+  --ok-ink: #1c523a;
+
+  --warn: #9c6612;
+  --warn-wash: #f7efdd;
+  --warn-ink: #6e4708;
+
+  --danger: #b0372a;
+  --danger-wash: #f8e8e4;
+  --danger-ink: #7d241b;
+
+  --info: #325d94;
+  --info-wash: #e7eef7;
+  --info-ink: #21406a;
+
+  --neutral-wash: #efeee9;
+  --neutral-ink: #4d5158;
+
+  /* ---------- 侧边栏（深墨） ---------- */
+  --sidebar-bg: #14171a;
+  --sidebar-bg-soft: #1a1e22;
+  --sidebar-ink: #e9e9e5;
+  --sidebar-muted: #9298a0;
+  --sidebar-faint: #6b7178;
+  --sidebar-line: #272c31;
+  --sidebar-active: #223029;
+  --sidebar-active-ink: #f0f4f1;
+  --sidebar-accent: #7fb8a5;
+
+  /* ---------- 字体 ---------- */
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC",
+    "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Songti SC", "Noto Serif SC", "STSong", Georgia, "Times New Roman", serif;
+  --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, "Courier New", monospace;
+
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-20: 20px;
+  --fs-26: 26px;
+  --fs-32: 32px;
+  --fs-36: 36px;
+
+  --lh-11: 16px;
+  --lh-12: 18px;
+  --lh-13: 20px;
+  --lh-14: 22px;
+  --lh-16: 24px;
+  --lh-20: 28px;
+  --lh-26: 34px;
+  --lh-32: 40px;
+  --lh-36: 44px;
+
+  /* ---------- 间距 ---------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* ---------- 圆角 ---------- */
+  --r-xs: 3px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
+  --r-pill: 999px;
+
+  /* ---------- 边框 / 阴影 ---------- */
+  --border: 1px solid var(--line);
+  --border-strong: 1px solid var(--line-strong);
+  --shadow-pop: 0 6px 20px rgba(23, 25, 29, 0.1);
+  --shadow-drawer: -16px 0 40px rgba(23, 25, 29, 0.16);
+  --shadow-modal: 0 20px 56px rgba(23, 25, 29, 0.22);
+  --shadow-toast: 0 10px 28px rgba(23, 25, 29, 0.18);
+
+  /* ---------- 布局 ---------- */
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 64px;
+  --topbar-h: 56px;
+  --content-max: 1440px;
+  --page-pad-x: 32px;
+  --page-pad-top: 24px;
+  --page-pad-bottom: 48px;
+  --row-h: 56px;
+
+  /* ---------- 动效 ---------- */
+  --dur-1: 120ms;
+  --dur-2: 180ms;
+  --dur-3: 240ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- 层级 ---------- */
+  --z-topbar: 20;
+  --z-dropdown: 40;
+  --z-drawer: 60;
+  --z-modal: 80;
+  --z-toast: 100;
+}
