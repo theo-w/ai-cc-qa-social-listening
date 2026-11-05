@@ -4,7 +4,11 @@
     {
       "name": "api-dev",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@qcc/api", "dev"],
+      "runtimeArgs": [
+        "--filter",
+        "@qcc/api",
+        "dev"
+      ],
       "port": 8787
     },
     {
@@ -15,13 +19,31 @@
     {
       "name": "web-preview",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@qcc/web", "exec", "vite", "--port", "5179", "--strictPort"],
+      "runtimeArgs": [
+        "--filter",
+        "@qcc/web",
+        "exec",
+        "vite",
+        "--port",
+        "5179",
+        "--strictPort"
+      ],
       "port": 5179
     },
     {
       "name": "api",
       "url": "http://127.0.0.1:8787",
       "port": 8787
+    },
+    {
+      "name": "static-file",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8765"
+      ],
+      "port": 8765
     }
   ]
 }
